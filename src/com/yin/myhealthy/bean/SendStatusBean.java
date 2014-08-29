@@ -5,17 +5,7 @@ import java.util.List;
 import com.yin.myhealthy.bean.healthyknow.HealKnowCategoryBean;
 
 public class SendStatusBean<T> {
-	
-//	public Class<T> kind;
-	
-	public SendStatusBean(){
-//		this.kind = (Class<T>) getClass();
-	}
-	
-//	public Class<T> getKind(){
-//		return kind;
-//	}
-	
+
 	public boolean getSuccess() {
 		return success;
 	}
