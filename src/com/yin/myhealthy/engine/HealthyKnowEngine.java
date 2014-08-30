@@ -13,7 +13,6 @@ public class HealthyKnowEngine {
 	//获取健康知识分类列表
 	public void GetHealKnowCategoryList(Handler handler){
 		AsyncHttpClientUtil.GetXml(GlobalDate.API_HEAYKNOW_CATE_LIST, null, handler);
-		
 	}
 	
 	
@@ -49,10 +48,19 @@ public class HealthyKnowEngine {
 	
 	
 	
-	//获取健康知识详情列表
-	public void GetHealthyKnowBean(int id,Handler handler){
+	
+	/*
+	 * 获取健康知识详情
+	 * 请求参数
+	 * id(必填)		long		健康知识分类ID标号
+	 */
+	public void GetHealthyKnowBean(String id,Handler handler){
+		String urlStr = GlobalDate.API_HEAYKNOW_MORE;
+		if(id != null){
+			urlStr += "?id="+id;
+		}
 		
-		AsyncHttpClientUtil.GetXml(GlobalDate.API_HEAYKNOW_MORE, null, handler);
+		AsyncHttpClientUtil.GetXml(urlStr, null, handler);
 	}
 	
 	
