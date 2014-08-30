@@ -31,14 +31,14 @@ public class GsonTools {
 		return list;
 	}
 	
-	public static List<HealKnowCategoryBean> changeGsonToHKCList(String gsonString,
-			Class<HealKnowCategoryBean> cls) {
-		Gson gson = new Gson();
-		List<HealKnowCategoryBean> list = gson.fromJson(gsonString,
-				new TypeToken<List<HealKnowCategoryBean>>() {
-				}.getType());
-		return list;
-	}
+//	public static List<HealKnowCategoryBean> changeGsonToHKCList(String gsonString,
+//			Class<HealKnowCategoryBean> cls) {
+//		Gson gson = new Gson();
+//		List<HealKnowCategoryBean> list = gson.fromJson(gsonString,
+//				new TypeToken<List<HealKnowCategoryBean>>() {
+//				}.getType());
+//		return list;
+//	}
 	
 
 	public static <T> List<Map<String, T>> changeGsonToListMaps(

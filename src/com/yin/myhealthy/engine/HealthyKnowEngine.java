@@ -1,95 +1,58 @@
 package com.yin.myhealthy.engine;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.os.Handler;
-import android.os.Message;
-import android.provider.Settings.Global;
 
 import com.yin.myhealthy.GlobalDate;
-import com.yin.myhealthy.bean.healthyknow.HealKnowCategoryBean;
-import com.yin.myhealthy.bean.healthyknow.HealthyKnowBean;
-import com.yin.myhealthy.bean.healthyknow.HealthyKnowListBean;
-import com.yin.myhealthy.utils.GsonTools;
-import com.yin.myhealthy.utils.HttpClientUtil;
-import com.yin.myhealthy.utils.StreamTools;
+import com.yin.myhealthy.bean.KeyValuesBean;
+import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class HealthyKnowEngine {
 	
-	private Handler handler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			switch (msg.what) {
-			
-			
-			}
-		}
-	
-	};
-	
 	//获取健康知识分类列表
-	public List<HealKnowCategoryBean> GetHealKnowCategoryList(){
+	public void GetHealKnowCategoryList(Handler handler){
+		AsyncHttpClientUtil.GetXml(GlobalDate.API_HEAYKNOW_CATE_LIST, null, handler);
 		
-		new Thread(){
-			public void run() {
-				String jsonString = null;
-				String xml = "";
-				
-				HttpClientUtil util = new HttpClientUtil();
-				InputStream is = util.sendXml(GlobalDate.API_HEAYKNOW_CATE_LIST, xml);
-				try {
-					jsonString = StreamTools.readFromStream(is);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}				
-				
-				JSONObject obj;
-				String healthyKnowStr = null;
-				
-				List<HealKnowCategoryBean> list = null;
-				try {
-					obj = new JSONObject(jsonString);
-					// 得到服务器的版本信息
-					healthyKnowStr = (String) obj.getJSONArray("yi18").toString();
-					list = GsonTools.changeGsonToHKCList(healthyKnowStr,HealKnowCategoryBean.class);
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
-				if(list.isEmpty()){
-					System.out.println("empty");
-				}else{
-					System.out.println(list.get(2).getName());
-				}
-						
-			};
-		}.start();
-		
-		
-		return null;
 	}
 	
 	
-	//获取健康信息知识列表
-	public List<HealthyKnowListBean> GetHealthyKnowList(){
-		return null;
+	/*
+	 * 获取健康信息知识列表
+	 * 请求参数（以下都不是必须的）：
+	 * page		int		请求页数，默认是1
+	 * limit	int		每页返回的条数，默认是20
+	 * type		string	排序方式 ：id：最新时间；count：访问最多，默认是id，按最新时间。
+	 * id		long	id：这里是指知识分类的ID 默认为 null ，也就是全部。
+	 */
+	public void GetHealthyKnowList(List<KeyValuesBean> list,Handler handler){
+		String urlStr = GlobalDate.API_HEAYKNOW_LIST;
+		
+		//如果参数列表非null并且非空
+		if((list != null) && (!list.isEmpty()) ){
+			urlStr += "?";
+		
+			//遍历链表，获得并设置参数名和参数值
+			for(int i=0;i<list.size();i++){
+				urlStr += list.get(i).getKey() + "=" + list.get(i).getValues();
+				if(i != (list.size()-1)){
+					urlStr += "&";
+				}
+			}
+		
+		}
+		
+		System.out.println("urlStr:"+urlStr);
+		
+		AsyncHttpClientUtil.GetXml(urlStr, null, handler);
 	}
 	
 	
 	
 	//获取健康知识详情列表
-	public HealthyKnowBean GetHealthyKnowBean(int id){
-		return null;
+	public void GetHealthyKnowBean(int id,Handler handler){
+		
+		AsyncHttpClientUtil.GetXml(GlobalDate.API_HEAYKNOW_MORE, null, handler);
 	}
 	
 	

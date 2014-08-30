@@ -1,16 +1,12 @@
 package com.yin.myhealthy;
 
-import org.apache.http.Header;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.example.myhealthy.R;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.yin.myhealthy.utils.AsyncHttpClientUtil;
+import com.yin.myhealthy.test.TestEngine;
 
 public class MainActivity extends Activity {
 
@@ -36,13 +32,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		
-		
-		
-		AsyncHttpClientUtil.GetXml(LOTTERY_URI, null, handler);
-		
+		TestEngine.TestGetHealthyKnowList();
 		
 		
 		
+		//AsyncHttpClientUtil.GetXml(LOTTERY_URI, null, handler);
 		
 //		new Thread(){
 //			public void run() {
