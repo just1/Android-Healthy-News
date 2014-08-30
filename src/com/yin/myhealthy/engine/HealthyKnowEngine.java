@@ -31,8 +31,9 @@ public class HealthyKnowEngine {
 			
 			
 			}
-		};
+		}
 	
+	};
 	
 	//获取健康知识分类列表
 	public List<HealKnowCategoryBean> GetHealKnowCategoryList(){
@@ -75,7 +76,7 @@ public class HealthyKnowEngine {
 		}.start();
 		
 		
-		return list;
+		return null;
 	}
 	
 	
@@ -92,5 +93,6 @@ public class HealthyKnowEngine {
 	}
 	
 	
-	
 }
+	
+
