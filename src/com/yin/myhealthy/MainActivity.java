@@ -26,7 +26,7 @@ import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;
 
 public class MainActivity extends Activity {
 	
-	public Context context = this;
+	public Context context = MainActivity.this;
 	private LinearLayout ll;
 	private PullDownListView lv ;
 	private PullDownListViewAdapter adapter;
@@ -110,60 +110,13 @@ public class MainActivity extends Activity {
 		
 		//请求网络，获取健康知识分类列表
 		List<KeyValuesBean> list = new ArrayList<KeyValuesBean>();
-		list.add(new KeyValuesBean("page", "20"));
-		list.add(new KeyValuesBean("limit", "5"));
+		list.add(new KeyValuesBean("page", "1"));
+		list.add(new KeyValuesBean("limit", "30"));
 		list.add(new KeyValuesBean("type", "id"));
 		
 		HealthyKnowEngine hke = new HealthyKnowEngine();
 		
 		hke.GetHealthyKnowList(list,handler);
-		
-		
-//		lv = (PullDownListView) findViewById(R.id.pd_lv);
-//		list = new ArrayList<String>();
-//		list.add("loonggg");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		list.add("我们都是开发者");
-//		adapter = new PullDownListViewAdapter(list, this);
-//		lv.setAdapter(adapter);
-//
-//		lv.setonRefreshListener(new OnRefreshListener() {
-//
-//			@Override
-//			public void onRefresh() {
-//				new AsyncTask<Void, Void, Void>() {
-//					protected Void doInBackground(Void... params) {
-//						try {
-//							Thread.sleep(1000);
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//						list.add("刷新后添加的内容");
-//						return null;
-//					}
-//
-//					@Override
-//					protected void onPostExecute(Void result) {
-//						adapter.notifyDataSetChanged();
-//						lv.onRefreshComplete();
-//					}
-//				}.execute(null, null, null);
-//			}
-//		});
 	}
 
 }
