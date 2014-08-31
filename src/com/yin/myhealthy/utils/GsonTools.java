@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.yin.myhealthy.bean.healthyknow.HealKnowCategoryBean;
 
 public class GsonTools {
 

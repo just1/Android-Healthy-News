@@ -12,6 +12,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,16 +23,28 @@ import com.example.myhealthy.R;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 
 public class PullDownListView extends ListView implements OnScrollListener {
-
 	private final static int RELEASE_To_REFRESH = 0;// 下拉过程的状态值
 	private final static int PULL_To_REFRESH = 1; // 从下拉返回到不刷新的状态值
 	private final static int REFRESHING = 2;// 正在刷新的状态值
 	private final static int DONE = 3;
 	private final static int LOADING = 4;
 
+	// ListView加载更多的布局
+	private View moreView;
+	private Button btn_load_more;
+	private ProgressBar pb_load_progress;
+
+	// 适配器
+	private PullDownListViewAdapter adapter;
+
 	// 实际的padding的距离与界面上偏移距离的比例
 	private final static int RATIO = 3;
 	private LayoutInflater inflater;
+
+	// 记录是否滑动到底部的item
+	private int lastItem;
+	private int startIndex = 0;
+	private int requestSize = 10;
 
 	// ListView头部下拉刷新的布局
 	private LinearLayout headerView;
@@ -67,11 +80,23 @@ public class PullDownListView extends ListView implements OnScrollListener {
 		init(context);
 	}
 
+	private void initMoreView() {
+		moreView = inflater.inflate(R.layout.lv_pd_footer, null);
+		btn_load_more = (Button) moreView.findViewById(R.id.btn_load_more);
+		pb_load_progress = (ProgressBar) moreView
+				.findViewById(R.id.pb_load_progress);
+		moreView.setVisibility(GONE);	//设置为不可见，而且不占空间
+		this.addFooterView(moreView);
+	}
+	
+	public void setMoreViewBtnListener(OnClickListener listener){
+		btn_load_more.setOnClickListener(listener);
+	}
+
 	private void init(Context context) {
 		// setCacheColorHint(context.getResources().getColor(R.color.transparent));
 		inflater = LayoutInflater.from(context);
-		headerView = (LinearLayout) inflater.inflate(
-				R.layout.pdlistviewiew_header, null);
+		headerView = (LinearLayout) inflater.inflate(R.layout.lv_pd_header, null);
 		lvHeaderTipsTv = (TextView) headerView
 				.findViewById(R.id.lvHeaderTipsTv);
 		lvHeaderLastUpdatedTv = (TextView) headerView
@@ -115,16 +140,46 @@ public class PullDownListView extends ListView implements OnScrollListener {
 		state = DONE;
 		// 是否正在刷新
 		isRefreshable = false;
+
+		// 初始化加载更多
+		initMoreView();
 	}
 
+	// 判断是否滑倒底部
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+		if (lastItem == adapter.getCount()
+				&& scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+
+			System.out.println("已经到底了,lastItem:"+String.valueOf(lastItem));
+			startIndex += requestSize;
+
+			ShowLoadMoreDateView();
+		}
+		else {	//要减多少，到时候自己再调
+			HideLoadMoreDateView();
+		}
 	}
+	
+	//显示加载更多的窗口
+	private void ShowLoadMoreDateView(){
+		moreView.setVisibility(VISIBLE);
+	} 
+	
+	//隐藏加载更多的窗口
+	public void HideLoadMoreDateView(){
+		moreView.setVisibility(GONE);
+	}
+	
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+
+		lastItem = firstVisibleItem + visibleItemCount - 2;	//	可能是减一，也可能减二
+		System.out.println("lastItem:"+String.valueOf(lastItem));
+
 		if (firstVisibleItem == 0) {
 			isRefreshable = true;
 		} else {
@@ -324,6 +379,7 @@ public class PullDownListView extends ListView implements OnScrollListener {
 	}
 
 	public void setAdapter(PullDownListViewAdapter adapter) {
+		this.adapter = adapter;
 		lvHeaderLastUpdatedTv.setText("最近更新:" + new Date().toLocaleString());
 		super.setAdapter(adapter);
 	}

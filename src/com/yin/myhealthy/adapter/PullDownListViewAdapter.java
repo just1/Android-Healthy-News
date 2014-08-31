@@ -40,7 +40,7 @@ public class PullDownListViewAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		View view = View.inflate(context, R.layout.listview_item, null);
+		View view = View.inflate(context, R.layout.lv_pd_item, null);
 		//View view = View.inflate(HomeActivity.this, R.layout.list_item_home, null);
 		
 		
