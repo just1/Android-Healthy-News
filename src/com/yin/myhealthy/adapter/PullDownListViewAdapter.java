@@ -10,26 +10,34 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.myhealthy.R;
+import com.loopj.android.image.SmartImageView;
 
 public class PullDownListViewAdapter extends BaseAdapter {
-	private List<String> list;
+	private List<String> titleList;
+	private List<String> imgList;
 	private TextView tv;
 	private LayoutInflater mInflater = null;
 	private Context context;
 
-	public PullDownListViewAdapter(List<String> list,Context context) {
-		this.list = list;
+	public PullDownListViewAdapter(List<String> titleList, Context context) {
+		this.titleList = titleList;
+		this.context = context;
+	}
+	
+	public PullDownListViewAdapter(List<String> titleList,List<String> imgList, Context context) {
+		this.titleList = titleList;
+		this.imgList = imgList;
 		this.context = context;
 	}
 
 	@Override
 	public int getCount() {
-		return list.size();
+		return titleList.size();
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return list.get(position);
+		return titleList.get(position);
 	}
 
 	@Override
@@ -41,11 +49,12 @@ public class PullDownListViewAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		View view = View.inflate(context, R.layout.lv_pd_item, null);
-		//View view = View.inflate(HomeActivity.this, R.layout.list_item_home, null);
 		
+		SmartImageView sivIcon = (SmartImageView) view.findViewById(R.id.siv_listview_item_icon);
+		sivIcon.setImageUrl(imgList.get(position));		// …Ë÷√Õº∆¨
 		
 		tv = (TextView) view.findViewById(R.id.tv_lv_item);
-		tv.setText(list.get(position));
+		tv.setText(titleList.get(position));
 		
 		return view;
 	}

@@ -33,13 +33,14 @@ public class MainActivity extends Activity {
 	private PullDownListView lv;
 	private PullDownListViewAdapter adapter;
 	private List<String> titleList = new ArrayList<String>();
-
+	private List<String> imgList = new ArrayList<String>();
+	
+	//初始化ListView
 	private void initListView() {
-
 		lv = new PullDownListView(context);
 		ll.addView(lv);
 
-		adapter = new PullDownListViewAdapter(titleList, context);
+		adapter = new PullDownListViewAdapter(titleList, imgList,context);
 		lv.setAdapter(adapter);
 		lv.setMoreViewBtnListener(moreBtnListener);
 
@@ -122,6 +123,8 @@ public class MainActivity extends Activity {
 
 			for (int i = 0; i < HKLBeanList.size(); i++) {
 				titleList.add(HKLBeanList.get(i).getTitle());
+				
+				imgList.add("http://www.yi18.net/"+HKLBeanList.get(i).getImg());
 			}
 
 			// 更新ListView数据

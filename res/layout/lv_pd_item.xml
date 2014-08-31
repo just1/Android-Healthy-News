@@ -1,16 +1,21 @@
-<LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    
-    
-    <TextView 
+    android:padding="5dip" >
+
+    <com.loopj.android.image.SmartImageView
+        android:id="@+id/siv_listview_item_icon"
+        android:layout_width="100dip"
+        android:layout_height="60dip" 
+        android:src="@drawable/ic_launcher"/>
+
+    <TextView
         android:id="@+id/tv_lv_item"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        />
-    
-    
-    
-</LinearLayout>
+        android:layout_marginLeft="3dip"
+        android:layout_toRightOf="@id/siv_listview_item_icon"
+        android:singleLine="true"
+        android:textSize="17sp" />
+
+</RelativeLayout>
