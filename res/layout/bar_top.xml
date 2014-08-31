@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal" 
+    
+    >
+    
+	    <ImageButton
+	        android:id="@+id/imbtn_topbar_sing"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/buttombar_healthyknow">
+		
+	    </ImageButton>    
+	        
+	    <ImageButton
+	        android:id="@+id/imbtn_topbar_songlist"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/buttombar_diet">
+	    </ImageButton>    
+	    
+	    <ImageButton
+	        android:id="@+id/imbtn_topbar_lic"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_weight="1"
+	        android:scaleType="fitCenter"
+	        android:src="@drawable/buttombar_knowledge">
+	    </ImageButton>    
+        
+        
+    
+
+</LinearLayout>
