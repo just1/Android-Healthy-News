@@ -4,39 +4,48 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:layout_alignParentBottom="true"
+    android:background="#996699"
     >
     
     <ImageButton
+        android:id="@+id/imgbtn_bottombar_healthyknow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:src="@drawable/buttombar_healthyknow">
-	
+        android:src="@drawable/buttombar_healthyknow"
+        android:background="#00000000"
+        >
     </ImageButton>    
         
     <ImageButton
+        android:id="@+id/imgbtn_bottombar_diet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:src="@drawable/buttombar_diet">
+        android:src="@drawable/buttombar_diet"
+        android:background="#00000000">
     </ImageButton>    
     
     <ImageButton
+        android:id="@+id/imgbtn_bottombar_medicine"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:src="@drawable/buttombar_medicine">
+        android:src="@drawable/buttombar_medicine"
+        android:background="#00000000">
     </ImageButton>    
     
     <ImageButton
+        android:id="@+id/imgbtn_bottombar_knowledge"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:scaleType="fitCenter"
-        android:src="@drawable/buttombar_knowledge">
+        android:src="@drawable/buttombar_knowledge"
+        android:background="#00000000">
 	
     </ImageButton>    
     

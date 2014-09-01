@@ -16,6 +16,7 @@ import com.yin.myhealthy.view.DietFragment;
 import com.yin.myhealthy.view.HealthyKnowFragment;
 import com.yin.myhealthy.view.KnowledgeFragment;
 import com.yin.myhealthy.view.MedicineFragment;
+import com.yin.myhealthy.view.manager.ButtomBarManager;
 import com.yin.myhealthy.view.manager.TopBarManager;
 
 public class MainActivity extends FragmentActivity {
@@ -48,6 +49,7 @@ public class MainActivity extends FragmentActivity {
 
 		
 		TopBarManager.getInstance().init(this);
+		ButtomBarManager.getInstance().init(this);
 	}
 
 
