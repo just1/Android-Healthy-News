@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity {
 
 		fragmentList.add(new HealthyKnowFragment(MainActivity.this));
 		fragmentList.add(new DietFragment());
-		fragmentList.add(new MedicineFragment());
+		fragmentList.add(new MedicineFragment(MainActivity.this,this));
 		fragmentList.add(new KnowledgeFragment());
 
 		adapter = new MainFragmentPagerAdapter(getSupportFragmentManager(),

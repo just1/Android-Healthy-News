@@ -41,7 +41,6 @@ public class ChildViewPager extends ViewPager {
 			}
 
 			if (mDX > mDY) {
-
 				mIntercept = true;
 				mLastAct = MotionEvent.ACTION_MOVE;
 				return false;
