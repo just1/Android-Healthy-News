@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.Window;
-import android.view.WindowManager;
 
 import com.example.myhealthy.R;
 import com.yin.myhealthy.adapter.MainFragmentPagerAdapter;
@@ -20,7 +22,6 @@ import com.yin.myhealthy.view.manager.ButtomBarManager;
 import com.yin.myhealthy.view.manager.TopBarManager;
 
 public class MainActivity extends FragmentActivity {
-
 
 	private ViewPager vp;
 	List<Fragment> fragmentList = new ArrayList<Fragment>();
@@ -37,7 +38,15 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 
 		vp = (ViewPager) findViewById(R.id.vp);
-
+		vp.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return true;
+			}
+		});
+		
 		fragmentList.add(new HealthyKnowFragment(MainActivity.this));
 		fragmentList.add(new DietFragment());
 		fragmentList.add(new MedicineFragment(MainActivity.this,this));
