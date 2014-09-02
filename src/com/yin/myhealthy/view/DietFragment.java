@@ -40,13 +40,14 @@ public class DietFragment extends Fragment {
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp);
         List<View> listViews = new ArrayList<View>();
         for (int i = 0; i < mLayouts.length; i++) {
+        	
             listViews.add(inflater.inflate(mLayouts[i], null));
         }
         mViewPager.setAdapter(new ChildViewPagerAdapter(listViews));
 		
 		return view;
 	}
-	
+	 
 	
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
