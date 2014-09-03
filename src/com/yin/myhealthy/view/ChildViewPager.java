@@ -10,6 +10,8 @@ public class ChildViewPager extends ViewPager {
 	int mLastAct = -1;
 	boolean mIntercept = false;
 	
+	
+	
 	public ChildViewPager(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -45,7 +47,6 @@ public class ChildViewPager extends ViewPager {
 			if(mDX-mDY > 5){
 				return true;
 			}
-			
 			
 			if (mDX > mDY) {
 				mIntercept = true;

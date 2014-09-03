@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +25,11 @@ public class MedicineFragment extends Fragment {
 
 	private ChildViewPager mViewPager;
 	private Context context;
-
+	
 	public MedicineFragment(Context context) {
 		super();
 		this.context = context;
 	}
-
-
-
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,10 +38,11 @@ public class MedicineFragment extends Fragment {
 				false);
 
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_medicine);
+		
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 
-		//listViews.add(new TestFragment1(context));
-		//listViews.add(new TestFragment2(context));
+		listViews.add(new TestFragment1(context));
+		listViews.add(new TestFragment2(context));
 		
 		
 		mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
@@ -65,23 +63,6 @@ public class MedicineFragment extends Fragment {
 				return 0;
 			}
 		});
-		
-		
-//		mViewPager.setAdapter(new FragmentStatePagerAdapter(getChildFragmentManager()) {
-//
-//             @Override
-//             public Fragment getItem(final int position) {
-//                 return listViews.get(position);
-//                 
-//             }
-//
-//			@Override
-//			public int getCount() {
-//				// TODO Auto-generated method stub
-//				return listViews.size();
-//			}
-//		 });
-		
 		
 		
 		return view;

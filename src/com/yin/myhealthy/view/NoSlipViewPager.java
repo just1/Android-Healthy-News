@@ -27,7 +27,7 @@ public class NoSlipViewPager extends ViewPager {
 //	@Override
 //	public void scrollTo(int x, int y) {
 //		if (isCanScroll) {
-//			super.scrollTo(x, y);
+//			super.scrollTo(x, y); 
 //		}
 //	}
 	

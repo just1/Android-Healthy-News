@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ public class KnowledgeFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_knowledge, container, false);
 		
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp);
+		
         List<View> listViews = new ArrayList<View>();
         listViews.add(new AutoGetDateListView(context));
         listViews.add(new AutoGetDateListView(context));
