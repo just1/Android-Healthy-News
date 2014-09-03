@@ -4,6 +4,7 @@ import java.util.Date;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,7 @@ public class PullDownListView extends ListView implements OnScrollListener {
 	private final static int REFRESHING = 2;// 正在刷新的状态值
 	private final static int DONE = 3;
 	private final static int LOADING = 4;
+
 
 	// ListView加载更多的布局
 	private View moreView;
@@ -85,18 +87,20 @@ public class PullDownListView extends ListView implements OnScrollListener {
 		btn_load_more = (Button) moreView.findViewById(R.id.btn_load_more);
 		pb_load_progress = (ProgressBar) moreView
 				.findViewById(R.id.pb_load_progress);
-		moreView.setVisibility(GONE);	//设置为不可见，而且不占空间
+		moreView.setVisibility(GONE); // 设置为不可见，而且不占空间
 		this.addFooterView(moreView);
 	}
-	
-	public void setMoreViewBtnListener(OnClickListener listener){
+
+	public void setMoreViewBtnListener(OnClickListener listener) {
 		btn_load_more.setOnClickListener(listener);
 	}
 
 	private void init(Context context) {
+
 		// setCacheColorHint(context.getResources().getColor(R.color.transparent));
 		inflater = LayoutInflater.from(context);
-		headerView = (LinearLayout) inflater.inflate(R.layout.lv_pd_header, null);
+		headerView = (LinearLayout) inflater.inflate(R.layout.lv_pd_header,
+				null);
 		lvHeaderTipsTv = (TextView) headerView
 				.findViewById(R.id.lvHeaderTipsTv);
 		lvHeaderLastUpdatedTv = (TextView) headerView
@@ -152,33 +156,31 @@ public class PullDownListView extends ListView implements OnScrollListener {
 		if (lastItem == adapter.getCount()
 				&& scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
 
-			System.out.println("已经到底了,lastItem:"+String.valueOf(lastItem));
+			System.out.println("已经到底了,lastItem:" + String.valueOf(lastItem));
 			startIndex += requestSize;
 
 			ShowLoadMoreDateView();
-		}
-		else {	//要减多少，到时候自己再调
+		} else { // 要减多少，到时候自己再调
 			HideLoadMoreDateView();
 		}
 	}
-	
-	//显示加载更多的窗口
-	private void ShowLoadMoreDateView(){
+
+	// 显示加载更多的窗口
+	private void ShowLoadMoreDateView() {
 		moreView.setVisibility(VISIBLE);
-	} 
-	
-	//隐藏加载更多的窗口
-	public void HideLoadMoreDateView(){
+	}
+
+	// 隐藏加载更多的窗口
+	public void HideLoadMoreDateView() {
 		moreView.setVisibility(GONE);
 	}
-	
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
 
-		lastItem = firstVisibleItem + visibleItemCount - 2;	//	可能是减一，也可能减二
-		System.out.println("lastItem:"+String.valueOf(lastItem));
+		lastItem = firstVisibleItem + visibleItemCount - 2; // 可能是减一，也可能减二
+		System.out.println("lastItem:" + String.valueOf(lastItem));
 
 		if (firstVisibleItem == 0) {
 			isRefreshable = true;

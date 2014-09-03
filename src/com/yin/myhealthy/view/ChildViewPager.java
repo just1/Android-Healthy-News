@@ -40,6 +40,13 @@ public class ChildViewPager extends ViewPager {
 				return false;
 			}
 
+			//如果是左右滑动，那么就在这里进行拦截
+			//目的是让里面嵌套的ListView能够相互不影响
+			if(mDX-mDY > 5){
+				return true;
+			}
+			
+			
 			if (mDX > mDY) {
 				mIntercept = true;
 				mLastAct = MotionEvent.ACTION_MOVE;

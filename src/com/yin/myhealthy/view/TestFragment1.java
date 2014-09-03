@@ -31,7 +31,7 @@ public class TestFragment1 extends BaseListViewFragment {
 		// 需要返回的页号
 		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
 
-		list.add(new KeyValuesBean("limit", "30"));
+		list.add(new KeyValuesBean("limit", "10"));
 		list.add(new KeyValuesBean("type", "id"));
 
 		HealthyKnowEngine hke = new HealthyKnowEngine();

@@ -24,14 +24,11 @@ public class MedicineFragment extends Fragment {
 
 	private ChildViewPager mViewPager;
 	private Context context;
-	private FragmentActivity activity;
 
-	public MedicineFragment(Context context,FragmentActivity activity) {
+	public MedicineFragment(Context context) {
 		super();
 		this.context = context;
-		this.activity = activity;
 	}
-
 
 
 
@@ -46,7 +43,7 @@ public class MedicineFragment extends Fragment {
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_medicine);
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 
-		listViews.add(new TestFragment1(context));
+		//listViews.add(new TestFragment1(context));
 		//listViews.add(new TestFragment2(context));
 		
 		
