@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myhealthy.R;
+import com.yin.myhealthy.view.manager.TopBarManager;
 
 //Ò©Æ·Ò³Ãæ
 public class MedicineFragment extends Fragment {
@@ -58,6 +59,9 @@ public class MedicineFragment extends Fragment {
 				false);
 
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_medicine);
+		
+		TopBarManager.getInstance().setMedicineVp(mViewPager);
+		
 		
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 

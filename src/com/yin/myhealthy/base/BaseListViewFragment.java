@@ -128,7 +128,13 @@ public abstract class BaseListViewFragment extends Fragment{
 		public void handleMessage(Message msg) {
 			String jsonStr = (String) msg.obj;
 
-			AnalyJSONToList(jsonStr);
+			//实际发现这里会报空指针异常
+			if(jsonStr != null){
+				if(!jsonStr.isEmpty()){
+					AnalyJSONToList(jsonStr);
+				}
+			}
+			
 
 			// 更新ListView数据
 			adapter.notifyDataSetChanged();
