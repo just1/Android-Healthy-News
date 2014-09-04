@@ -3,22 +3,17 @@ package com.yin.myhealthy.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.myhealthy.R;
-import com.yin.myhealthy.adapter.ChildViewPagerAdapter;
 
 //Ò©Æ·Ò³Ãæ
 public class MedicineFragment extends Fragment {
@@ -26,6 +21,31 @@ public class MedicineFragment extends Fragment {
 	private ChildViewPager mViewPager;
 	private Context context;
 	
+	
+	public MedicineFragment() {
+		super();
+		//HealthyApplication appliction = getA
+		
+		if(getActivity() == null){
+			
+			Log.d("³ö´íÀ²À²À²À²À²À²","³ö´í£º   getActivity() is null");
+			System.out.println("getActivity() is null");
+		}
+		else{
+			
+			Log.d("³ö´íÀ²À²À²À²À²À²","¾¹È»Ã»ÓÐ³ö´í");
+			System.out.println("¾¹È»Ã»ÓÐ³ö´í");
+			this.context = getActivity();
+		}
+		
+	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+	    super.onAttach(activity);  
+	    context = activity;  
+	}
+
 	public MedicineFragment(Context context) {
 		super();
 		this.context = context;

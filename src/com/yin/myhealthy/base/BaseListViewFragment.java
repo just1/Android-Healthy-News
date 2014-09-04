@@ -3,6 +3,7 @@ package com.yin.myhealthy.base;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,11 +33,22 @@ public abstract class BaseListViewFragment extends Fragment{
 	private String apiUrl = "http://www.yi18.net/";
 
 	
+	public BaseListViewFragment() {
+		super();
+	}
+	
 	public BaseListViewFragment(Context context) {
 		super();
-		this.context = context;
+		this.context  = context;
 	}
 
+	
+	@Override
+	public void onAttach(Activity activity) {
+	    super.onAttach(activity);  
+	    context = activity;  
+	}
+	
 	// ≥ı ºªØListView
 	private void initView() {
 		lv = new PullDownListView(context);

@@ -21,6 +21,10 @@ public class HealthyKnowFragment extends BaseListViewFragment {
 	public HealthyKnowFragment(Context context) {
 		super(context);
 	}
+	
+	public HealthyKnowFragment() {
+		super();
+	}
 
 	@Override
 	protected void getListViewDate() {

@@ -3,6 +3,7 @@ package com.yin.myhealthy.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,12 +26,23 @@ public class KnowledgeFragment extends Fragment {
     private ChildViewPager mViewPager;
 	private Context context;
 	
+	public KnowledgeFragment() {
+		super();
+		//this.context = getActivity();
+	}
+	
 	
 	public KnowledgeFragment(Context context) {
 		super();
 		this.context = context;
 	}
 
+	
+	@Override
+	public void onAttach(Activity activity) {
+	    super.onAttach(activity);  
+	    context = activity;  
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
