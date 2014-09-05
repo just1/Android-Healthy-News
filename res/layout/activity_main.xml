@@ -3,15 +3,15 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
-    <!--
-         <include
-        android:id="@+id/ly_main_topbar"
+    <include
+        android:id="@+id/ll_main_topbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         layout="@layout/bar_top" />
-    -->
-    <LinearLayout
+
+    <!--
+         <LinearLayout
         android:id="@+id/ll_topbar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,11 +19,12 @@
         android:gravity="center_horizontal"
          >
     </LinearLayout>
+    -->
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@id/ll_topbar"
+        android:layout_below="@id/ll_main_topbar"
         android:orientation="vertical" >
 
         <FrameLayout
@@ -76,6 +77,6 @@
         android:layout_height="match_parent"
         android:layout_above="@id/ly_main_buttombar"
         android:layout_below="@id/ly_main_topbar" >
-    </com.yin.myhealthy.view.NoSlipViewPager>
+    </com.yin.myhealthy.view.NoSlipViewPager>
 -->
 

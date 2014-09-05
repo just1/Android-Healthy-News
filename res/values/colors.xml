@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="tab_selected_bg">#C4E1E1</color>
+    <color name="radiobg_press">#43859d</color>
+    <color name="radiobg_normal">#00000000</color>
 </resources>

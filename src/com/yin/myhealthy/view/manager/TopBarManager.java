@@ -5,9 +5,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost.OnTabChangeListener;
 
 import com.example.myhealthy.R;
@@ -34,12 +34,12 @@ public class TopBarManager implements OnTabChangeListener,OnPageChangeListener{
 	
 	//页面处理
 	//存放东西的布局
-	private LinearLayout ll;
+	private LinearLayout ll_medicine;
 	
 	//药品页面的viewpager
 	private ViewPager vp_medicine;
 	private String medicine_tab[] = { "资讯", "饮食"};
-	
+	private RadioGroup rg_medicine;
 	
 	
 	// 单例模式
@@ -73,28 +73,52 @@ public class TopBarManager implements OnTabChangeListener,OnPageChangeListener{
 	public void initView(Activity activity) {
 		this.activity = activity;
 
-		ll = (LinearLayout) activity.findViewById(R.id.ll_topbar);
+		ll_medicine = (LinearLayout) activity.findViewById(R.id.ll_topbar_medicine);
+		rg_medicine = (RadioGroup) activity.findViewById(R.id.rg_topbar_medicine);
 		
-		if(activity == null){
-			Log.d("topBar", "activity is null");
-		}else{
-			Log.d("topBar", "activity is not null");
-		}
+		ll_medicine.setVisibility(View.GONE);	//设置不可见
+
+//		if(ll == null){
+//			Log.d("topBar", "ll is null");
+//		}else{
+//			Log.d("topBar", "ll is not null");
+//		}
 		
+		setListener();		//设置监听
 		
-		if(ll == null){
-			Log.d("topBar", "ll is null");
-		}else{
-			Log.d("topBar", "ll is not null");
-		}
+		reflashView();		//刷新页面
 		
-		reflashView();
 	}
+	
+	//设置监听
+	private void setListener(){
+		rg_medicine.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch (checkedId) {
+				case R.id.rb_topbar_medicine_1:
+					vp_medicine.setCurrentItem(0);
+					break;
+
+				case R.id.rb_topbar_medicine_2:
+					vp_medicine.setCurrentItem(1);
+					break;
+					
+				default:
+					break;
+				}
+			}
+		});
+		
+		
+	}
+	
 
 	private int vpItemNum;
 	private void reflashView(){
 		//清楚所有已有
-		ll.removeAllViews();
+		//ll.removeAllViews();
 		
 		//根据当前页面号来设置标题
 		switch(currentPage){
@@ -105,25 +129,8 @@ public class TopBarManager implements OnTabChangeListener,OnPageChangeListener{
 			break;
 			
 		case MEDICINE:
-			for(vpItemNum=0;vpItemNum<2;vpItemNum++){
-				Button btn = new Button(activity);
-				btn.setText(medicine_tab[vpItemNum]);
-				btn.setWidth(1);
-				btn.setHeight(50);
-				btn.setWidth(50);
-				btn.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						vp_medicine.setCurrentItem(vpItemNum+1);
-						
-					}
-				});
-				
-				
-				ll.addView(btn);
-				
-			}
+			ll_medicine.setVisibility(View.VISIBLE);
+			
 			
 			break;
 		case KNOWLEDGE:

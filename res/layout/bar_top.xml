@@ -2,39 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:orientation="horizontal" 
-    >
-    
-<!-- 	    <ImageButton
-	        android:id="@+id/imbtn_topbar_sing"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        
-	        android:layout_weight="1"
-	        android:scaleType="fitCenter"
-	        android:src="@drawable/buttombar_healthyknow">
-		
-	    </ImageButton>    
-	        
-	    <ImageButton
-	        android:id="@+id/imbtn_topbar_songlist"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:scaleType="fitCenter"
-	        android:src="@drawable/buttombar_diet">
-	    </ImageButton>    
-	    
-	    <ImageButton
-	        android:id="@+id/imbtn_topbar_lic"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_weight="1"
-	        android:scaleType="fitCenter"
-	        android:src="@drawable/buttombar_knowledge">
-	    </ImageButton>     -->
-        
-        
-    
+    android:orientation="horizontal" >
+
+    <!-- Medicine页面导航条 -->
+
+    <LinearLayout
+        android:id="@+id/ll_topbar_medicine"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent" >
+
+        <RadioGroup
+            android:id="@+id/rg_topbar_medicine"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="left"
+            android:orientation="horizontal"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp" 
+            >
+
+            <RadioButton
+                android:id="@+id/rb_topbar_medicine_1"
+                android:text="哈哈" 
+                style="@style/radioButton"
+                android:checked="true"
+                
+                />
+
+            <RadioButton
+                android:id="@+id/rb_topbar_medicine_2"
+                android:text="嘻嘻" 
+                style="@style/radioButton"/>
+            
+            
+        </RadioGroup>
+    </LinearLayout>
 
 </LinearLayout>
