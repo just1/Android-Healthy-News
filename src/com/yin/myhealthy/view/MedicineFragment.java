@@ -61,10 +61,10 @@ public class MedicineFragment extends Fragment {
 
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_medicine);
 		
-		//传递viewpager到标题管理器
-		TopBarManager.getInstance().setMedicineVp(mViewPager);
-		//设置切换页面的监听
-		mViewPager.setOnPageChangeListener(TopBarManager.getInstance());
+//		//传递viewpager到标题管理器
+//		TopBarManager.getInstance().setMedicineVp(mViewPager);
+//		//设置切换页面的监听
+//		mViewPager.setOnPageChangeListener(TopBarManager.getInstance());
 		
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 

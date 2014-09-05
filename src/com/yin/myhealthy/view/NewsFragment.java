@@ -18,6 +18,11 @@ import com.yin.myhealthy.view.manager.TopBarManager;
 
 //健康资讯页面
 public class NewsFragment extends Fragment {
+	
+
+
+	
+	
 	private ChildViewPager mViewPager;
 	private Context context;
 	
@@ -58,7 +63,13 @@ public class NewsFragment extends Fragment {
 		mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), listViews));
 		
 		
+		//传递viewpager到标题管理器
+		TopBarManager.getInstance().setNewsVp(mViewPager);
+		//设置切换页面的监听
+		mViewPager.setOnPageChangeListener(TopBarManager.getInstance());
+		
 		return view;
 	}
+	
 
 }
