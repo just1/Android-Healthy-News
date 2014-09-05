@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost.OnTabChangeListener;
@@ -40,7 +41,7 @@ public class TopBarManager implements OnTabChangeListener,OnPageChangeListener{
 	private ViewPager vp_medicine;
 	private String medicine_tab[] = { "资讯", "饮食"};
 	private RadioGroup rg_medicine;
-	
+	private int rb_medicine_arry[] ={R.id.rb_topbar_medicine_1,R.id.rb_topbar_medicine_2};
 	
 	// 单例模式
 	// 1.定义静态变量
@@ -167,8 +168,14 @@ public class TopBarManager implements OnTabChangeListener,OnPageChangeListener{
 	}
 
 	@Override
-	public void onPageSelected(int arg0) {
-		// TODO Auto-generated method stub
+	public void onPageSelected(int id) {
+		if(currentPage == MEDICINE){
+			rg_medicine.check(rb_medicine_arry[id]);
+		}
+		
+		
+		
+		
 		
 	}
 }
