@@ -17,8 +17,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.healthyknow.HealthyKnowListBean;
-import com.yin.myhealthy.engine.HealthyKnowEngine;
+import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 //自动从网上拉数据的ListView
 public class AutoGetDateListView extends PullDownListView {
@@ -104,8 +104,7 @@ public class AutoGetDateListView extends PullDownListView {
 		list.add(new KeyValuesBean("limit", "30"));
 		list.add(new KeyValuesBean("type", "id"));
 
-		HealthyKnowEngine hke = new HealthyKnowEngine();
-		hke.GetHealthyKnowList(list, handler);
+		AsyncHttpClientUtil.RequestAPI(apiUrl, list, handler);	
 	}
 
 	// "加载更多"的事件处理
@@ -138,7 +137,7 @@ public class AutoGetDateListView extends PullDownListView {
 	protected void AnalyJSONToList(String jsonStr) {
 		JSONObject obj;
 		String healthyKnowListStr = null;
-		List<HealthyKnowListBean> HKLBeanList = null;
+		List<NewsListBean> HKLBeanList = null;
 		try {
 
 			// 用JSONObject获取指定段的JSON内容
@@ -147,7 +146,7 @@ public class AutoGetDateListView extends PullDownListView {
 
 			// 用GSON来反序列化，生成相应的实体类
 			HKLBeanList = new Gson().fromJson(healthyKnowListStr,
-					new TypeToken<List<HealthyKnowListBean>>() {
+					new TypeToken<List<NewsListBean>>() {
 					}.getType());
 
 		} catch (JSONException e) {

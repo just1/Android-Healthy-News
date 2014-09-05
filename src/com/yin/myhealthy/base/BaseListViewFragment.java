@@ -30,18 +30,13 @@ public abstract class BaseListViewFragment extends Fragment{
 	private PullDownListViewAdapter adapter;
 	protected List<String> titleList = new ArrayList<String>();
 	protected List<String> imgList = new ArrayList<String>();
-	private String apiUrl = "http://www.yi18.net/";
+	protected String apiUrl = null;
 
 	
-	public BaseListViewFragment() {
-		super();
+	public BaseListViewFragment(String url) {
+		apiUrl = url;
 	}
 	
-	public BaseListViewFragment(Context context) {
-		super();
-		this.context  = context;
-	}
-
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -70,11 +65,6 @@ public abstract class BaseListViewFragment extends Fragment{
 							titleList.removeAll(null);
 							imgList.removeAll(null);
 							getListViewDate();
-//							Looper.prepare();
-//							Toast.makeText(
-//									getActivity().getApplicationContext(),
-//									"更新了30条数据", 0).show();
-//							Looper.loop();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -93,7 +83,7 @@ public abstract class BaseListViewFragment extends Fragment{
 	}
 
 	// 访问网络，请求数据
-	protected abstract void getListViewDate();
+	protected  abstract void getListViewDate();
 //	{
 //		// 请求网络，获取健康知识分类列表
 //		List<KeyValuesBean> list = new ArrayList<KeyValuesBean>();
@@ -173,7 +163,7 @@ public abstract class BaseListViewFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_healthyknow, container,
+		View view = inflater.inflate(R.layout.fragment_base_lv, container,
 				false);
 
 		ll = (LinearLayout) view.findViewById(R.id.ll_frag_healthyknow);

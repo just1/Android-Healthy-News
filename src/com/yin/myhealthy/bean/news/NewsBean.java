@@ -1,6 +1,6 @@
-package com.yin.myhealthy.bean.healthyknow;
+package com.yin.myhealthy.bean.news;
 
-public class HealthyKnowBean {
+public class NewsBean {
 
 	private String title;
 	

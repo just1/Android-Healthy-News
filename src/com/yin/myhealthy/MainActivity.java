@@ -10,7 +10,7 @@ import android.widget.TabHost.TabSpec;
 
 import com.example.myhealthy.R;
 import com.yin.myhealthy.view.DietFragment;
-import com.yin.myhealthy.view.HealthyKnowFragment;
+import com.yin.myhealthy.view.NewsFragment;
 import com.yin.myhealthy.view.KnowledgeFragment;
 import com.yin.myhealthy.view.MedicineFragment;
 import com.yin.myhealthy.view.manager.TopBarManager;
@@ -34,7 +34,7 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * 定义数组来存放Fragment界面
 	 */
-	 private Class fragmentArray[] = { HealthyKnowFragment.class,
+	 private Class fragmentArray[] = { NewsFragment.class,
 	 DietFragment.class, MedicineFragment.class, KnowledgeFragment.class };
 
 	/**

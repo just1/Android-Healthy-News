@@ -46,7 +46,8 @@
         </android.support.v4.app.FragmentTabHost>
     </LinearLayout>
 
-</RelativeLayout><!--
+</RelativeLayout>
+<!--
          <include
         android:id="@+id/ly_main_buttombar"
         android:layout_width="match_parent"

@@ -11,10 +11,10 @@ import android.os.Message;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.healthyknow.HealKnowCategoryBean;
-import com.yin.myhealthy.bean.healthyknow.HealthyKnowListBean;
-import com.yin.myhealthy.engine.HealthyKnowEngine;
+import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class TestEngine {
 
@@ -29,7 +29,7 @@ public class TestEngine {
 				
 				JSONObject obj;
 				String healthyKnowListStr = null;
-				List<HealthyKnowListBean> list = null;
+				List<NewsListBean> list = null;
 				
 				try {
 					
@@ -39,7 +39,7 @@ public class TestEngine {
 					
 					//用GSON来反序列化，生成相应的实体类
 					list = new Gson().fromJson(healthyKnowListStr,
-							new TypeToken<List<HealthyKnowListBean>>() {}.getType());
+							new TypeToken<List<NewsListBean>>() {}.getType());
 					
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -73,9 +73,7 @@ public class TestEngine {
 		list.add(new KeyValuesBean("limit", "5"));
 		list.add(new KeyValuesBean("type", "id"));
 		
-		HealthyKnowEngine hke = new HealthyKnowEngine();
-		
-		hke.GetHealthyKnowList(list,handler);
+		AsyncHttpClientUtil.RequestAPI(GlobalDate.API_NEWS_LIST, list, handler);	
 		
 	}
 	

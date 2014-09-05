@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ public class DietFragment extends Fragment {
     private Activity mActivity;
     private LayoutInflater mLayoutInflater;
     private ChildViewPager mViewPager;
+    private Context context;
 
     private int[] mLayouts = new int[] { R.layout.guide_page_layout_one,
             R.layout.guide_page_layout_two, R.layout.guide_page_layout_three,
@@ -56,12 +58,14 @@ public class DietFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        // TODO Auto-generated method stub
-        mActivity = activity;
-        super.onAttach(activity);
-    }
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		//应该在这里调用getActivity()才不会返回为null，而不应该在构造函数里面调用
+		this.context = getActivity();
+	}
+
 	
 
 }

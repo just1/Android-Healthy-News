@@ -1,7 +1,7 @@
-package com.yin.myhealthy.bean.healthyknow;
+package com.yin.myhealthy.bean.news;
 
 
-public class HealKnowCategoryBean {
+public class NewsCategoryBean {
 
 	public String getName() {
 		return name;

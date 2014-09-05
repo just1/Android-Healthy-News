@@ -39,10 +39,13 @@ public class KnowledgeFragment extends Fragment {
 
 	
 	@Override
-	public void onAttach(Activity activity) {
-	    super.onAttach(activity);  
-	    context = activity;  
+	public void onStart() {
+		super.onStart();
+		
+		//应该在这里调用getActivity()才不会返回为null，而不应该在构造函数里面调用
+		this.context = getActivity();
 	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,8 +55,8 @@ public class KnowledgeFragment extends Fragment {
 		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp);
 		
         List<View> listViews = new ArrayList<View>();
-        listViews.add(new AutoGetDateListView(context));
-        listViews.add(new AutoGetDateListView(context));
+ //       listViews.add(new AutoGetDateListView(context));
+ //       listViews.add(new AutoGetDateListView(context));
 //        for (int i = 0; i < mLayouts.length; i++) {
 //        	
 //            listViews.add(inflater.inflate(mLayouts[i], null));

@@ -23,6 +23,14 @@ public class MedicineFragment extends Fragment {
 	private Context context;
 	
 	
+	@Override
+	public void onStart() {
+		super.onStart();
+		
+		//应该在这里调用getActivity()才不会返回为null，而不应该在构造函数里面调用
+		this.context = getActivity();
+	}
+
 	public MedicineFragment() {
 		super();
 		
@@ -40,12 +48,6 @@ public class MedicineFragment extends Fragment {
 		
 	}
 	
-	@Override
-	public void onAttach(Activity activity) {
-	    super.onAttach(activity);  
-	    context = activity;  
-	}
-
 	public MedicineFragment(Context context) {
 		super();
 		this.context = context;
@@ -66,8 +68,8 @@ public class MedicineFragment extends Fragment {
 		
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 
-		listViews.add(new TestFragment1(context));
-		listViews.add(new TestFragment2(context));
+		//listViews.add(new TestFragment1(context));
+		//listViews.add(new TestFragment2(context));
 		
 		
 		mViewPager.setAdapter(new FragmentPagerAdapter(getChildFragmentManager()) {
