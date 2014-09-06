@@ -4,7 +4,7 @@
     android:layout_height="50dp"
     android:orientation="horizontal" >
 
-    <!-- Medicine页面导航条 -->
+    <!-- News页面导航条 -->
 
     <LinearLayout
         android:id="@+id/ll_topbar_news"
@@ -62,5 +62,72 @@
             </RadioGroup>
         </HorizontalScrollView>
     </LinearLayout>
+    
+    
+    
+     <!-- Diet页面导航条 -->
+
+    <LinearLayout
+        android:id="@+id/ll_topbar_diet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <RadioGroup
+                android:id="@+id/rg_topbar_diet"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp" >
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_1"
+                    style="@style/radioButton"
+                    android:checked="true"
+                    android:text="亮发" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_2"
+                    style="@style/radioButton"
+                    android:text="健脑" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_3"
+                    style="@style/radioButton"
+                    android:text="温肺" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_4"
+                    style="@style/radioButton"
+                    android:text="有益心血管" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_5"
+                    style="@style/radioButton"
+                    android:text="明目" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_6"
+                    style="@style/radioButton"
+                    android:text="益乳" />
+
+                <RadioButton
+                    android:id="@+id/rb_topbar_diet_7"
+                    style="@style/radioButton"
+                    android:text="健脾" />
+                
+                
+                
+            </RadioGroup>
+        </HorizontalScrollView>
+    </LinearLayout>
+    
+    
+    
 
 </LinearLayout>

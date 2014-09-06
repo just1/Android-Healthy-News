@@ -24,8 +24,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yin.myhealthy.view.ContextActivity" />
+        
         <activity android:name="com.yin.myhealthy.MainActivity" />
+        <activity android:name="com.yin.myhealthy.view.NewsContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.DietContextActivity" />
         
         
     </application>

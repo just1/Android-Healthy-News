@@ -70,7 +70,7 @@ public class SingleNewsFragment extends BaseListViewFragment {
 
 		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
 
-		list.add(new KeyValuesBean("limit", "10"));
+		list.add(new KeyValuesBean("limit", "20"));
 		list.add(new KeyValuesBean("type", "id"));
 		list.add(new KeyValuesBean("id", id));
 
@@ -92,7 +92,7 @@ public class SingleNewsFragment extends BaseListViewFragment {
 				String url = GlobalDate.API_NEWS_MORE + news_id;
 
 				Intent startIntent = new Intent(getActivity(),
-						ContextActivity.class);
+						NewsContextActivity.class);
 				startIntent.putExtra("url", url);
 				startActivity(startIntent);
 			}

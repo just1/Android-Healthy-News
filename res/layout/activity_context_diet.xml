@@ -15,6 +15,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="2dp"
+            android:background="#00000000"
             android:src="@drawable/activity_context_back" />
 
         <ImageButton
@@ -23,41 +24,46 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:layout_marginRight="2dp"
+            android:background="#00000000"
             android:src="@drawable/activity_context_more" />
 
         <TextView
-            android:id="@+id/tv_context_title"
+            android:id="@+id/tv_context_name"
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:singleLine="false"
-      		android:gravity="center_horizontal"
+      		android:gravity="center"
             android:textSize="18sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl_context_second"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="50dp"
         android:layout_below="@id/rl_context_first" 
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp">
 
         <TextView
-            android:id="@+id/tv_context_time"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_context_tag"
+            android:id="@+id/tv_context_bar"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:gravity="center"
-            android:textSize="18sp" />
+            android:gravity="left"
+            android:textSize="18sp" 
+            android:text="功能："/>
+
+        
+        <!-- 暂不显示疗效 -->
+         <TextView
+            android:id="@+id/tv_context_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/tv_context_bar"
+            android:gravity="left"
+            android:textSize="18sp" /> 
     </RelativeLayout>
 
     <RelativeLayout

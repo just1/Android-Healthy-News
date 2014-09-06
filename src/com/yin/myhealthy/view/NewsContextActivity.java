@@ -18,10 +18,10 @@ import android.widget.TextView;
 import com.example.myhealthy.R;
 import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
-import com.yin.myhealthy.bean.ContextBean;
+import com.yin.myhealthy.bean.NewsContextBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
-public class ContextActivity extends Activity {
+public class NewsContextActivity extends Activity {
 
 	private ImageButton ib_back;
 	private ImageButton ib_more;
@@ -40,7 +40,7 @@ public class ContextActivity extends Activity {
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 		
-		setContentView(R.layout.activity_context);
+		setContentView(R.layout.activity_context_news);
 
 		initView();
 		initData();
@@ -66,7 +66,7 @@ public class ContextActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				ContextActivity.this.finish();
+				NewsContextActivity.this.finish();
 			}
 		});
 		
@@ -116,7 +116,7 @@ public class ContextActivity extends Activity {
 
 			// 用GSON来反序列化，生成相应的实体类
 			Gson gson = new Gson();
-			ContextBean bean = gson.fromJson(someJsonStr, ContextBean.class);
+			NewsContextBean bean = gson.fromJson(someJsonStr, NewsContextBean.class);
 
 			//根据json的数据更新页面
 			reflashViewFromNet(bean);
@@ -127,10 +127,10 @@ public class ContextActivity extends Activity {
 	}
 	
 	//根据json的数据更新页面
-	private void reflashViewFromNet(ContextBean bean){
+	private void reflashViewFromNet(NewsContextBean bean){
 		tv_title.setText(bean.getTitle());
-		tv_time.setText(bean.getTime());
-		tv_tag.setText(bean.getTag());
+		tv_time.setText(tv_time.getText() + bean.getTime());
+		tv_tag.setText(tv_tag.getText() + bean.getTag());
 		
 		//因为有些详细内容是没有图片的
 		if(bean.getImg() != null){

@@ -1,18 +1,13 @@
 package com.yin.myhealthy.bean;
 
 
-public class ContextBean {
+public class NewsContextBean {
 
 	private String title;
 	private String tag;
 	private String img;
 	
-	public String getImg() {
-		return img;
-	}
-	public void setImg(String img) {
-		this.img = img;
-	}
+
 	//message会很长，这样不知道会不会出错
 	private String message;
 	
@@ -22,7 +17,15 @@ public class ContextBean {
 	private String time;
 	private int id;
 	
-
+	
+	
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
+	
 	public String getTitle() {
 		return title;
 	}

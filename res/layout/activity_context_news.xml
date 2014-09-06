@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:id="@+id/rl_context_first"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true" >
+
+        <ImageButton
+            android:id="@+id/ib_context_back"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="2dp"
+            android:background="#00000000"
+            android:src="@drawable/activity_context_back" />
+
+        <ImageButton
+            android:id="@+id/ib_context_more"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="2dp"
+            android:background="#00000000"
+            android:src="@drawable/activity_context_more" />
+
+        <TextView
+            android:id="@+id/tv_context_title"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:singleLine="false"
+      		android:gravity="center"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_context_second"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/rl_context_first" 
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <TextView
+            android:id="@+id/tv_context_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="时间：" />
+
+        <TextView
+            android:id="@+id/tv_context_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:gravity="center"
+            android:textSize="18sp" 
+            android:text="类别："/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_context_third"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_context_second"
+        android:gravity="center_horizontal" 
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        >
+
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/siv_context_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            />
+
+        <ScrollView 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+            android:id="@+id/tv_context_contextmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/siv_context_img"
+            android:gravity="left"
+            android:textSize="18sp" />
+            
+        </ScrollView>
+        
+        
+    </RelativeLayout>
+
+</RelativeLayout>

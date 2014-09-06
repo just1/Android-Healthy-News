@@ -64,7 +64,7 @@ public class SplashActivity extends Activity {
 	
 	private void TestStartContextActivity(){
 		Intent startIntent = new Intent(SplashActivity.this,
-				ContextActivity.class);
+				NewsContextActivity.class);
 
 		
 		startActivity(startIntent);

@@ -20,8 +20,6 @@ import com.example.myhealthy.R;
 
 public class TopBarManager implements OnTabChangeListener, OnPageChangeListener {
 
-	private final int CHANGE_TOP_BAR = 1;
-	
 	/**
 	 * Tab选项卡的文字
 	 */
@@ -51,28 +49,36 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 	private RadioGroup rg_news;
 	private LinearLayout ll_news;
 
-	private String NewsCategoryList[] = { "企业要闻", // id=1
-			"医疗新闻", // id=2
-			"生活贴士", // id=3
-			"药品新闻", // id=4
-			"食品新闻", // id=5
-			"社会热点", // id=6
-			"疾病快讯" // id=7
-	};
-
-	private int rb_news_arry[] = { R.id.rb_topbar_news_1,
+	/*
+	 * 对应列表名: "企业要闻", // id=1 "医疗新闻", // id=2 "生活贴士", // id=3 "药品新闻", // id=4
+	 * "食品新闻", // id=5 "社会热点", // id=6 "疾病快讯" // id=7
+	 */
+	private int rb_news_id_arry[] = { R.id.rb_topbar_news_1,
 			R.id.rb_topbar_news_2, R.id.rb_topbar_news_3,
 			R.id.rb_topbar_news_4, R.id.rb_topbar_news_5,
 			R.id.rb_topbar_news_6, R.id.rb_topbar_news_7, };
-	
-	private List<RadioButton> rbList = new ArrayList<RadioButton>();
-	
-	
+
+	private List<RadioButton> rb_news_list = new ArrayList<RadioButton>();
 
 	// 饮食方面
+
+	/*
+	 * 亮发 id:1 健脑 id:2 温肺 id:3 有益心血管 id:4 明目 id:5 益乳 id:6 健脾 id:7 和胃 id:8 益肝
+	 * id:9 补肾 id:10 润肠 id:11 强筋 id:12 壮骨 id:13 养颜护肤 id:14 通血 id:15 发汗解表 id:16
+	 * 消炎止痛 id:17 降糖消渴 id:18 抑癌抗瘤 id:19 调经 id:20 养阴补虚 id:21 抗衰抗辐射 id:22 其他功效
+	 * id:23 补充能量 id:24 提高免疫力 id:25 减肥 id:26 安神除烦 id:27 疗头痛头晕 id:28 受孕 id:29
+	 */
+
 	private ViewPager vp_diet;
 	private RadioGroup rg_diet;
 	private LinearLayout ll_diet;
+
+	private int rb_diet_id_arry[] = { R.id.rb_topbar_diet_1,
+			R.id.rb_topbar_diet_2, R.id.rb_topbar_diet_3,
+			R.id.rb_topbar_diet_4, R.id.rb_topbar_diet_5,
+			R.id.rb_topbar_diet_6, R.id.rb_topbar_diet_7, };
+
+	private List<RadioButton> rb_diet_list = new ArrayList<RadioButton>();
 
 	// 药箱方面
 	private ViewPager vp_medicine;
@@ -128,12 +134,21 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 		rg_news = (RadioGroup) activity.findViewById(R.id.rg_topbar_news);
 		ll_news.setVisibility(View.GONE); // 设置不可见
 
-		for(int i=0;i<rb_news_arry.length;i++){
-			rbList.add((RadioButton) activity.findViewById(rb_news_arry[i]));
+		for (int i = 0; i < rb_news_id_arry.length; i++) {
+			rb_news_list.add((RadioButton) activity
+					.findViewById(rb_news_id_arry[i]));
 		}
-		
-		
-		
+
+		// 饮食页面
+		ll_diet = (LinearLayout) activity.findViewById(R.id.ll_topbar_diet);
+		rg_diet = (RadioGroup) activity.findViewById(R.id.rg_topbar_diet);
+		ll_diet.setVisibility(View.GONE); // 设置不可见
+
+		for (int i = 0; i < rb_diet_id_arry.length; i++) {
+			rb_diet_list.add((RadioButton) activity
+					.findViewById(rb_diet_id_arry[i]));
+		}
+
 		setListener(); // 设置监听
 		reflashView(); // 刷新页面
 
@@ -145,16 +160,27 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				for (int i = 0; i < rb_news_arry.length; i++) {
-					if (checkedId == rb_news_arry[i]) {
+				for (int i = 0; i < rb_news_id_arry.length; i++) {
+					if (checkedId == rb_news_id_arry[i]) {
 						vp_news.setCurrentItem(i);
 					}
 				}
 			}
 		});
 
-	}
+		rg_diet.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				for (int i = 0; i < rb_diet_id_arry.length; i++) {
+					if (checkedId == rb_diet_id_arry[i]) {
+						vp_diet.setCurrentItem(i);
+					}
+				}
+			}
+		});
+
+	}
 
 	private void reflashView() {
 		// 清楚所有已有
@@ -163,11 +189,17 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 		// 根据当前页面号来设置标题
 		switch (currentPage) {
 		case NEWS:
+			ll_diet.setVisibility(View.GONE);
+
 			ll_news.setVisibility(View.VISIBLE);
 
 			break;
 
 		case DIET:
+			ll_news.setVisibility(View.GONE);
+
+			ll_diet.setVisibility(View.VISIBLE);
+
 			break;
 
 		case MEDICINE:
@@ -180,6 +212,8 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 		}
 	}
 
+	
+	//对底部菜单tabHost进行监听
 	@Override
 	public void onTabChanged(String tabId) {
 		// 如果页面设置当前页面号
@@ -205,46 +239,42 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 	}
 
-	
-	//通过handler
+	// 通过handler
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+
+			int id = (Integer) msg.obj;
+
+			/*
+			 * 假如直接从radiogroup设置里面的radiobutton选中，会导致viewpager不停地切换
+			 * 这是因为从radiogroup里面设置check，会导致radiobutton的click被重复调用很多次
+			 * radiobutton的点击事件能让viewpager切换，所以viewpager就会不停切换
+			 * 
+			 * 解决方法：直接调用对应的radiobutton的setChecked
+			 */
+
+			if (currentPage == NEWS) {
+				// rg_news.check(rb_news_arry[id]);
+				rb_news_list.get(id).setChecked(true);
+			}
 			
-			if(msg.what == CHANGE_TOP_BAR){
-				int id = (Integer) msg.obj;
-				
-				/*
-				 * 假如直接从radiogroup设置里面的radiobutton选中，会导致viewpager不停地切换
-				 * 这是因为从radiogroup里面设置check，会导致radiobutton的click被重复调用很多次
-				 * radiobutton的点击事件能让viewpager切换，所以viewpager就会不停切换
-				 * 
-				 * 解决方法：直接调用对应的radiobutton的setChecked
-				 * */
-				
-				if (currentPage == NEWS) {
-					
-					
-					//rg_news.check(rb_news_arry[id]);
-					rbList.get(id).setChecked(true);
-				}
+			
+			if (currentPage == DIET) {
+				rb_diet_list.get(id).setChecked(true);
 			}
 		};
 	};
 
-	
-	
 	@Override
 	public void onPageSelected(int id) {
-		//假如直接改RadioGroup会导致滑动不流畅,所以采用message+handler
-//		if (currentPage == NEWS) {
-//			rg_news.check(rb_news_arry[id]);
-//		}
-		
+		// 假如直接改RadioGroup会导致滑动不流畅,所以采用message+handler
+		// if (currentPage == NEWS) {
+		// rg_news.check(rb_news_arry[id]);
+		// }
+
 		Message msg = new Message();
-		msg.what = CHANGE_TOP_BAR;
 		msg.obj = id;
 		handler.sendMessage(msg);
 	}
-		
-	
+
 }

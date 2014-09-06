@@ -70,7 +70,7 @@ public class SingleDietFragment extends BaseListViewFragment {
 
 		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
 
-		list.add(new KeyValuesBean("limit", "10"));
+		list.add(new KeyValuesBean("limit", "20"));
 		list.add(new KeyValuesBean("type", "id"));
 		list.add(new KeyValuesBean("id", id));
 
@@ -88,11 +88,11 @@ public class SingleDietFragment extends BaseListViewFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 
-				String news_id = idList.get(position-1);
-				String url = GlobalDate.API_DIET_MORE + news_id;
+				String diet_id = idList.get(position-1);
+				String url = GlobalDate.API_DIET_MORE + diet_id;
 
 				Intent startIntent = new Intent(getActivity(),
-						ContextActivity.class);
+						DietContextActivity.class);
 				startIntent.putExtra("url", url);
 				startActivity(startIntent);
 			}
