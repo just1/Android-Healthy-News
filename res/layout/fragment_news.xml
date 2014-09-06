@@ -6,7 +6,7 @@
     android:orientation="vertical" >
 
     <com.yin.myhealthy.view.ChildViewPager
-        android:id="@+id/child_vp_medicine"
+        android:id="@+id/child_vp_news"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 

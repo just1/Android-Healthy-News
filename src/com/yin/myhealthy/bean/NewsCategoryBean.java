@@ -1,4 +1,4 @@
-package com.yin.myhealthy.bean.news;
+package com.yin.myhealthy.bean;
 
 
 public class NewsCategoryBean {

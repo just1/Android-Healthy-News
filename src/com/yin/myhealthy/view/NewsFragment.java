@@ -13,20 +13,14 @@ import android.view.ViewGroup;
 import com.example.myhealthy.R;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.adapter.MyFragmentPagerAdapter;
-import com.yin.myhealthy.base.SingleNewsFragment;
 import com.yin.myhealthy.view.manager.TopBarManager;
 
 //健康资讯页面
 public class NewsFragment extends Fragment {
-	
 
-
-	
-	
 	private ChildViewPager mViewPager;
 	private Context context;
-	
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -42,12 +36,7 @@ public class NewsFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_news, container,
 				false);
 
-		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_medicine);
-		
-		//传递viewpager到标题管理器
-		TopBarManager.getInstance().setMedicineVp(mViewPager);
-		//设置切换页面的监听
-		mViewPager.setOnPageChangeListener(TopBarManager.getInstance());
+		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_news);
 		
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 		

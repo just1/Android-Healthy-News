@@ -1,4 +1,4 @@
-package com.yin.myhealthy.base;
+package com.yin.myhealthy.view;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -17,11 +14,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
-import com.yin.myhealthy.bean.ContextBean;
+import com.yin.myhealthy.base.BaseListViewFragment;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
-import com.yin.myhealthy.view.ContextActivity;
 
 public class SingleNewsFragment extends BaseListViewFragment {
 
@@ -36,16 +32,16 @@ public class SingleNewsFragment extends BaseListViewFragment {
 	@Override
 	protected void AnalyJSONToList(String jsonStr) {
 		JSONObject obj;
-		String healthyKnowListStr = null;
+		String someJsonStr = null;
 		List<NewsListBean> newsListBeanList = null;
 		try {
 
 			// 用JSONObject获取指定段的JSON内容
 			obj = new JSONObject(jsonStr);
-			healthyKnowListStr = (String) obj.getJSONArray("yi18").toString();
+			someJsonStr = (String) obj.getJSONArray("yi18").toString();
 
 			// 用GSON来反序列化，生成相应的实体类
-			newsListBeanList = new Gson().fromJson(healthyKnowListStr,
+			newsListBeanList = new Gson().fromJson(someJsonStr,
 					new TypeToken<List<NewsListBean>>() {
 					}.getType());
 

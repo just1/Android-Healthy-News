@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.base.BaseListViewFragment;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 //½¡¿µ×ÊÑ¶Ò³Ãæ

@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class TestEngine {

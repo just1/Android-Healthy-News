@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 //自动从网上拉数据的ListView

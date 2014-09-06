@@ -213,16 +213,17 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 			if(msg.what == CHANGE_TOP_BAR){
 				int id = (Integer) msg.obj;
 				
+				/*
+				 * 假如直接从radiogroup设置里面的radiobutton选中，会导致viewpager不停地切换
+				 * 这是因为从radiogroup里面设置check，会导致radiobutton的click被重复调用很多次
+				 * radiobutton的点击事件能让viewpager切换，所以viewpager就会不停切换
+				 * 
+				 * 解决方法：直接调用对应的radiobutton的setChecked
+				 * */
+				
 				if (currentPage == NEWS) {
 					
-					//
-					/*
-					 * 假如直接从radiogroup设置里面的radiobutton选中，会导致viewpager不停地切换
-					 * 这是因为从radiogroup里面设置check，会导致radiobutton的click被重复调用很多次
-					 * radiobutton的点击事件能让viewpager切换，所以viewpager就会不停切换
-					 * 
-					 * 解决方法：直接调用对应的radiobutton的setChecked
-					 * */
+					
 					//rg_news.check(rb_news_arry[id]);
 					rbList.get(id).setChecked(true);
 				}

@@ -14,54 +14,52 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-        
 
-        <RadioGroup
-            android:id="@+id/rg_topbar_news"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="left"
-            android:orientation="horizontal"
-            android:paddingBottom="6dp"
-            android:paddingTop="6dp" >
+            <RadioGroup
+                android:id="@+id/rg_topbar_news"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:orientation="horizontal"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp" >
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_1"
-                style="@style/radioButton"
-                android:checked="true"
-                android:text="企业要闻" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_1"
+                    style="@style/radioButton"
+                    android:checked="true"
+                    android:text="企业要闻" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_2"
-                style="@style/radioButton"
-                android:text="医疗新闻" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_2"
+                    style="@style/radioButton"
+                    android:text="医疗新闻" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_3"
-                style="@style/radioButton"
-                android:text="生活贴士" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_3"
+                    style="@style/radioButton"
+                    android:text="生活贴士" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_4"
-                style="@style/radioButton"
-                android:text="药品新闻" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_4"
+                    style="@style/radioButton"
+                    android:text="药品新闻" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_5"
-                style="@style/radioButton"
-                android:text="食品新闻" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_5"
+                    style="@style/radioButton"
+                    android:text="食品新闻" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_6"
-                style="@style/radioButton"
-                android:text="社会热点" />
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_6"
+                    style="@style/radioButton"
+                    android:text="社会热点" />
 
-            <RadioButton
-                android:id="@+id/rb_topbar_news_7"
-                style="@style/radioButton"
-                android:text="疾病快讯" />
-        </RadioGroup>
-        
+                <RadioButton
+                    android:id="@+id/rb_topbar_news_7"
+                    style="@style/radioButton"
+                    android:text="疾病快讯" />
+            </RadioGroup>
         </HorizontalScrollView>
     </LinearLayout>
 

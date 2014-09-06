@@ -1,7 +1,5 @@
 package com.yin.myhealthy.view;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.myhealthy.R;
 import com.yin.myhealthy.MainActivity;
-import com.yin.myhealthy.bean.ContextBean;
 
 public class SplashActivity extends Activity {
 

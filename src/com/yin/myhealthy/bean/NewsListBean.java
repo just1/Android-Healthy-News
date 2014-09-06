@@ -1,18 +1,28 @@
-package com.yin.myhealthy.bean.news;
+package com.yin.myhealthy.bean;
 
-public class HealthyKnowListBean {
+public class NewsListBean {
 	private String title;
+	private String tag;
+	
+	
 	private String img;
 	private int count;
-	private int fcount;
-	private int rcount;
+
 	private String author;
+	private int focal;
+	
 	
 	public String getTitle() {
 		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 	public String getImg() {
 		return img;
@@ -26,41 +36,17 @@ public class HealthyKnowListBean {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	public int getFcount() {
-		return fcount;
-	}
-	public void setFcount(int fcount) {
-		this.fcount = fcount;
-	}
-	public int getRcount() {
-		return rcount;
-	}
-	public void setRcount(int rcount) {
-		this.rcount = rcount;
-	}
 	public String getAuthor() {
 		return author;
 	}
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	public int getLoreclass() {
-		return loreclass;
+	public int getFocal() {
+		return focal;
 	}
-	public void setLoreclass(int loreclass) {
-		this.loreclass = loreclass;
-	}
-	public String getClassName() {
-		return className;
-	}
-	public void setClassName(String className) {
-		this.className = className;
-	}
-	public String getMd() {
-		return md;
-	}
-	public void setMd(String md) {
-		this.md = md;
+	public void setFocal(int focal) {
+		this.focal = focal;
 	}
 	public String getTime() {
 		return time;
@@ -74,16 +60,7 @@ public class HealthyKnowListBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-	private int loreclass;
-	private String className;
-	private String md;
 	private String time;
 	private int id;
-	
-	
-	
-	
-	
-	
 	
 }
