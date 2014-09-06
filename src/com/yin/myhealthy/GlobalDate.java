@@ -35,7 +35,11 @@ public class GlobalDate {
 	/*
 	 * 资讯
 	 */
+	
+	//资讯列表
 	public static final String API_NEWS_LIST = "http://api.yi18.net/news/list";
 	
+	//详细资讯内容
+	public static final String API_NEWS_MORE = "http://api.yi18.net/news/show?id=";
 	
 }

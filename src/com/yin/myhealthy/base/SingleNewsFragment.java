@@ -17,8 +17,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.bean.ContextBean;
 import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.bean.news.NewsBean;
 import com.yin.myhealthy.bean.news.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 import com.yin.myhealthy.view.ContextActivity;
@@ -93,27 +93,12 @@ public class SingleNewsFragment extends BaseListViewFragment {
 					int position, long id) {
 
 				String news_id = idList.get(position-1);
-				String url = "http://api.yi18.net/news/show?id=" + news_id;
-
-				// NewsBean nb = new NewsBean();
-				// nb.setTitle("my title");
-				// nb.setTag("my tag");
-				// nb.setTime("my time");
-				// nb.setMessage("my context");
-
-				// Bundle data = new Bundle();
-				// data.putSerializable("bean", nb);
+				String url = GlobalDate.API_NEWS_MORE + news_id;
 
 				Intent startIntent = new Intent(getActivity(),
 						ContextActivity.class);
 				startIntent.putExtra("url", url);
- 
-				// startIntent.putExtras(data);
-
 				startActivity(startIntent);
-
-				// SplashActivity.this.finish();
-
 			}
 
 		});

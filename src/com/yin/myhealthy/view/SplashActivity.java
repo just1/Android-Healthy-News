@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.example.myhealthy.R;
 import com.yin.myhealthy.MainActivity;
-import com.yin.myhealthy.bean.news.NewsBean;
+import com.yin.myhealthy.bean.ContextBean;
 
 public class SplashActivity extends Activity {
 
@@ -66,18 +66,9 @@ public class SplashActivity extends Activity {
 
 	
 	private void TestStartContextActivity(){
-//		NewsBean nb = new NewsBean();
-//		nb.setTitle("my title");
-//		nb.setTag("my tag");
-//		nb.setTime("my time");
-//		nb.setMessage("my context");
-//		
-//		Bundle data = new Bundle();
-//		data.putSerializable("bean", nb);
-		
 		Intent startIntent = new Intent(SplashActivity.this,
 				ContextActivity.class);
-		//startIntent.putExtras(data);
+
 		
 		startActivity(startIntent);
 		SplashActivity.this.finish();

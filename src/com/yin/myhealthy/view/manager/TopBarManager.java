@@ -1,5 +1,8 @@
 package com.yin.myhealthy.view.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +11,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost.OnTabChangeListener;
@@ -16,6 +20,8 @@ import com.example.myhealthy.R;
 
 public class TopBarManager implements OnTabChangeListener, OnPageChangeListener {
 
+	private final int CHANGE_TOP_BAR = 1;
+	
 	/**
 	 * Tab选项卡的文字
 	 */
@@ -58,6 +64,10 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 			R.id.rb_topbar_news_2, R.id.rb_topbar_news_3,
 			R.id.rb_topbar_news_4, R.id.rb_topbar_news_5,
 			R.id.rb_topbar_news_6, R.id.rb_topbar_news_7, };
+	
+	private List<RadioButton> rbList = new ArrayList<RadioButton>();
+	
+	
 
 	// 饮食方面
 	private ViewPager vp_diet;
@@ -118,6 +128,12 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 		rg_news = (RadioGroup) activity.findViewById(R.id.rg_topbar_news);
 		ll_news.setVisibility(View.GONE); // 设置不可见
 
+		for(int i=0;i<rb_news_arry.length;i++){
+			rbList.add((RadioButton) activity.findViewById(rb_news_arry[i]));
+		}
+		
+		
+		
 		setListener(); // 设置监听
 		reflashView(); // 刷新页面
 
@@ -139,7 +155,6 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 	}
 
-	private int vpItemNum;
 
 	private void reflashView() {
 		// 清楚所有已有
@@ -190,31 +205,44 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 	}
 
-//	Handler onPageSelectedhandler = new Handler() {
-//		@Override
-//		public void handleMessage(Message msg) {
-//
-//			if (currentPage == NEWS) {
-//				int id = (Integer) msg.obj;
-//				rg_news.check(rb_news_arry[id]);
-//			}
-//		}
-//
-//	};
+	
+	//通过handler
+	private Handler handler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			
+			if(msg.what == CHANGE_TOP_BAR){
+				int id = (Integer) msg.obj;
+				
+				if (currentPage == NEWS) {
+					
+					//
+					/*
+					 * 假如直接从radiogroup设置里面的radiobutton选中，会导致viewpager不停地切换
+					 * 这是因为从radiogroup里面设置check，会导致radiobutton的click被重复调用很多次
+					 * radiobutton的点击事件能让viewpager切换，所以viewpager就会不停切换
+					 * 
+					 * 解决方法：直接调用对应的radiobutton的setChecked
+					 * */
+					//rg_news.check(rb_news_arry[id]);
+					rbList.get(id).setChecked(true);
+				}
+			}
+		};
+	};
 
 	
-	//这里会导致滑动不流畅
+	
 	@Override
 	public void onPageSelected(int id) {
-
-//		Message msg = new Message();
-//		msg.obj = id;
-//		onPageSelectedhandler.sendMessage(msg);
-
+		//假如直接改RadioGroup会导致滑动不流畅,所以采用message+handler
+//		if (currentPage == NEWS) {
+//			rg_news.check(rb_news_arry[id]);
+//		}
 		
-		if (currentPage == NEWS) {
-			rg_news.check(rb_news_arry[id]);
-		}
+		Message msg = new Message();
+		msg.what = CHANGE_TOP_BAR;
+		msg.obj = id;
+		handler.sendMessage(msg);
 	}
 		
 	

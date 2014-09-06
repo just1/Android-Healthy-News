@@ -1,7 +1,7 @@
-package com.yin.myhealthy.bean.news;
+package com.yin.myhealthy.bean;
 
 
-public class NewsBean {
+public class ContextBean {
 
 	private String title;
 	private String tag;
