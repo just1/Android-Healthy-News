@@ -4,6 +4,7 @@
     android:layout_height="match_parent" >
 
     <RelativeLayout
+        android:id="@+id/rl_context_first"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true" >
@@ -11,19 +12,81 @@
         <ImageButton
             android:id="@+id/ib_context_back"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="2dp"
             android:src="@drawable/activity_context_back" />
-        
+
         <ImageButton
             android:id="@+id/ib_context_more"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="2dp"
             android:src="@drawable/activity_context_more" />
-        
+
+        <TextView
+            android:id="@+id/tv_context_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignLeft="@id/ib_context_back"
+            android:layout_alignRight="@id/ib_context_more"
+            android:gravity="center"
+            android:text="title"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_context_second"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_below="@id/rl_context_first" >
+
+        <TextView
+            android:id="@+id/tv_context_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:text="时间"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_context_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignRight="@id/tv_context_time"
+            android:layout_marginRight="120dp"
+            android:gravity="center"
+            android:text="类别"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_context_third"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/rl_context_second" 
+        android:gravity="center_horizontal"
+        >
+
+        <com.loopj.android.image.SmartImageView
+            android:id="@+id/siv_context_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            
+            android:src="@drawable/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_context_contextmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/siv_context_img"
+            
+            android:gravity="center"
+            android:text="正文"
+            android:textSize="18sp" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -1,6 +1,14 @@
 package com.yin.myhealthy.bean.news;
 
-public class NewsBean {
+import java.io.Serializable;
+
+public class NewsBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
 	private String title;
 	private String tag;
 	

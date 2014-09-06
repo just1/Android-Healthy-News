@@ -1,5 +1,7 @@
 package com.yin.myhealthy.view;
 
+import java.io.Serializable;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.myhealthy.R;
 import com.yin.myhealthy.MainActivity;
+import com.yin.myhealthy.bean.news.NewsBean;
 
 public class SplashActivity extends Activity {
 
@@ -43,10 +46,13 @@ public class SplashActivity extends Activity {
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			Intent startIntent = new Intent(SplashActivity.this,
-					MainActivity.class);
-			startActivity(startIntent);
-			SplashActivity.this.finish();
+//			Intent startIntent = new Intent(SplashActivity.this,
+//					MainActivity.class);
+//			startActivity(startIntent);
+//			SplashActivity.this.finish();
+			
+			
+			TestStartContextActivity();
 		};
 	};
 
@@ -61,4 +67,24 @@ public class SplashActivity extends Activity {
 		tv_splash.startAnimation(set);
 	}
 
+	
+	private void TestStartContextActivity(){
+		NewsBean nb = new NewsBean();
+		nb.setTitle("my title");
+		nb.setTag("my tag");
+		nb.setTime("my time");
+		nb.setMessage("my context");
+		
+		Bundle data = new Bundle();
+		data.putSerializable("bean", nb);
+		
+		Intent startIntent = new Intent(SplashActivity.this,
+				ContextActivity.class);
+		startIntent.putExtras(data);
+		
+		startActivity(startIntent);
+		SplashActivity.this.finish();
+		
+	}
+	
 }
