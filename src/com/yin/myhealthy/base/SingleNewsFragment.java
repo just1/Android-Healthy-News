@@ -6,19 +6,29 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.bean.KeyValuesBean;
+import com.yin.myhealthy.bean.news.NewsBean;
 import com.yin.myhealthy.bean.news.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
+import com.yin.myhealthy.view.ContextActivity;
 
-public class SingleNewsFragment extends BaseListViewFragment{
+public class SingleNewsFragment extends BaseListViewFragment {
 
-	//新闻类别的id号
+	// 新闻类别的id号
 	private String id;
-	
-	public SingleNewsFragment(String url,String id) {
+
+	public SingleNewsFragment(String url, String id) {
 		super(url);
 		this.id = id;
 	}
@@ -27,13 +37,12 @@ public class SingleNewsFragment extends BaseListViewFragment{
 	protected void AnalyJSONToList(String jsonStr) {
 		JSONObject obj;
 		String healthyKnowListStr = null;
-	    List<NewsListBean> newsListBeanList = null;
+		List<NewsListBean> newsListBeanList = null;
 		try {
 
 			// 用JSONObject获取指定段的JSON内容
 			obj = new JSONObject(jsonStr);
-			healthyKnowListStr = (String) obj.getJSONArray("yi18")
-					.toString();
+			healthyKnowListStr = (String) obj.getJSONArray("yi18").toString();
 
 			// 用GSON来反序列化，生成相应的实体类
 			newsListBeanList = new Gson().fromJson(healthyKnowListStr,
@@ -46,14 +55,14 @@ public class SingleNewsFragment extends BaseListViewFragment{
 
 		for (int i = 0; i < newsListBeanList.size(); i++) {
 			titleList.add(newsListBeanList.get(i).getTitle());
-			
+			idList.add(String.valueOf(newsListBeanList.get(i).getId()));
+
 			/*
-			 * 图片地址示例：
-			 * http://www.yi18.net/img/news/20140905132030_697.jpg
-			 * 
-			 * */
-			imgList.add(GlobalDate.WEB_ADDRESS + newsListBeanList.get(i).getImg());
-		}			
+			 * 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
+			 */
+			imgList.add(GlobalDate.WEB_ADDRESS
+					+ newsListBeanList.get(i).getImg());
+		}
 	}
 
 	@Override
@@ -62,14 +71,53 @@ public class SingleNewsFragment extends BaseListViewFragment{
 		List<KeyValuesBean> list = new ArrayList<KeyValuesBean>();
 
 		// 需要返回的页号
-		
+
 		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
 
 		list.add(new KeyValuesBean("limit", "10"));
 		list.add(new KeyValuesBean("type", "id"));
 		list.add(new KeyValuesBean("id", id));
 
-		AsyncHttpClientUtil.RequestAPI(apiUrl, list, handler);		
+		AsyncHttpClientUtil.RequestAPI(apiUrl, list, listDataHandler);
+	}
+
+	// 设置listView的item点击处理
+	@Override
+	public void setLvItemClickListener() {
+
+		// listview设置点击处理事件
+		lv.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				String news_id = idList.get(position-1);
+				String url = "http://api.yi18.net/news/show?id=" + news_id;
+
+				// NewsBean nb = new NewsBean();
+				// nb.setTitle("my title");
+				// nb.setTag("my tag");
+				// nb.setTime("my time");
+				// nb.setMessage("my context");
+
+				// Bundle data = new Bundle();
+				// data.putSerializable("bean", nb);
+
+				Intent startIntent = new Intent(getActivity(),
+						ContextActivity.class);
+				startIntent.putExtra("url", url);
+ 
+				// startIntent.putExtras(data);
+
+				startActivity(startIntent);
+
+				// SplashActivity.this.finish();
+
+			}
+
+		});
+
 	}
 
 }

@@ -1,18 +1,18 @@
 package com.yin.myhealthy.bean.news;
 
-import java.io.Serializable;
 
-public class NewsBean implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	
+public class NewsBean {
+
 	private String title;
 	private String tag;
+	private String img;
 	
-	
+	public String getImg() {
+		return img;
+	}
+	public void setImg(String img) {
+		this.img = img;
+	}
 	//message会很长，这样不知道会不会出错
 	private String message;
 	

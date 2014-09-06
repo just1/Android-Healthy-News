@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
 import com.example.myhealthy.R;
@@ -26,10 +28,12 @@ public abstract class BaseListViewFragment extends Fragment{
 
 	public Context context = null;
 	private LinearLayout ll;
-	private PullDownListView lv;
+	protected PullDownListView lv;
 	private PullDownListViewAdapter adapter;
 	protected List<String> titleList = new ArrayList<String>();
 	protected List<String> imgList = new ArrayList<String>();
+	protected List<String> idList = new ArrayList<String>();
+	
 	protected String apiUrl = null;
 
 	
@@ -64,6 +68,7 @@ public abstract class BaseListViewFragment extends Fragment{
 							Thread.sleep(500);
 							titleList.removeAll(null);
 							imgList.removeAll(null);
+							idList.removeAll(null);
 							getListViewDate();
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -79,8 +84,13 @@ public abstract class BaseListViewFragment extends Fragment{
 				}.execute(null, null, null);
 			}
 		});
-
+		
+		//设置listview的item监听
+		setLvItemClickListener();
 	}
+
+	abstract public void setLvItemClickListener();
+
 
 	// 访问网络，请求数据
 	protected  abstract void getListViewDate();
@@ -113,7 +123,7 @@ public abstract class BaseListViewFragment extends Fragment{
 	};
 
 	// 用来获取健康信息列表的数据，并显示到ListView中
-	protected Handler handler = new Handler() {
+	protected Handler listDataHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			String jsonStr = (String) msg.obj;
@@ -125,7 +135,6 @@ public abstract class BaseListViewFragment extends Fragment{
 				}
 			}
 			
-
 			// 更新ListView数据
 			adapter.notifyDataSetChanged();
 		}

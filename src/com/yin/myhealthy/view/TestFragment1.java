@@ -32,7 +32,7 @@ public class TestFragment1 extends BaseListViewFragment {
 		list.add(new KeyValuesBean("limit", "10"));
 		list.add(new KeyValuesBean("type", "id"));
 
-		AsyncHttpClientUtil.RequestAPI(apiUrl, list, handler);
+		AsyncHttpClientUtil.RequestAPI(apiUrl, list, listDataHandler);
 	}
 
 	@Override
@@ -60,6 +60,12 @@ public class TestFragment1 extends BaseListViewFragment {
 
 			imgList.add("http://www.yi18.net/" + HKLBeanList.get(i).getImg());
 		}
+	}
+
+	@Override
+	public void setLvItemClickListener() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,14 +1,26 @@
 package com.yin.myhealthy.view;
 
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Html;
+import android.view.View;
 import android.view.Window;
 import android.widget.TextView;
 
 import com.example.myhealthy.R;
+import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
 import com.yin.myhealthy.bean.news.NewsBean;
+import com.yin.myhealthy.bean.news.NewsListBean;
+import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class ContextActivity extends Activity {
 
@@ -42,17 +54,93 @@ public class ContextActivity extends Activity {
 	}
 
 	private void initData() {
+		
+//		Intent intent = getIntent();
+//		NewsBean bean = (NewsBean) intent.getSerializableExtra("bean");
+//		tv_title.setText(bean.getTitle());
+//		tv_time.setText(bean.getTime());
+//		tv_tag.setText(bean.getTag());
+//		
+//		//img_context.setImageUrl(bean.get);
+//		
+//		tv_context.setText(bean.getMessage());
+		
 		Intent intent = getIntent();
-
-		NewsBean bean = (NewsBean) intent.getSerializableExtra("bean");
-		tv_title.setText(bean.getTitle());
-		tv_time.setText(bean.getTime());
-		tv_tag.setText(bean.getTag());
+		String news_url =  (String) intent.getSerializableExtra("url");
 		
-		//img_context.setImageUrl(bean.get);
+		//请求网络
+		AsyncHttpClientUtil.RequestAPI(news_url, null, handler);
 		
-		tv_context.setText(bean.getMessage());
+		//json解析
 		
+		//界面显示
 	}
+	
+	Handler handler = new Handler(){
+
+		@Override
+		public void handleMessage(Message msg) {
+			
+			String jsonStr = (String) msg.obj;
+
+			//实际发现这里会报空指针异常
+			if(jsonStr != null){
+				if(!jsonStr.isEmpty()){
+					
+					
+					
+					AnalyJSONToList(jsonStr);
+				}
+			}
+		}
+	};
+	
+	private void AnalyJSONToList(String jsonStr) {
+		JSONObject obj;
+		String healthyKnowListStr = null;
+		List<NewsListBean> newsListBeanList = null;
+		try {
+
+			// 用JSONObject获取指定段的JSON内容
+			obj = new JSONObject(jsonStr);
+			
+			healthyKnowListStr = (String) obj.get("yi18").toString();
+
+			//测试，乱写
+			//tv_context.setText(healthyKnowListStr);
+			
+			
+			
+			
+			// 用GSON来反序列化，生成相应的实体类
+			Gson gson = new Gson();
+			NewsBean newsBean = gson.fromJson(healthyKnowListStr, NewsBean.class);
+
+			//根据json的数据更新页面
+			reflashViewFromNet(newsBean);
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+
+	}
+	
+	private void reflashViewFromNet(NewsBean newsbean){
+		tv_title.setText(newsbean.getTitle());
+		tv_time.setText(newsbean.getTime());
+		tv_tag.setText(newsbean.getTag());
+		
+		//因为有些详细内容是没有图片的
+		if(newsbean.getImg() != null){
+			img_context.setImageUrl(newsbean.getImg());
+		}else{
+			img_context.setVisibility(View.GONE);
+		}
+		
+		//s
+		tv_context.setText(Html.fromHtml(newsbean.getMessage()));
+	}
+	
 
 }

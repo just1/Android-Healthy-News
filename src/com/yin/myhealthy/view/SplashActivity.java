@@ -27,7 +27,6 @@ public class SplashActivity extends Activity {
 		
 		// 设置隐藏标题栏,必须在setContentView()前调用
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_main);
 		
 		setContentView(R.layout.activity_splash);
 
@@ -40,19 +39,17 @@ public class SplashActivity extends Activity {
 		tv_splash.setText("健康资讯通");
 
 		setAllAnimation();
-
 		finishAnimation();
 	}
 
 	private Handler handler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-//			Intent startIntent = new Intent(SplashActivity.this,
-//					MainActivity.class);
-//			startActivity(startIntent);
-//			SplashActivity.this.finish();
+			Intent startIntent = new Intent(SplashActivity.this,
+					MainActivity.class);
+			startActivity(startIntent);
+			SplashActivity.this.finish();
 			
-			
-			TestStartContextActivity();
+			//TestStartContextActivity();
 		};
 	};
 
@@ -69,18 +66,18 @@ public class SplashActivity extends Activity {
 
 	
 	private void TestStartContextActivity(){
-		NewsBean nb = new NewsBean();
-		nb.setTitle("my title");
-		nb.setTag("my tag");
-		nb.setTime("my time");
-		nb.setMessage("my context");
-		
-		Bundle data = new Bundle();
-		data.putSerializable("bean", nb);
+//		NewsBean nb = new NewsBean();
+//		nb.setTitle("my title");
+//		nb.setTag("my tag");
+//		nb.setTime("my time");
+//		nb.setMessage("my context");
+//		
+//		Bundle data = new Bundle();
+//		data.putSerializable("bean", nb);
 		
 		Intent startIntent = new Intent(SplashActivity.this,
 				ContextActivity.class);
-		startIntent.putExtras(data);
+		//startIntent.putExtras(data);
 		
 		startActivity(startIntent);
 		SplashActivity.this.finish();
