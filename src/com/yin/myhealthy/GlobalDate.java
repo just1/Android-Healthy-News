@@ -46,4 +46,14 @@ public class GlobalDate {
 	// 详细饮食内容
 	public static final String API_DIET_MORE = "http://api.yi18.net/food/show?id=";
 
+	
+	/*
+	 * 药箱
+	 */
+	// 药品列表
+	public static final String API_MEDICINE_LIST = "http://api.yi18.net/drug/list";
+
+	// 详细药品内容
+	public static final String API_MEDICINE_MORE = "http://api.yi18.net/drug/show?id=";
+
 }

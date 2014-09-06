@@ -40,14 +40,14 @@ public class DietFragment extends Fragment {
 		final List<Fragment> listViews = new ArrayList<Fragment>();
 		
 
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"1"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"2"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"3"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"4"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"5"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"6"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"7"));
-		listViews.add(new SingleDietFragment(GlobalDate.API_DIET_MENU_LIST,"8"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"1"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"2"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"3"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"4"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"5"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"6"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"7"));
+		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"8"));
 	
 		
 		mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), listViews));

@@ -80,10 +80,16 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 	private List<RadioButton> rb_diet_list = new ArrayList<RadioButton>();
 
+	
+	
+	
 	// 药箱方面
 	private ViewPager vp_medicine;
 	private RadioGroup rg_medicine;
 	private LinearLayout ll_medicine;
+	
+	
+	
 
 	// 百科方面
 	private ViewPager vp_knowledge;
@@ -203,7 +209,7 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 			break;
 
 		case MEDICINE:
-			ll_medicine.setVisibility(View.VISIBLE);
+			//ll_medicine.setVisibility(View.VISIBLE);
 
 			break;
 		case KNOWLEDGE:

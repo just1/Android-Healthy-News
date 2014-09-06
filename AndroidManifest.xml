@@ -28,6 +28,7 @@
         <activity android:name="com.yin.myhealthy.MainActivity" />
         <activity android:name="com.yin.myhealthy.view.NewsContextActivity" />
         <activity android:name="com.yin.myhealthy.view.DietContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.MedicineContextActivity" />
         
         
     </application>
