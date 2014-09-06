@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -50,6 +51,18 @@ public class SingleNewsFragment extends BaseListViewFragment {
 		}
 
 		for (int i = 0; i < newsListBeanList.size(); i++) {
+			//判断是否全部都加载完毕
+			if(!titleList.isEmpty()){		//如果titleList里面有数据
+				//拿titleList里面第一个数据出来进行比较
+				//如果相同，则不用继续加载进去，并其他全部加载完了
+				if(titleList.get(0) == newsListBeanList.get(i).getTitle()){
+					Toast.makeText(context, "数据全部加载完", 0).show();;
+					
+					return;
+				}
+			}
+			
+			
 			titleList.add(newsListBeanList.get(i).getTitle());
 			idList.add(String.valueOf(newsListBeanList.get(i).getId()));
 

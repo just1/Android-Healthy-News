@@ -7,7 +7,7 @@
         android:id="@+id/siv_listview_item_icon"
         android:layout_width="100dip"
         android:layout_height="60dip" 
-        android:src="@drawable/ic_launcher"/>
+        android:src="@drawable/image_normal"/>
 
     <TextView
         android:id="@+id/tv_lv_item"

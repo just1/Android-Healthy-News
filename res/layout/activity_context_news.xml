@@ -52,7 +52,7 @@
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:textSize="18sp"
-            android:text="时间：" />
+            android:text="" />
 
         <TextView
             android:id="@+id/tv_context_tag"
@@ -61,7 +61,7 @@
             android:layout_alignParentLeft="true"
             android:gravity="center"
             android:textSize="18sp" 
-            android:text="类别："/>
+            android:text=""/>
     </RelativeLayout>
 
     <RelativeLayout
