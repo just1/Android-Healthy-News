@@ -7,7 +7,8 @@
         android:id="@+id/rl_context_first"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:background="@color/darkseagreen" >
 
         <ImageButton
             android:id="@+id/ib_context_back"
@@ -37,72 +38,70 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/rl_context_second"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_below="@id/rl_context_first"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/tv_context_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="类别："
-            android:textSize="18sp" />
-
-        <!-- 暂时只显示类别 -->
-        
-         <TextView
-            android:id="@+id/tv_context_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text=""
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tv_context_factory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text=""
-            android:textSize="12sp" 
-            android:visibility="gone"/> 
-        
-        
-    </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_context_third"
+        android:id="@+id/rl_context_second"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/rl_context_second"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        android:layout_below="@id/rl_context_first"
+        android:background="@color/lemonchiffon"
         android:gravity="center_horizontal" >
 
-        <com.loopj.android.image.SmartImageView
-            android:id="@+id/siv_context_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true" />
-
         <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp" >
 
-            <TextView
-                android:id="@+id/tv_context_contextmsg"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/siv_context_img"
-                android:gravity="left"
-                android:textSize="18sp" />
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp" >
+
+                <TextView
+                    android:id="@+id/tv_context_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="类别："
+                    android:textSize="18sp" />
+
+                <!-- 暂时只显示类别，工厂和分类不显示 -->
+
+                <TextView
+                    android:id="@+id/tv_context_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_context_factory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text=""
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+                <com.loopj.android.image.SmartImageView
+                    android:id="@+id/siv_context_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_below="@id/tv_context_category" />
+
+                <TextView
+                    android:id="@+id/tv_context_contextmsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_context_category"
+                    android:gravity="left"
+                    android:textSize="18sp" />
+            </RelativeLayout>
         </ScrollView>
     </RelativeLayout>
 

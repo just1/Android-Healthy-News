@@ -2,14 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+    android:background="@color/mediumseagreen">
 
     <!-- News页面导航条 -->
 
     <LinearLayout
         android:id="@+id/ll_topbar_news"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+         >
 
         <HorizontalScrollView
             android:layout_width="match_parent"

@@ -10,21 +10,11 @@
         android:layout_alignParentTop="true"
         layout="@layout/bar_top" />
 
-    <!--
-         <LinearLayout
-        android:id="@+id/ll_topbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-         >
-    </LinearLayout>
-    -->
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@id/ll_main_topbar"
+        android:background="@color/beige"
         android:orientation="vertical" >
 
         <FrameLayout
@@ -47,37 +37,3 @@
     </LinearLayout>
 
 </RelativeLayout>
-<!--
-         <include
-        android:id="@+id/ly_main_buttombar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        layout="@layout/bar_buttom" />
-
-    <include
-        android:id="@+id/ly_main_topbar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        layout="@layout/bar_top" />
-
-    
-         <android.support.v4.view.ViewPager
-        android:id="@+id/vp"
-        android:layout_above="@id/ly_main_buttombar"
-        android:layout_below="@id/ly_main_topbar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </android.support.v4.view.ViewPager>
-   
-
-    <com.yin.myhealthy.view.NoSlipViewPager
-        android:id="@+id/vp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/ly_main_buttombar"
-        android:layout_below="@id/ly_main_topbar" >
-    </com.yin.myhealthy.view.NoSlipViewPager>
--->
-

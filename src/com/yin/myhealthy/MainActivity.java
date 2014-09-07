@@ -40,7 +40,7 @@ public class MainActivity extends FragmentActivity {
 	/**
 	 * Tab选项卡的文字
 	 */
-	private String mTextviewArray[] = { "资讯", "饮食", "药品", "百科" };
+	private String mTextviewArray[] = { "资讯", "饮食", "药箱", "百科" };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="radiobg_press">#43859d</color>
     <color name="radiobg_normal">#00000000</color>
+    <color name="olivedrab">#6B8E23</color>
+    <color name="gray">#808080</color>
+    <color name="violet">#EE82EE</color>
+    <color name="steelblue">#4682B4</color>
+    <color name="purple">#800080</color>
+    <color name="red">#CC0000</color>
+    <color name="orange">#FFA500</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="green">#008000</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="brown">#A52A2A</color>
+    <color name="maroon">#800000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="darkseagreen">#8FBC8F</color>
+    <color name="lemonchiffon">#FFFACD</color>
+    <color name="mediumseagreen">#3CB371</color>
+    <color name="beige">#F5F5DC</color>
+    <color name="lightsteelblue">#B0C4DE</color>
+
 </resources>
