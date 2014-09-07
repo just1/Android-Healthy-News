@@ -80,21 +80,41 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 	private List<RadioButton> rb_diet_list = new ArrayList<RadioButton>();
 
-	
-	
-	
 	// 药箱方面
+	/*
+	 * 性病用药id:1 抗结核及麻风类id:2 血液疾病类id:3 水电解质及酸碱id:4 抗寄生虫类id:5 风湿免疫科id:6 肿瘤科id:7
+	 * 神经/精神id:8 内分泌失常id:9 肾病id:10 肝胆胰用药id:11 心脑血管id:12 维生素及营养类id:13 儿科用药id:14
+	 * 妇科用药id:15 男科用药id:16 家庭常备id:17 呼吸系统类id:18 五官用药id:19 肠胃用药id:20 皮肤用药id:21
+	 * 感冒发热id:22 手术用药id:203 其他id:201
+	 */
+
 	private ViewPager vp_medicine;
 	private RadioGroup rg_medicine;
 	private LinearLayout ll_medicine;
-	
-	
-	
+
+	private int rb_medicine_id_arry[] = { R.id.rb_topbar_medicine_1,
+			R.id.rb_topbar_medicine_2, R.id.rb_topbar_medicine_3,
+			R.id.rb_topbar_medicine_4, R.id.rb_topbar_medicine_5,
+			R.id.rb_topbar_medicine_6, R.id.rb_topbar_medicine_7, };
+
+	private List<RadioButton> rb_medicine_list = new ArrayList<RadioButton>();
 
 	// 百科方面
+	/*
+	 * 老人健康id:1 孩子健康id:2 健康饮食id:3 男性健康id:4 女性保养id:5 孕婴手册id:6 私密生活id:7 育儿宝典id:8
+	 * 心里健康id:9 四季养生id:10 减肥瘦身id:11 医疗护理id:12 夫妻情感id:13
+	 */
+
 	private ViewPager vp_knowledge;
 	private RadioGroup rg_knowledge;
 	private LinearLayout ll_knowledge;
+
+	private int rb_knowledge_id_arry[] = { R.id.rb_topbar_knowledge_1,
+			R.id.rb_topbar_knowledge_2, R.id.rb_topbar_knowledge_3,
+			R.id.rb_topbar_knowledge_4, R.id.rb_topbar_knowledge_5,
+			R.id.rb_topbar_knowledge_6, R.id.rb_topbar_knowledge_7, };
+
+	private List<RadioButton> rb_knowledge_list = new ArrayList<RadioButton>();
 
 	// 单例模式
 	// 1.定义静态变量
@@ -155,6 +175,30 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 					.findViewById(rb_diet_id_arry[i]));
 		}
 
+		// 药箱页面
+		ll_medicine = (LinearLayout) activity
+				.findViewById(R.id.ll_topbar_medicine);
+		rg_medicine = (RadioGroup) activity
+				.findViewById(R.id.rg_topbar_medicine);
+		ll_medicine.setVisibility(View.GONE); // 设置不可见
+
+		for (int i = 0; i < rb_medicine_id_arry.length; i++) {
+			rb_medicine_list.add((RadioButton) activity
+					.findViewById(rb_medicine_id_arry[i]));
+		}
+
+		// 百科页面
+		ll_knowledge = (LinearLayout) activity
+				.findViewById(R.id.ll_topbar_knowledge);
+		rg_knowledge = (RadioGroup) activity
+				.findViewById(R.id.rg_topbar_knowledge);
+		ll_knowledge.setVisibility(View.GONE); // 设置不可见
+
+		for (int i = 0; i < rb_knowledge_id_arry.length; i++) {
+			rb_knowledge_list.add((RadioButton) activity
+					.findViewById(rb_knowledge_id_arry[i]));
+		}
+
 		setListener(); // 设置监听
 		reflashView(); // 刷新页面
 
@@ -186,6 +230,30 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 			}
 		});
 
+		rg_medicine.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				for (int i = 0; i < rb_medicine_id_arry.length; i++) {
+					if (checkedId == rb_medicine_id_arry[i]) {
+						vp_medicine.setCurrentItem(i);
+					}
+				}
+			}
+		});
+
+		rg_knowledge.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				for (int i = 0; i < rb_knowledge_id_arry.length; i++) {
+					if (checkedId == rb_knowledge_id_arry[i]) {
+						vp_knowledge.setCurrentItem(i);
+					}
+				}
+			}
+		});
+
 	}
 
 	private void reflashView() {
@@ -196,30 +264,40 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 		switch (currentPage) {
 		case NEWS:
 			ll_diet.setVisibility(View.GONE);
+			ll_medicine.setVisibility(View.GONE);
+			ll_knowledge.setVisibility(View.GONE);
 
 			ll_news.setVisibility(View.VISIBLE);
-
 			break;
 
 		case DIET:
 			ll_news.setVisibility(View.GONE);
+			ll_medicine.setVisibility(View.GONE);
+			ll_knowledge.setVisibility(View.GONE);
 
 			ll_diet.setVisibility(View.VISIBLE);
-
 			break;
 
 		case MEDICINE:
-			//ll_medicine.setVisibility(View.VISIBLE);
+			ll_news.setVisibility(View.GONE);
+			ll_diet.setVisibility(View.GONE);
+			ll_knowledge.setVisibility(View.GONE);
 
+			ll_medicine.setVisibility(View.VISIBLE);
 			break;
+
 		case KNOWLEDGE:
+			ll_news.setVisibility(View.GONE);
+			ll_diet.setVisibility(View.GONE);
+			ll_medicine.setVisibility(View.GONE);
+
+			ll_knowledge.setVisibility(View.VISIBLE);
 			break;
 
 		}
 	}
 
-	
-	//对底部菜单tabHost进行监听
+	// 对底部菜单tabHost进行监听
 	@Override
 	public void onTabChanged(String tabId) {
 		// 如果页面设置当前页面号
@@ -261,12 +339,29 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 
 			if (currentPage == NEWS) {
 				// rg_news.check(rb_news_arry[id]);
-				rb_news_list.get(id).setChecked(true);
+				
+				//防止viewpager里面的页面比radiogroup多的时候出错
+				if (rb_news_list.size() > id) {		
+					rb_news_list.get(id).setChecked(true);
+				}
 			}
-			
-			
+
 			if (currentPage == DIET) {
-				rb_diet_list.get(id).setChecked(true);
+				if (rb_diet_list.size() > id) {
+					rb_diet_list.get(id).setChecked(true);
+				}
+			}
+
+			if (currentPage == MEDICINE) {
+				if (rb_medicine_list.size() > id) {
+					rb_medicine_list.get(id).setChecked(true);
+				}
+			}
+
+			if (currentPage == KNOWLEDGE) {
+				if (rb_knowledge_list.size() > id) {
+					rb_knowledge_list.get(id).setChecked(true);
+				}
 			}
 		};
 	};

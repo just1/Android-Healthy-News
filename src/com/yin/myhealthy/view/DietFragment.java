@@ -47,7 +47,6 @@ public class DietFragment extends Fragment {
 		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"5"));
 		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"6"));
 		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"7"));
-		listViews.add(new DietSingleFragment(GlobalDate.API_DIET_MENU_LIST,"8"));
 	
 		
 		mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), listViews));
