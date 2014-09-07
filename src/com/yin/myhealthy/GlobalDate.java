@@ -12,24 +12,8 @@ public class GlobalDate {
 	public static final String WEB_ADDRESS = "http://www.yi18.net/";
 
 	/*
-	 * 健康知识信息列表
-	 */
-	public static final String API_HEAYKNOW_LIST = "http://api.yi18.net/lore/list";
-
-	/*
-	 * 健康知识分类列表
-	 */
-	public static final String API_HEAYKNOW_CATE_LIST = "http://api.yi18.net/lore/list";
-
-	/*
-	 * 健康知识信息详细
-	 */
-	public static final String API_HEAYKNOW_MORE = "http://api.yi18.net/lore/list";
-
-	/*
 	 * 资讯
 	 */
-
 	// 资讯列表
 	public static final String API_NEWS_LIST = "http://api.yi18.net/news/list";
 
@@ -39,14 +23,12 @@ public class GlobalDate {
 	/*
 	 * 饮食
 	 */
-
 	// 饮食列表（按疗效）
 	public static final String API_DIET_MENU_LIST = "http://api.yi18.net/food/menulist";
 
 	// 详细饮食内容
 	public static final String API_DIET_MORE = "http://api.yi18.net/food/show?id=";
 
-	
 	/*
 	 * 药箱
 	 */
@@ -55,5 +37,14 @@ public class GlobalDate {
 
 	// 详细药品内容
 	public static final String API_MEDICINE_MORE = "http://api.yi18.net/drug/show?id=";
+
+	/*
+	 * 健康知识
+	 */
+	// 分类列表
+	public static final String API_KNOWLEDGE_LIST = "http://api.yi18.net/lore/list";
+
+	// 健康知识信息详细
+	public static final String API_KNOWLEDGE_MORE = "http://api.yi18.net/lore/show?id=";
 
 }

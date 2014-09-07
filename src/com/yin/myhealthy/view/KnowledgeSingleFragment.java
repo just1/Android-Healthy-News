@@ -16,16 +16,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.base.BaseListViewFragment;
-import com.yin.myhealthy.bean.DietListBean;
 import com.yin.myhealthy.bean.KeyValuesBean;
+import com.yin.myhealthy.bean.KnowledgeListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
-public class DietSingleFragment extends BaseListViewFragment {
+public class KnowledgeSingleFragment extends BaseListViewFragment {
 
 	// 新闻类别的id号
 	private String id;
 
-	public DietSingleFragment(String url, String id) {
+	public KnowledgeSingleFragment(String url, String id) {
 		super(url);
 		this.id = id;
 	}
@@ -34,7 +34,7 @@ public class DietSingleFragment extends BaseListViewFragment {
 	protected void AnalyJSONToList(String jsonStr) {
 		JSONObject obj;
 		String someJsonStr = null;
-		List<DietListBean> dietListBeanList = null;
+		List<KnowledgeListBean> knowledgeListBeanList = null;
 		try {
 
 			// 用JSONObject获取指定段的JSON内容
@@ -42,34 +42,39 @@ public class DietSingleFragment extends BaseListViewFragment {
 			someJsonStr = (String) obj.getJSONArray("yi18").toString();
 
 			// 用GSON来反序列化，生成相应的实体类
-			dietListBeanList = new Gson().fromJson(someJsonStr,
-					new TypeToken<List<DietListBean>>() {
+			knowledgeListBeanList = new Gson().fromJson(someJsonStr,
+					new TypeToken<List<KnowledgeListBean>>() {
 					}.getType());
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
-		
-		//判断是否全部都加载完毕
-		if(dietListBeanList.size() == 0){
+		// 判断是否全部都加载完毕
+		if (knowledgeListBeanList.size() == 0) {
 			System.out.println("数据全部加载完");
 			Toast.makeText(context, "数据全部加载完", 0).show();
-			
+
 			return;
 		}
-		
-		
-		for (int i = 0; i < dietListBeanList.size(); i++) {		
-			
-			titleList.add(dietListBeanList.get(i).getName());
-			idList.add(String.valueOf(dietListBeanList.get(i).getId()));
+
+		// 判断是否全部都加载完毕
+		if (knowledgeListBeanList.size() == 0) {
+			System.out.println("数据全部加载完");
+			Toast.makeText(context, "数据全部加载完", 0).show();
+
+			return;
+		}
+
+		for (int i = 0; i < knowledgeListBeanList.size(); i++) {
+			titleList.add(knowledgeListBeanList.get(i).getTitle());
+			idList.add(String.valueOf(knowledgeListBeanList.get(i).getId()));
 
 			/*
 			 * 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
 			 */
 			imgList.add(GlobalDate.WEB_ADDRESS
-					+ dietListBeanList.get(i).getImg());
+					+ knowledgeListBeanList.get(i).getImg());
 		}
 	}
 
@@ -98,13 +103,13 @@ public class DietSingleFragment extends BaseListViewFragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+					int position, long itemId) {
 
-				String diet_id = idList.get(position-1);
-				String url = GlobalDate.API_DIET_MORE + diet_id;
+				String id = idList.get(position - 1);
+				String url = GlobalDate.API_KNOWLEDGE_MORE + id;
 
 				Intent startIntent = new Intent(getActivity(),
-						DietContextActivity.class);
+						KnowledgeContextActivity.class);
 				startIntent.putExtra("url", url);
 				startActivity(startIntent);
 			}

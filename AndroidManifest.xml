@@ -29,7 +29,7 @@
         <activity android:name="com.yin.myhealthy.view.NewsContextActivity" />
         <activity android:name="com.yin.myhealthy.view.DietContextActivity" />
         <activity android:name="com.yin.myhealthy.view.MedicineContextActivity" />
-        
+        <activity android:name="com.yin.myhealthy.view.KnowledgeContextActivity" />
         
     </application>
 

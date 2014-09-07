@@ -3,65 +3,50 @@ package com.yin.myhealthy.view;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myhealthy.R;
-import com.yin.myhealthy.adapter.ChildViewPagerAdapter;
+import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.adapter.MyFragmentPagerAdapter;
+import com.yin.myhealthy.view.manager.TopBarManager;
 
 
 //百科页面
 public class KnowledgeFragment extends Fragment {
 	
-    private int[] mLayouts = new int[] { R.layout.guide_page_layout_one,
-            R.layout.guide_page_layout_two, R.layout.guide_page_layout_three,
-            R.layout.guide_page_layout_four };
-    
-    private ChildViewPager mViewPager;
-	private Context context;
-	
-	public KnowledgeFragment() {
-		super();
-		//this.context = getActivity();
-	}
-	
-	
-	public KnowledgeFragment(Context context) {
-		super();
-		this.context = context;
-	}
-
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		
-		//应该在这里调用getActivity()才不会返回为null，而不应该在构造函数里面调用
-		this.context = getActivity();
-	}
-
+	private ChildViewPager mViewPager;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_knowledge, container, false);
+		View view = inflater.inflate(R.layout.fragment_knowledge, container,
+				false);
+
+		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp_knowledge);
 		
-		mViewPager = (ChildViewPager) view.findViewById(R.id.child_vp);
+		final List<Fragment> listViews = new ArrayList<Fragment>();
 		
-        List<View> listViews = new ArrayList<View>();
- //       listViews.add(new AutoGetDateListView(context));
- //       listViews.add(new AutoGetDateListView(context));
-//        for (int i = 0; i < mLayouts.length; i++) {
-//        	
-//            listViews.add(inflater.inflate(mLayouts[i], null));
-//        }
-        mViewPager.setAdapter(new ChildViewPagerAdapter(listViews));
+
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"1"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"2"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"3"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"4"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"5"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"6"));
+		listViews.add(new KnowledgeSingleFragment(GlobalDate.API_KNOWLEDGE_LIST,"7"));
+
+		
+		mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), listViews));
+		
+		
+		//传递viewpager到标题管理器
+		TopBarManager.getInstance().setKnoweledgeVp(mViewPager);
+		//设置切换页面的监听
+		mViewPager.setOnPageChangeListener(TopBarManager.getInstance());
 		
 		return view;
 	}

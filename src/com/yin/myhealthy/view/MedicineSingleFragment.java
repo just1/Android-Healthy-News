@@ -18,7 +18,6 @@ import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.base.BaseListViewFragment;
 import com.yin.myhealthy.bean.KeyValuesBean;
 import com.yin.myhealthy.bean.MedicineListBean;
-import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class MedicineSingleFragment extends BaseListViewFragment {
@@ -51,19 +50,16 @@ public class MedicineSingleFragment extends BaseListViewFragment {
 			e.printStackTrace();
 		}
 
+		
+		// 判断是否全部都加载完毕
+		if (medicineListBeanList.size() == 0) {
+			System.out.println("数据全部加载完");
+			Toast.makeText(context, "数据全部加载完", 0).show();
+
+			return;
+		}
+		
 		for (int i = 0; i < medicineListBeanList.size(); i++) {
-			//判断是否全部都加载完毕
-			if(!titleList.isEmpty()){		//如果titleList里面有数据
-				//拿titleList里面第一个数据出来进行比较
-				//如果相同，则不用继续加载进去，并其他全部加载完了
-				if(titleList.get(0) == medicineListBeanList.get(i).getName()){
-					Toast.makeText(context, "数据全部加载完", 0).show();;
-					
-					return;
-				}
-			}
-			
-			
 			titleList.add(medicineListBeanList.get(i).getName());
 			idList.add(String.valueOf(medicineListBeanList.get(i).getId()));
 
