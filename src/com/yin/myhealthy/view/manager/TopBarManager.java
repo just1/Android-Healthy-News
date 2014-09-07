@@ -16,7 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost.OnTabChangeListener;
 
-import com.example.myhealthy.R;
+import com.yin.myhealthy.R;
 
 public class TopBarManager implements OnTabChangeListener, OnPageChangeListener {
 
@@ -341,27 +341,21 @@ public class TopBarManager implements OnTabChangeListener, OnPageChangeListener 
 				// rg_news.check(rb_news_arry[id]);
 				
 				//防止viewpager里面的页面比radiogroup多的时候出错
-				if (rb_news_list.size() > id) {		
+				//if (rb_news_list.size() > id) {		
 					rb_news_list.get(id).setChecked(true);
-				}
+				//}
 			}
 
 			if (currentPage == DIET) {
-				if (rb_diet_list.size() > id) {
 					rb_diet_list.get(id).setChecked(true);
-				}
 			}
 
 			if (currentPage == MEDICINE) {
-				if (rb_medicine_list.size() > id) {
 					rb_medicine_list.get(id).setChecked(true);
-				}
 			}
 
 			if (currentPage == KNOWLEDGE) {
-				if (rb_knowledge_list.size() > id) {
 					rb_knowledge_list.get(id).setChecked(true);
-				}
 			}
 		};
 	};

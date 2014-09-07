@@ -15,11 +15,10 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.myhealthy.R;
 import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
+import com.yin.myhealthy.R;
 import com.yin.myhealthy.bean.MedicineContextBean;
-import com.yin.myhealthy.bean.NewsContextBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 public class MedicineContextActivity extends Activity {

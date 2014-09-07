@@ -10,8 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
-import com.example.myhealthy.R;
 import com.yin.myhealthy.MainActivity;
+import com.yin.myhealthy.R;
 
 public class SplashActivity extends Activity {
 
@@ -33,7 +33,7 @@ public class SplashActivity extends Activity {
 
 	private void initView() {
 		tv_splash = (TextView) findViewById(R.id.tv_splash_login);
-		tv_splash.setText("½¡¿µ×ÊÑ¶Í¨");
+		tv_splash.setText(R.string.app_name);
 
 		setAllAnimation();
 		finishAnimation();

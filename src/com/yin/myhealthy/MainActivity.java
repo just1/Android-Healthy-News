@@ -5,14 +5,12 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.Window;
-import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
-import com.example.myhealthy.R;
 import com.yin.myhealthy.view.DietFragment;
-import com.yin.myhealthy.view.NewsFragment;
 import com.yin.myhealthy.view.KnowledgeFragment;
 import com.yin.myhealthy.view.MedicineFragment;
+import com.yin.myhealthy.view.NewsFragment;
 import com.yin.myhealthy.view.manager.TopBarManager;
 
 public class MainActivity extends FragmentActivity {

@@ -14,11 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
 
-import com.example.myhealthy.R;
+import com.yin.myhealthy.R;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 import com.yin.myhealthy.view.PullDownListView;
 import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;

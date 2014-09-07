@@ -1,12 +1,5 @@
 package com.yin.myhealthy.view.manager;
 
-import android.app.Activity;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageButton;
-
-import com.example.myhealthy.R;
 
 public class ButtomBarManager {
 //	// µ¥ÀýÄ£Ê½

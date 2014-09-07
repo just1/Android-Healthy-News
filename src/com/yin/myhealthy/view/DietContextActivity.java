@@ -15,10 +15,9 @@ import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.myhealthy.R;
 import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
-import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.R;
 import com.yin.myhealthy.bean.DietContextBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 

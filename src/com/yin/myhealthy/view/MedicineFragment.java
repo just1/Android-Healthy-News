@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.myhealthy.R;
 import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.R;
 import com.yin.myhealthy.adapter.MyFragmentPagerAdapter;
 import com.yin.myhealthy.view.manager.TopBarManager;
 

@@ -4,7 +4,6 @@ import java.util.Date;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.myhealthy.R;
+import com.yin.myhealthy.R;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 
 public class PullDownListView extends ListView implements OnScrollListener {

@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.myhealthy.R;
 import com.loopj.android.image.SmartImageView;
+import com.yin.myhealthy.R;
 
 public class PullDownListViewAdapter extends BaseAdapter {
 	private List<String> titleList;
