@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="lib" path="libs/android-support-v4.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="lib" path="libs/android-async-http-1.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/commons-lang3-3.0-beta.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gson-2.2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/android-async-http-1.4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/mframework.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Core-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-KaiXin-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-QQ-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-QZone-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-SinaWeibo-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-TencentWeibo-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Core-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Favorite-2.3.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Moments-2.3.12.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

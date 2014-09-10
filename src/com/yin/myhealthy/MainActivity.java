@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.widget.TabHost.TabSpec;
+import cn.sharesdk.framework.ShareSDK;
 
 import com.yin.myhealthy.view.DietFragment;
 import com.yin.myhealthy.view.KnowledgeFragment;
@@ -47,6 +48,9 @@ public class MainActivity extends FragmentActivity {
 		// 设置隐藏标题栏,必须在setContentView()前调用
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
+		
+		//初始化shareSDK
+		ShareSDK.initSDK(this);
 
 		initView();
 
