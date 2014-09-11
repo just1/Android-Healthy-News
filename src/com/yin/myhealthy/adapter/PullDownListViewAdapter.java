@@ -15,7 +15,7 @@ import com.yin.myhealthy.R;
 public class PullDownListViewAdapter extends BaseAdapter {
 	private List<String> titleList;
 	private List<String> imgList;
-	private TextView tv;
+
 	private LayoutInflater mInflater = null;
 	private Context context;
 
@@ -23,8 +23,9 @@ public class PullDownListViewAdapter extends BaseAdapter {
 		this.titleList = titleList;
 		this.context = context;
 	}
-	
-	public PullDownListViewAdapter(List<String> titleList,List<String> imgList, Context context) {
+
+	public PullDownListViewAdapter(List<String> titleList,
+			List<String> imgList, Context context) {
 		this.titleList = titleList;
 		this.imgList = imgList;
 		this.context = context;
@@ -47,15 +48,28 @@ public class PullDownListViewAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		
+		if (convertView == null) {
+			convertView = View.inflate(context, R.layout.lv_pd_item, null);
+			holder = new ViewHolder();
 
-		View view = View.inflate(context, R.layout.lv_pd_item, null);
-		
-		SmartImageView sivIcon = (SmartImageView) view.findViewById(R.id.siv_listview_item_icon);
-		sivIcon.setImageUrl(imgList.get(position));		// 设置图片
-		
-		tv = (TextView) view.findViewById(R.id.tv_lv_item);
-		tv.setText(titleList.get(position));
-		
-		return view;
+			holder.sivIcon = (SmartImageView) convertView
+					.findViewById(R.id.siv_listview_item_icon);
+			holder.tv = (TextView) convertView.findViewById(R.id.tv_lv_item);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		holder.sivIcon.setImageUrl(imgList.get(position)); // 设置图片
+		holder.tv.setText(titleList.get(position));
+
+		return convertView;
+	}
+
+	//item条目较少的时候就用static，否则不要用
+	static class ViewHolder {
+		SmartImageView sivIcon;
+		TextView tv;
 	}
 }
