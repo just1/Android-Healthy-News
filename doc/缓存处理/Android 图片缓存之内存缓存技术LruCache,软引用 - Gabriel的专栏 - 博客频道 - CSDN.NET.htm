@@ -1,0 +1,1083 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0054)http://blog.csdn.net/gf771115/article/details/30269159 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" async="" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ga.js"></script><script id="allmobilize" charset="utf-8" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/allmobilize.min.js"></script><style type="text/css"></style>
+ <meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" media="handheld" href="http://blog.csdn.net/gf771115/article/details/30269159#">
+
+    <title>Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏
+        - 博客频道 - CSDN.NET</title>
+    
+    <meta name="description" content="转自：http://blog.chinaunix.net/uid-26930580-id-4138306.html">
+    <script src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad.js"></script>
+        <!--new top-->
+       
+        <link rel="stylesheet" href="http://static.csdn.net/public/common/toolbar/css/index.css">
+        <!--new top-->
+
+    <link rel="Stylesheet" type="text/css" href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/style.css">
+    <link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/gf771115/rss/list">
+    <link rel="shortcut icon" href="http://csdnimg.cn/public/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/default.css">
+ 
+
+
+<script src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/share.js"></script><script type="text/javascript" charset="utf-8" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/tracking.js"></script><script type="text/javascript" charset="utf-8" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/main.js"></script><link href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/bdsstyle.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/style(1).css"><link type="text/css" rel="stylesheet" href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/style(2).css"><script src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/logger.js"></script><link rel="stylesheet" href="http://bdimg.share.baidu.com/static/api/css/share_style0_16.css?v=f4b44e79.css"></head>
+<body><iframe style="display: none; " frameborder="0"></iframe>
+    
+   
+      <!--new top-->
+    <script id="toolbar-tpl-scriptId" fixed="true" prod="blog" skin="black" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/html.js" type="text/javascript"></script><div class="csdn-toolbar csdn-toolbar-skin-black ">        <div class="container row center-block ">          <div class="col-md-3 pull-left logo clearfix"><a href="http://www.csdn.net/?ref=toolbar" title="CSDN首页" target="_blank" class="icon"></a><a title="频道首页" href="http://blog.csdn.net/?ref=toolbar_logo" target="_blank" class="img blog-icon"></a></div>          <div class="pull-right login-wrap unlogin">            <ul class="btns">              <li class="loginlink"><a href="https://passport.csdn.net/account/login?ref=toolbar" target="_top">登录&nbsp;</a>|<a target="_top" href="https://passport.csdn.net/account/register?ref=toolbar">&nbsp;注册</a></li>              <li class="search">                <div class="icon on-search-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <form action="http://so.csdn.net/search" method="get" target="_blank">                      <input type="hidden" value="toolbar" name="ref" accesskey="2">                      <div class="border">                        <input placeholder="搜索" type="text" value="" name="q" accesskey="2"><span class="icon-enter-sm"></span>                      </div>                    </form>                  </div>                </div>              </li>              <li class="favor">                <div class="icon on-favor-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div style="display:none;" class="favor-success"><span class="msg">收藏成功</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <div style="display:none;" class="favor-failed"><span class="icon-danger-lg"></span><span class="msg">收藏失败，请重新收藏</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <form role="form" class="form-horizontal favor-form">                      <div class="form-group">                        <div class="clearfix">                          <label for="input-title" class="col-sm-2 control-label">标题</label>                          <div class="col-sm-10">                            <input id="inputTitle" type="text" placeholder="" class="title form-control">                          </div>                        </div>                        <div class="alert alert-danger"><strong></strong>标题不能为空</div>                      </div>                      <div class="form-group">                        <label for="input-url" class="col-sm-2 control-label">网址</label>                        <div class="col-sm-10">                          <input id="input-url" type="text" placeholder="" class="url form-control">                        </div>                      </div>                      <div class="form-group">                        <label for="input-tag" class="col-sm-2 tag control-label">标签</label>                        <div class="col-sm-10">                          <input id="input-tag" type="text" class="form-control tag">                        </div>                      </div>                      <div class="form-group">                        <label for="input-description" class="description col-sm-2 control-label">摘要</label>                        <div class="col-sm-10">                          <textarea id="input-description" class="form-control description"></textarea>                        </div>                      </div>                      <div class="form-group">                        <div class="col-sm-offset-2 col-sm-10 ft">                          <div class="col-sm-4 pull-left">                            <div class="checkbox">                              <label>                                <input type="checkbox" name="share" checked="checked" class="share">公开                              </label>                            </div>                          </div>                          <div class="col-sm-8 pull-right favor-btns">                            <button type="button" class="cancel btn btn-default">取消</button>                            <button type="submit" class="submit btn btn-primary">收藏</button>                          </div>                        </div>                      </div>                    </form>                  </div>                </div>              </li>              <li class="notify">                <div style="display:none" class="number"></div>                <div style="display:none" class="icon-hasnotes-sm"></div>                <div id="header_notice_num"></div>                <div class="icon on-notify-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div id="note1" class="csdn_note">                      <div class="box"></div>                    <iframe src="about:block" frameborder="0" allowtransparency="true" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe></div>                  </div>                </div>              </li>              <li class="ugc">                <div class="icon on-ugc-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <dl>                      <dt><a href="http://geek.csdn.net/news/expert?ref=toolbar" target="_blank" class="p-news clearfix"><em class="icon"></em><span>分享资讯</span></a></dt>                      <dt><a href="http://share.csdn.net/slides/new?ref=toolbar" target="_blank" class="p-doc clearfix"><em class="icon"></em><span>传PPT/文档</span></a></dt>                      <dt><a href="http://bbs.csdn.net/topics/new?ref=toolbar" target="_blank" class="p-ask clearfix"><em class="icon"></em><span>提问题</span></a></dt>                      <dt><a href="http://write.blog.csdn.net/postedit?ref=toolbar" target="_blank" class="p-blog clearfix"><em class="icon"></em><span>写博客</span></a></dt>                      <dt><a href="http://u.download.csdn.net/upload?ref=toolbar" target="_blank" class="p-src clearfix"><em class="icon"></em><span>传资源</span></a></dt>                      <dt><a href="https://code.csdn.net/projects/new?ref=toolbar" target="_blank" class="c-obj clearfix"><em class="icon"></em><span>创建项目</span></a></dt>                      <dt><a href="https://code.csdn.net/snippets/new?ref=toolbar" target="_blank" class="c-code clearfix"><em class="icon"></em><span>创建代码片</span></a></dt>                    </dl>                  </div>                </div>              </li>              <li class="profile">                <div class="icon on-profile-icon"><img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/100x100.jpg" class="curr-icon-img">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div class="bd">                      <dl class="clearfix">                        <dt class="pull-left img"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="avatar"><img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/100x100.jpg"></a></dt>                        <dd class="info"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="nickname"></a><a class="set-nick" href="https://passport.csdn.net/account/profile">设置昵称<span class="write-icon"></span></a><span class="dec"><a class="fill-dec" href="http://my.csdn.net/" target="_blank">编辑自我介绍，让更多人了解你<span class="write-icon"></span></a></span></dd>                      </dl>                    </div>                    <div class="ft clearfix"><a target="_blank" href="http://my.csdn.net/my/account/changepwd?ref=toolbar" class="pull-left"><span class="icon-cog"></span>帐号设置</a><a href="https://passport.csdn.net/account/logout?ref=toolbar" target="_top" class="pull-right "><span class="icon-signout"></span><span class="out">退出</span></a></div>                  </div>                </div>              </li>              <li class="apps">                <div class="icon on-apps-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>社区</h5>                      </dt>                      <dd> <a href="http://blog.csdn.net/?ref=toolbar" target="_blank">博客</a></dd>                      <dd> <a href="http://bbs.csdn.net/?ref=toolbar" target="_blank">论坛</a></dd>                      <dd> <a href="http://download.csdn.net/?ref=toolbar" target="_blank">下载</a></dd>                      <dd><a href="http://share.csdn.net/?ref=toolbar" target="_blank">Share</a></dd>                      <dd><a href="http://geek.csdn.net/?ref=toolbar" target="_blank">极客头条</a></dd>                    </dl>                  </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>服务</h5>                      </dt>                      <dd> <a href="https://code.csdn.net/?ref=toolbar" target="_blank">CODE</a></dd>                      <dd> <a href="http://hero.csdn.net/?ref=toolbar" target="_blank">英雄会</a></dd>                      <dd> <a href="http://huiyi.csdn.net/?ref=toolbar" target="_blank">活动</a></dd>                      <dd> <a href="http://www.csto.com/?ref=toolbar" target="_blank">CSTO</a></dd>                    </dl>                  </div>                  <div class="detail last">                    <dl>                      <dt>                        <h5>俱乐部</h5>                      </dt>                      <dd> <a href="http://cto.csdn.net/?ref=toolbar" target="_blank">CTO俱乐部</a></dd>                      <dd> <a href="http://student.csdn.net/?ref=toolbar" target="_blank">高校俱乐部</a></dd>                    </dl>                  </div>                </div>              </div>            </li>            </ul>          </div>        </div>    </div>
+     <!--new top-->
+    <div id="container">
+        <div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h2>
+                <a href="http://blog.csdn.net/gf771115">Gabriel的专栏</a></h2>
+            <h3></h3>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg">
+    </div>
+    <div class="navigator">
+        <ul>
+                <li id="btnContents"><a href="http://blog.csdn.net/gf771115?viewmode=contents"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_mulu&#39;])">
+                    <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+                <li id="btnView"><a href="http://blog.csdn.net/gf771115?viewmode=list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_zhaiyao&#39;])">
+                    <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+                <li id="btnRss"><a href="http://blog.csdn.net/gf771115/rss/list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_RSS&#39;])">
+                    <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>                
+
+            </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "gf771115";
+    var _blogger = username;
+    var blog_address = "http://blog.csdn.net/gf771115";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";  
+</script>
+
+        <div id="body">
+            <div id="main">
+                <div class="main">
+                        <div class="ad_class">
+<div class="notice tracking-ad" data-mod="popu_3"> 
+
+<a href="http://bbs.csdn.net/topics/390812950?page=2#post-398116601" target="_blank">
+<font color="blue">博客专家福利
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://bbs.csdn.net/topics/390863850" target="_blank">
+<font color="red">【限时活动】建专辑得大奖</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://www.csdn.net/article/2014-09-10/2821606" target="_blank">
+<font color="blue">专访荣浩：流程的永恒之道
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="http://blog.csdn.net/blogdevteam/article/details/38657235" target="_blank"><font color="red">当青春遇上互联网，能否点燃你的创业梦
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="http://blog.csdn.net/blogdevteam/article/details/38418263" target="_blank">
+<font color="blue">推荐有礼--找出您心中的技术大牛
+</font></a>
+
+
+</div>                        </div>
+                        
+
+  
+<link href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/comment1.css" type="text/css" rel="stylesheet">
+<link href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/style1.css" type="text/css" rel="stylesheet">
+<script language="JavaScript" type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/jquery.cookie.js"></script>
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/main(1).js"></script>
+<div id="article_details" class="details">
+    <div class="article_title">   
+         <span class="ico ico_type_Repost"></span>
+
+
+    <h1>
+        <span class="link_title"><a href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET.htm">
+        Android 图片缓存之内存缓存技术LruCache,软引用
+        </a></span>
+    </h1>
+</div>
+
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/gf771115/article/category/690867" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_fenlei&#39;]);">Android/OMS</a> 
+        </span>
+    <span class="link_postdate">2014-06-12 17:32</span>
+    <span class="link_view" title="阅读次数">444人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/gf771115/article/details/30269159#comments" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_pinglun&#39;])">评论</a>(0)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shoucang&#39;]);collectArticle(&#39;Android 图片缓存之内存缓存技术LruCache,软引用&#39;,&#39;30269159&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/gf771115/article/details/30269159#report" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_jubao&#39;]);report(30269159,2);return false;" title="举报">举报</a></span>
+    
+</div>
+
+  
+    
+<div id="article_content" class="article_content">
+
+<p>转自：http://blog.chinaunix.net/uid-26930580-id-4138306.html</p>
+<p><span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">每当碰到一些大图片的时候，我们如果不对图片进行处理就会报OOM异常，</span><br style="word-wrap:break-word">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"></span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">这个</span></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">问题曾经让我觉得很烦恼</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">，后来终于得到了解决，</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">那么现在就让我和大家一起分享一下吧。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">这篇博文要讲的图片缓存机制，我接触到的有两钟，一种是软引用，另一种是内存缓存技术。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">先来看下两者的使用方式，再来作比较。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">除了加载图片时要用到缓存处理，还有一个比较重要的步骤要做，就是要先压缩图片。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; line-height:26px; font-family:NSimSun; font-size:18px"><span style="word-wrap:break-word">1、压缩图片</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">至于要压缩到什么状态就要看自己当时的处境了，压缩图片的时候既要达到一个小的值，又不能让其模糊</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">，更不能拉伸图片。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+</p>
+<div id="codeText" class="codeText" style="word-wrap:break-word; border:1px solid rgb(221,221,221); width:1562.640625px; overflow:auto; margin:0px 0px 1.1em; padding:0px; word-break:break-all; font-family:Consolas,monospace; color:rgb(102,102,102)">
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(255,153,0)">/**<br style="word-wrap:break-word">
+</span></span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * 加载内存卡图片<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; */<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BitmapFactory<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>Options options&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;BitmapFactory<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>Options<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inJustDecodeBounds&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;true<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">//
+ 设置了此属性一定要记得将值设置为false</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;BitmapFactory<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>decodeFile<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">url</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">int</span>&nbsp;be&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,255)">int</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>outHeight&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span>&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>outWidth&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">?</span>&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>outHeight&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">/</span>&nbsp;150<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">:</span>&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>outWidth&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">/</span>&nbsp;200<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>be&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;0<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">//
+ 判断200是否超过原始图片高度</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;1<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">// 如果超过，则不进行缩放</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inSampleSize&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;be<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inPreferredConfig&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">Config</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>ARGB_4444<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inPurgeable&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;true<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inInputShareable&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;true<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>inJustDecodeBounds&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;false<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">try</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;BitmapFactory<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>decodeFile<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">url</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;options<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">catch</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">OutOfMemoryError</span>&nbsp;e<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">System</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">gc</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Log</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>e<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>TAG<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,255)">"OutOfMemoryError"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span></li></ol>
+</div>
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:18px; font-family:NSimSun; line-height:2"><span style="word-wrap:break-word">2、软引用：</span></span><span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; line-height:2"><span style="word-wrap:break-word; color:black; line-height:2"><br style="word-wrap:break-word">
+<span style="word-wrap:break-word"></span><span style="word-wrap:break-word; font-family:NSimSun">只要有足够的内存，就一直保持对象，直到发现内存吃紧且没有</span></span></span></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2"><span style="word-wrap:break-word; line-height:2"><span style="word-wrap:break-word; line-height:2">Strong
+ Ref</span></span></span><span style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px"><span style="word-wrap:break-word"><span style="word-wrap:break-word; font-family:宋体; color:black"><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">时才回收对象。</span><br style="word-wrap:break-word">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span></span></span></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">我们可以这样定义：map里面的键是用来放图片地址的，既可以是网络上的图片地址，也可以SDcard上的图片地址</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">，</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">map里面的值里面放的是持有软引用的Bitmap，当然如果你要放Drawable，那也是可以的。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<div id="codeText" class="codeText" style="word-wrap:break-word; border:1px solid rgb(221,221,221); width:1562.640625px; overflow:auto; margin:0px 0px 1.1em; padding:0px; word-break:break-all; font-family:Consolas,monospace; color:rgb(102,102,102)">
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(0,0,255)">private</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Map</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">SoftReference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span>Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span>&nbsp;imageMap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)"></span></span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(0,0,204)">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">HashMap</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">SoftReference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span>Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span></span></li></ol>
+</div>
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">接下来就让我再介绍一下如何具体加载图片：</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">步骤：（1）先通过URL查看缓存中是否有图片，如果有，则直接去缓存中取得。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">如果没有，就开线程重新去网上下载。</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">（2）下载完了之后，就把图片放在缓存里面，方便下次可以直接从缓存中取得。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<div id="codeText" class="codeText" style="word-wrap:break-word; border:1px solid rgb(221,221,221); width:1562.640625px; overflow:auto; margin:0px 0px 1.1em; padding:0px; word-break:break-all; font-family:Consolas,monospace; color:rgb(102,102,102)">
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;Bitmap loadBitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,255)">final</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span><span style="word-wrap:break-word; color:rgb(0,0,255)">final</span>&nbsp;ImageCallBack
+ imageCallBack<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">SoftReference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span>Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">reference</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;imageMap<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">get</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">reference</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">reference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">get</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">reference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">get</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">final</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Handler</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">handler</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Handler</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;handleMessage<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,255)">final</span>&nbsp;android<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>os<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>Message
+ msg<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">//加入到缓存中</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>msg<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>obj<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imageMap<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">put</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">SoftReference</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span>Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>imageCallBack&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;imageCallBack<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>getBitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Thread</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">run</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Message message&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">handler</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>obtainMessage<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;message<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>obj&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;downloadBitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">handler</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>sendMessage<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>message<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">start</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp; //&nbsp;从网上下载图片<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">private</span>&nbsp;Bitmap downloadBitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">try</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;BitmapFactory<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>decodeStream<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">URL</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>imageUrl<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">openStream</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">catch</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">Exception</span>&nbsp;e<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">printStackTrace</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span>&nbsp;<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span></li></ol>
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">interface</span>&nbsp;ImageCallBack<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;getBitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>Bitmap bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span></li></ol>
+</div>
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:18px; font-family:NSimSun; line-height:2"><span style="word-wrap:break-word">2、内存缓存技术</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">另外一种图片缓存的方式就是内存缓存技术。在Android中，有一个叫做</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">LruCache</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">类专门用来做图片缓存处理的。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">它有一个特点，当缓存的图片达到了预先设定的值的时候，那么</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">近期使用次数最少的图片</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">就会被回收掉</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">步骤：（1）要先设置缓存图片的内存大小，我这里设置为手机内存的1/8,</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">手机内存的获取方式：</span></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">int
+ MAXMEMONRY = (int) (Runtime.getRuntime()</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">&nbsp;.maxMemory() / 1024);</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">（2）LruCache里面的键值对分别是URL和对应的图片</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">（3）重写了一个叫做sizeOf的方法，返回的是图片数量。</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<div id="codeText" class="codeText" style="word-wrap:break-word; border:1px solid rgb(221,221,221); width:1562.640625px; overflow:auto; margin:0px 0px 1.1em; padding:0px; word-break:break-all; font-family:Consolas,monospace; color:rgb(102,102,102)">
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(0,0,255)">private</span>&nbsp;LruCache<span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span>&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,255)">private</span>&nbsp;LruCacheUtils<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>mMemoryCache&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMemoryCache&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">new</span>&nbsp;LruCache<span style="word-wrap:break-word; color:rgb(0,0,204)">&lt;</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;Bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)"></span>MAXMEMONRY&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">/</span>&nbsp;8<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@<span style="word-wrap:break-word; color:rgb(255,0,0)">Override</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">protected</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">int</span>&nbsp;sizeOf<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;Bitmap
+ bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">// 重写此方法来衡量每张图片的大小，默认返回图片数量。</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>getRowBytes<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">*</span>&nbsp;bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">getHeight</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">/</span>&nbsp;1024<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@<span style="word-wrap:break-word; color:rgb(255,0,0)">Override</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">protected</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;entryRemoved<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,255)">boolean</span>&nbsp;evicted<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap oldValue<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;Bitmap newValue<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Log</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>v<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,255)">"tag"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,255)">"hard
+ cache is full , push to soft cache"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span></li></ol>
+</div>
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">（4）下面的方法分别是清空缓存、添加图片到缓存、从缓存中取得图片、从缓存中移除。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="word-wrap:break-word; color:rgb(0,0,0); font-family:NSimSun">移除和清除缓存是必须要做的事，因为图片缓存处理不当就会报内存溢出，所以一定要引起注意。</span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<div id="codeText" class="codeText" style="word-wrap:break-word; border:1px solid rgb(221,221,221); width:1562.640625px; overflow:auto; margin:0px 0px 1.1em; padding:0px; word-break:break-all; font-family:Consolas,monospace; color:rgb(102,102,102)">
+<ol start="1" class="dp-css" style="word-wrap:break-word; margin:0px 1px 0px 0px; padding:0px 0px 0px 40px; list-style:none; color:rgb(92,92,92); line-height:1.3">
+<li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<span style="word-wrap:break-word; color:rgb(0,0,0)"><span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;clearCache<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>mMemoryCache&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">size</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">&gt;</span>&nbsp;0<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Log</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>d<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,255)">"CacheUtils"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,255)">"mMemoryCache.size() "</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">+</span>&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">size</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>evictAll<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Log</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>d<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,255)">"CacheUtils"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,255)">"mMemoryCache.size()"</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">+</span>&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">size</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMemoryCache&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">synchronized</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;addBitmapToMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;Bitmap
+ bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">get</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">&amp;</span><span style="word-wrap:break-word; color:rgb(0,0,204)">&amp;</span>&nbsp;bitmap&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">put</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;bitmap<span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">else</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">Log</span><span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>w<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>TAG<span style="word-wrap:break-word; color:rgb(0,0,204)">,</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,255)">"the
+ res is aready exits"</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">synchronized</span>&nbsp;Bitmap getBitmapFromMemCache<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap bm&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">get</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;bm<span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">return</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(255,153,0)">/**<br style="word-wrap:break-word">
+</span></li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp; * 移除缓存<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp; *&nbsp;<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp; * @param key<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp; */<br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">public</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">synchronized</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">void</span>&nbsp;removeImageCache<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">String</span>&nbsp;<span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>mMemoryCache&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">{</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Bitmap bm&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;mMemoryCache<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span><span style="word-wrap:break-word; color:rgb(255,0,0)">remove</span><span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(255,0,0)">key</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">if</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span>bm&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">!</span><span style="word-wrap:break-word; color:rgb(0,0,204)">=</span>&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,255)">null</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;bm<span style="word-wrap:break-word; color:rgb(0,0,204)">.</span>recycle<span style="word-wrap:break-word; color:rgb(0,0,204)">(</span><span style="word-wrap:break-word; color:rgb(0,0,204)">)</span><span style="word-wrap:break-word; color:rgb(0,0,204)">;</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span><br style="word-wrap:break-word">
+</li><li style="word-wrap:break-word; margin:0px; padding:0px 0px 0px 10px; list-style:decimal outside">
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="word-wrap:break-word; color:rgb(0,0,204)">}</span></li></ol>
+</div>
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; color:rgb(102,102,102); font-size:14px; font-family:KaiTi_GB2312; line-height:2"><span style="word-wrap:break-word"><span style="word-wrap:break-word; color:rgb(0,0,0); font-size:18px; font-family:NSimSun">4、两者的比</span><span style="word-wrap:break-word; font-size:18px; color:rgb(0,0,0); font-family:NSimSun">较</span></span></span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2">说到这里，我觉得有必要来进行一下比较了。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2"></span><span style="word-wrap:break-word; color:rgb(102,102,102); font-size:16px; line-height:26px; font-family:&#39;Times New Roman&#39;"><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">网上有很多人使用软引用加载图片的多</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">&nbsp;，但是现在已经不再推荐使用这种方式了，</span><br style="word-wrap:break-word">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2; color:rgb(0,0,0)"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">（1）</span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">因为从
+ Android 2.3 (API Level 9)开始，垃圾回收器会更倾向于回收持有软引用或弱引用的对象，<br style="word-wrap:break-word">
+&nbsp;&nbsp;&nbsp;&nbsp; 这让软引用和弱引用变得不再可靠。</span><br style="word-wrap:break-word">
+<span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">（2）另外，Android 3.0 (API Level 11)中，图片的数据会存储在本地的内存当中，<br style="word-wrap:break-word">
+&nbsp;&nbsp;&nbsp;&nbsp; 因而无法用一种可预见的方式将其释放，这就有潜在的风险造成应用程序的内存溢出并崩溃，</span><br style="word-wrap:break-word">
+<span style="word-wrap:break-word; font-size:14px; font-family:KaiTi_GB2312; line-height:2; color:rgb(0,0,0)"></span><span style="word-wrap:break-word; font-size:14px; font-family:NSimSun; line-height:2; color:rgb(0,0,0)">所以我这里用得是LruCache来缓存图片，当存储Image的大小大于LruCache设定的值，系统自动释放内存，<br style="word-wrap:break-word">
+这个类是3.1版本中提供的，如果你是在更早的Android版本中开发，则需要导入android-support-v4的jar包</span></span><span style="word-wrap:break-word; font-family:宋体,Arial; font-size:16px; line-height:26px"></span><span style="color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">。</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-family:宋体,Arial; font-size:14px; line-height:2; color:rgb(0,51,153)">后记：我一直有强调一件事件，就是人应该要不停地进步，没有人生来就会编码，<br style="word-wrap:break-word">
+更没有人一开始就能找到很好的解决方案，</span><span style="word-wrap:break-word; font-family:宋体,Arial; font-size:14px; line-height:2; color:rgb(0,51,153)">我介绍了这两种用法，其实就是想说，<br style="word-wrap:break-word">
+这些都是我的技术进步的一个历程。如果大家有好的建议或者有什么好的看法，</span><br style="word-wrap:break-word; color:rgb(102,102,102); font-family:宋体,Arial; font-size:16px; line-height:26px">
+<span style="word-wrap:break-word; font-family:宋体,Arial; font-size:14px; line-height:2; color:rgb(0,51,153)">记得提出来，很高兴能和大家分享。</span><br>
+<p></p>
+
+</div>
+
+
+
+
+<!-- Baidu Button BEGIN -->
+
+<div class="bdsharebuttonbox bdshare-button-style0-16" style="float: right;" data-bd-bind="1410436013497">
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_more" data-cmd="more" style="background-position:0 0 !important; background-image: url(http://bdimg.share.baidu.com/static/api/img/share/icons_0_16.png?v=d754dcc0.png) !important"></a>
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="background-position:0 -52px !important"></a>
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="background-position:0 -104px !important"></a>
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博" style="background-position:0 -260px !important"></a>
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_renren" data-cmd="renren" title="分享到人人网" style="background-position:0 -208px !important"></a>
+<a href="http://blog.csdn.net/gf771115/article/details/30269159#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="background-position:0 -1612px !important"></a>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+<!-- Baidu Button END -->
+
+<!--192.168.100.35-->
+<ul class="article_next_prev">
+            <li class="prev_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;]);location.href=&#39;/gf771115/article/details/30247179&#39;;">上一篇</span><a href="http://blog.csdn.net/gf771115/article/details/30247179" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;])">ShareSDK关于微信分享问题</a></li>
+            <li class="next_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;]);location.href=&#39;/gf771115/article/details/30311761&#39;;">下一篇</span><a href="http://blog.csdn.net/gf771115/article/details/30311761" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;])">Android Bitmap OutOfMemory如何解决</a></li>
+</ul>
+
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1536434" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/bds_s_v2.js"></script>
+
+<script type="text/javascript">
+    document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+
+</div>
+      <dl class="blog-associat-tag">
+        <dt>主题推荐</dt>
+        <dd>
+                <a href="http://www.csdn.net/tag/%E6%8A%80%E6%9C%AF" target="_blank" class="blog-tage-red">技术</a> 
+                <a href="http://www.csdn.net/tag/%E7%BC%93%E5%AD%98" target="_blank" class="blog-tage-red">缓存</a> 
+                <a href="http://www.csdn.net/tag/%E5%86%85%E5%AD%98" target="_blank" class="blog-tage-red">内存</a> 
+                <a href="http://www.csdn.net/tag/android" target="_blank" class="blog-tage-red">android</a> 
+                <a href="http://www.csdn.net/tag/%E5%9B%BE%E7%89%87" target="_blank" class="blog-tage-red">图片</a> 
+        </dd>
+    </dl> 
+
+
+<dl class="blog-ass-articl tracking-ad" data-mod="popu_36" id="res-relatived"> 
+     <dt><span>猜你在找</span></dt>    
+<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/fengkehuan/article/details/6255661" title="关于壁纸镶嵌问题 ”VM won&#39;t let us allocate“" strategy="CFRecommendAlgorithm" target="_blank">关于壁纸镶嵌问题 ”VM won't let us allocate“</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/LVXIANGAN/article/details/7394254" title="用webview访问网站，当时老是出现“找不到网页，网页可能暂时出现故障”" strategy="CFRecommendAlgorithm" target="_blank">用webview访问网站，当时老是出现“找不到网页，网页可能暂时出现故障”</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/gaojinshan/article/details/18038181" title="ViewPager，实现真正的无限循环（定时+手动）" strategy="CFRecommendAlgorithm" target="_blank">ViewPager，实现真正的无限循环（定时+手动）</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/mal327/article/details/7061275" title="Android网络加载时显示进度条" strategy="CFRecommendAlgorithm" target="_blank">Android网络加载时显示进度条</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/mldxs/article/details/9179515" title="android制作圆角图片和图片倒影" strategy="CFRecommendAlgorithm" target="_blank">android制作圆角图片和图片倒影</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/yc0188/article/details/4155168" title="GZIP文件格式简介" strategy="CFRecommendAlgorithm" target="_blank">GZIP文件格式简介</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/axman/article/details/431800" title="多线程编程 基础篇 (四)" strategy="CFRecommendAlgorithm" target="_blank">多线程编程 基础篇 (四)</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/crazyzhangcrazy/article/details/8599936" title="[Android] AutoCompleteTextView：自动完成输入内容的控件" strategy="CFRecommendAlgorithm" target="_blank">[Android] AutoCompleteTextView：自动完成输入内容的控件</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/hudashi/article/details/7050909" title="Android中使用" running="" services"查看service进程内存"="" strategy="CFRecommendAlgorithm" target="_blank">Android中使用"running services"查看service进程内存</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/cainiaoxiaozhou/article/details/8059935" title="Android WebView嵌套Html 之一" strategy="CFRecommendAlgorithm" target="_blank">Android WebView嵌套Html 之一</a></dd></dl>
+
+<script type="text/javascript">
+    var searchtitletags = 'Android 图片缓存之内存缓存技术LruCache,软引用' + ',' + '技术,缓存,内存,android,图片';
+    searchService({
+        index: 'blog',
+        query: searchtitletags,
+        from: 10,
+        size: 10,
+        appendTo: '#res-relatived',
+        url: 'recommend',
+        his: 2,
+        client: "blog_cf_enhance",
+        tmpl: '<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="#{ url }" title="#{ title }" strategy="#{ strategy }">#{ title }</a></dd>'
+    });
+
+ </script>   
+
+
+    <div id="ad_cen">
+   
+          <script type="text/javascript">
+              new Ad(4, 'ad_cen');
+          </script>
+    <iframe id="ad_frm_0" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 746px; height: 90px; " src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad(1).htm"></iframe></div>
+<div class="comment_class">
+    <div id="comment_title" class="panel_head">
+        <span class="see_comment">查看评论</span><a name="comments"></a></div>
+    <div id="comment_list"><br>&nbsp;&nbsp;暂无评论<br><br><div class="clear"></div></div>
+    <div id="comment_bar">
+    </div>
+    <div id="comment_form"><div class="guest_link">您还没有登录,请<a href="javascript:void(0);" onclick="javascript:csdn.showLogin(function (dat) {js_logined(dat.data.userName);});">[登录]</a>或<a href="http://passport.csdn.net/account/register?from=http%3A%2F%2Fblog.csdn.net%2Fgf771115%2Farticle%2Fdetails%2F30269159">[注册]</a></div></div>
+
+    <div class="announce">
+        * 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+</div>
+
+<script type="text/javascript">
+    var fileName = '30269159';
+    var commentscount = 0;
+    var islock = false
+</script>
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/comment.js"></script>
+    <div id="ad_bot">
+    <iframe id="ad_frm_1" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 746px; height: 0px; " src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad(2).htm"></iframe></div>
+    <script type="text/javascript">
+    new Ad(5, 'ad_bot');
+    </script>
+<div id="report_dialog">
+</div>
+
+<div id="d-top" style="bottom:60px;">
+      
+
+       <a id="quick-reply" class="btn btn-top q-reply" title="快速回复" style="display:none;">
+            <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/blog-icon-reply.png" alt="快速回复">
+        </a>    
+
+    <a id="d-top-a" class="btn btn-top backtop" style="" title="返回顶部" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_huidaodingbu&#39;])">         
+         <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/top.png" alt="TOP">
+    </a>
+</div>
+<script type="text/javascript">
+    $(function ()
+    {
+        $("#ad_frm_0").height("90px");
+        
+        setTimeout(function(){
+            $("#ad_frm_2").height("200px");
+        },1000);
+        
+
+        if($("#comment_content").length>0)
+        {
+            $("#quick-reply").show();
+
+            $("#quick-reply").click(function(){
+                setEditorFocus();
+            });
+        }       
+     
+        var d_top = $('#d-top-a');
+        document.onscroll = function ()
+        {
+            var scrTop = (document.body.scrollTop || document.documentElement.scrollTop);
+            if (scrTop > 500)
+            {
+                d_top.show();
+            } else
+            {
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function ()
+        {
+            scrollTo(0, 0);
+            this.blur();
+            return false;
+        });
+    });
+  
+</script>
+<style type="text/css">
+    .tag_list
+    {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #D7CBC1;
+        color: #000000;
+        font-size: 12px;
+        line-height: 20px;
+        list-style: none outside none;
+        margin: 10px 2% 0 1%;
+        padding: 1px;
+    }
+    .tag_list h5
+    {
+        background: none repeat scroll 0 0 #E0DBD3;
+        color: #47381C;
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 5px;
+        margin: 0;
+    }
+    .tag_list h5 a
+    {
+        color: #47381C;
+    }
+    .classify
+    {
+        margin: 10px 0;
+        padding: 4px 12px 8px;
+    }
+    .classify a
+    {
+        margin-right: 20px;
+        white-space: nowrap;
+    }
+</style>
+<div class="tag_list">
+    <h5>
+        <a href="http://www.csdn.net/tag/" target="_blank">核心技术类目</a></h5>
+    <div class="classify">
+<a title="全部主题" href="http://www.csdn.net/tag" target="_blank" onclick="LogClickCount(this,336);">全部主题</a>
+<a title="Hadoop" href="http://g.csdn.net/5272865" target="_blank" onclick="LogClickCount(this,336);">Hadoop</a>
+<a title="AWS" href="http://g.csdn.net/5272866" target="_blank" onclick="LogClickCount(this,336);">AWS</a>
+<a title="移动游戏" href="http://g.csdn.net/5272870" target="_blank" onclick="LogClickCount(this,336);">移动游戏</a>
+<a title="Java" href="http://g.csdn.net/5272871" target="_blank" onclick="LogClickCount(this,336);">Java</a>
+<a title="Android" href="http://g.csdn.net/5272872" target="_blank" onclick="LogClickCount(this,336);">Android</a>
+<a title="iOS" href="http://g.csdn.net/5272873" target="_blank" onclick="LogClickCount(this,336);">iOS</a>
+<a title="Swift" href="http://g.csdn.net/5272868" target="_blank" onclick="LogClickCount(this,336);">Swift</a>
+<a title="智能硬件" href="http://g.csdn.net/5272869" target="_blank" onclick="LogClickCount(this,336);">智能硬件</a>
+<a title="Docker" href="http://g.csdn.net/5272867" target="_blank" onclick="LogClickCount(this,336);">Docker</a>
+<a title="OpenStack" href="http://g.csdn.net/5272925" target="_blank" onclick="LogClickCount(this,336);">OpenStack</a>
+<a title="VPN" href="http://www.csdn.net/tag/vpn" target="_blank" onclick="LogClickCount(this,336);">VPN</a>
+<a title="Spark" href="http://g.csdn.net/5272924" target="_blank" onclick="LogClickCount(this,336);">Spark</a>
+<a title="ERP" href="http://www.csdn.net/tag/erp" target="_blank" onclick="LogClickCount(this,336);">ERP</a>
+<a title="IE10" href="http://www.csdn.net/tag/ie10" target="_blank" onclick="LogClickCount(this,336);">IE10</a>
+<a title="Eclipse" href="http://www.csdn.net/tag/eclipse" target="_blank" onclick="LogClickCount(this,336);">Eclipse</a>
+<a title="CRM" href="http://www.csdn.net/tag/crm" target="_blank" onclick="LogClickCount(this,336);">CRM</a>
+<a title="JavaScript" href="http://www.csdn.net/tag/javascript" target="_blank" onclick="LogClickCount(this,336);">JavaScript</a>
+<a title="数据库" href="http://www.csdn.net/tag/%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank" onclick="LogClickCount(this,336);">数据库</a>
+<a title="Ubuntu" href="http://www.csdn.net/tag/ubuntu" target="_blank" onclick="LogClickCount(this,336);">Ubuntu</a>
+<a title="NFC" href="http://www.csdn.net/tag/nfc" target="_blank" onclick="LogClickCount(this,336);">NFC</a>
+<a title="WAP" href="http://www.csdn.net/tag/wap" target="_blank" onclick="LogClickCount(this,336);">WAP</a>
+<a title="jQuery" href="http://www.csdn.net/tag/jquery" target="_blank" onclick="LogClickCount(this,336);">jQuery</a>
+<a title="BI" href="http://www.csdn.net/tag/bi" target="_blank" onclick="LogClickCount(this,336);">BI</a>
+<a title="HTML5" href="http://www.csdn.net/tag/html5" target="_blank" onclick="LogClickCount(this,336);">HTML5</a>
+<a title="Spring" href="http://www.csdn.net/tag/spring" target="_blank" onclick="LogClickCount(this,336);">Spring</a>
+<a title="Apache" href="http://www.csdn.net/tag/apache" target="_blank" onclick="LogClickCount(this,336);">Apache</a>
+<a title=".NET" href="http://www.csdn.net/tag/.net" target="_blank" onclick="LogClickCount(this,336);">.NET</a>
+<a title="API" href="http://www.csdn.net/tag/api" target="_blank" onclick="LogClickCount(this,336);">API</a>
+<a title="HTML" href="http://www.csdn.net/tag/html" target="_blank" onclick="LogClickCount(this,336);">HTML</a>
+<a title="SDK" href="http://www.csdn.net/tag/sdk" target="_blank" onclick="LogClickCount(this,336);">SDK</a>
+<a title="IIS" href="http://www.csdn.net/tag/iis" target="_blank" onclick="LogClickCount(this,336);">IIS</a>
+<a title="Fedora" href="http://www.csdn.net/tag/fedora" target="_blank" onclick="LogClickCount(this,336);">Fedora</a>
+<a title="XML" href="http://www.csdn.net/tag/xml" target="_blank" onclick="LogClickCount(this,336);">XML</a>
+<a title="LBS" href="http://www.csdn.net/tag/lbs" target="_blank" onclick="LogClickCount(this,336);">LBS</a>
+<a title="Unity" href="http://www.csdn.net/tag/unity" target="_blank" onclick="LogClickCount(this,336);">Unity</a>
+<a title="Splashtop" href="http://www.csdn.net/tag/splashtop" target="_blank" onclick="LogClickCount(this,336);">Splashtop</a>
+<a title="UML" href="http://www.csdn.net/tag/uml" target="_blank" onclick="LogClickCount(this,336);">UML</a>
+<a title="components" href="http://www.csdn.net/tag/components" target="_blank" onclick="LogClickCount(this,336);">components</a>
+<a title="Windows Mobile" href="http://www.csdn.net/tag/windowsmobile" target="_blank" onclick="LogClickCount(this,336);">Windows Mobile</a>
+<a title="Rails" href="http://www.csdn.net/tag/rails" target="_blank" onclick="LogClickCount(this,336);">Rails</a>
+<a title="QEMU" href="http://www.csdn.net/tag/qemu" target="_blank" onclick="LogClickCount(this,336);">QEMU</a>
+<a title="KDE" href="http://www.csdn.net/tag/kde" target="_blank" onclick="LogClickCount(this,336);">KDE</a>
+<a title="Cassandra" href="http://www.csdn.net/tag/cassandra" target="_blank" onclick="LogClickCount(this,336);">Cassandra</a>
+<a title="CloudStack" href="http://www.csdn.net/tag/cloudstack" target="_blank" onclick="LogClickCount(this,336);">CloudStack</a>
+<a title="FTC" href="http://www.csdn.net/tag/ftc" target="_blank" onclick="LogClickCount(this,336);">FTC</a>
+<a title="coremail" href="http://www.csdn.net/tag/coremail" target="_blank" onclick="LogClickCount(this,336);">coremail</a>
+<a title="OPhone " href="http://www.csdn.net/tag/ophone" target="_blank" onclick="LogClickCount(this,336);">OPhone </a>
+<a title="CouchBase" href="http://www.csdn.net/tag/couchbase" target="_blank" onclick="LogClickCount(this,336);">CouchBase</a>
+<a title="云计算" href="http://www.csdn.net/tag/%E4%BA%91%E8%AE%A1%E7%AE%97" target="_blank" onclick="LogClickCount(this,336);">云计算</a>
+<a title="iOS6" href="http://www.csdn.net/tag/iOS6" target="_blank" onclick="LogClickCount(this,336);">iOS6</a>
+<a title="Rackspace " href="http://www.csdn.net/tag/rackspace" target="_blank" onclick="LogClickCount(this,336);">Rackspace </a>
+<a title="Web App" href="http://www.csdn.net/tag/webapp" target="_blank" onclick="LogClickCount(this,336);">Web App</a>
+<a title="SpringSide" href="http://www.csdn.net/tag/springside" target="_blank" onclick="LogClickCount(this,336);">SpringSide</a>
+<a title="Maemo" href="http://www.csdn.net/tag/maemo" target="_blank" onclick="LogClickCount(this,336);">Maemo</a>
+<a title="Compuware" href="http://www.csdn.net/tag/compuware" target="_blank" onclick="LogClickCount(this,336);">Compuware</a>
+<a title="大数据" href="http://www.csdn.net/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE" target="_blank" onclick="LogClickCount(this,336);">大数据</a>
+<a title="aptech" href="http://www.csdn.net/tag/aptech" target="_blank" onclick="LogClickCount(this,336);">aptech</a>
+<a title="Perl" href="http://www.csdn.net/tag/perl" target="_blank" onclick="LogClickCount(this,336);">Perl</a>
+<a title="Tornado" href="http://www.csdn.net/tag/tornado" target="_blank" onclick="LogClickCount(this,336);">Tornado</a>
+<a title="Ruby" href="http://www.csdn.net/tag/ruby" target="_blank" onclick="LogClickCount(this,336);">Ruby</a>
+<a title="Hibernate" href="http://www.csdn.net/hibernate" target="_blank" onclick="LogClickCount(this,336);">Hibernate</a>
+<a title="ThinkPHP" href="http://www.csdn.net/tag/thinkphp" target="_blank" onclick="LogClickCount(this,336);">ThinkPHP</a>
+<a title="HBase" href="http://www.csdn.net/tag/hbase" target="_blank" onclick="LogClickCount(this,336);">HBase</a>
+<a title="Pure" href="http://www.csdn.net/tag/pure" target="_blank" onclick="LogClickCount(this,336);">Pure</a>
+<a title="Solr" href="http://www.csdn.net/tag/solr" target="_blank" onclick="LogClickCount(this,336);">Solr</a>
+<a title="Angular" href="http://www.csdn.net/tag/angular" target="_blank" onclick="LogClickCount(this,336);">Angular</a>
+<a title="Cloud Foundry" href="http://www.csdn.net/tag/cloudfoundry" target="_blank" onclick="LogClickCount(this,336);">Cloud Foundry</a>
+<a title="Redis" href="http://www.csdn.net/tag/redis" target="_blank" onclick="LogClickCount(this,336);">Redis</a>
+<a title="Scala" href="http://www.csdn.net/tag/scala" target="_blank" onclick="LogClickCount(this,336);">Scala</a>
+<a title="Django" href="http://www.csdn.net/tag/django" target="_blank" onclick="LogClickCount(this,336);">Django</a>
+<a title="Bootstrap" href="http://www.csdn.net/tag/bootstrap" target="_blank" onclick="LogClickCount(this,336);">Bootstrap</a>
+    </div>
+</div>
+
+
+                        <div class="clear">
+                        </div>
+                    </div>                   
+                
+            </div>
+            <div id="side">
+    <div class="side">
+<div id="panel_Profile" class="panel">
+<ul class="panel_head"><span>个人资料</span></ul>
+<ul class="panel_body profile">
+<div id="blog_userface">
+    <a href="http://my.csdn.net/gf771115" target="_blank">
+    <img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/1_gf771115.jpg" title="访问我的空间" style="max-width:90%">
+    </a>
+    <br>
+    <span><a href="http://my.csdn.net/gf771115" class="user_name" target="_blank">gf771115</a></span>
+</div>
+<div class="interact">
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_guanzhu&#39;])"></a>
+<a href="javascript:void(0);" class="letter" onclick="loginto(1)" title="[发私信]"></a>
+</div>
+<div id="blog_medal">
+<div id="bms_box"></div></div>
+<ul id="blog_rank">
+    <li>访问：<span>605368次</span></li>
+    <li>积分：<span>6770分</span></li>
+    <li>排名：<span>第894名</span></li>
+</ul>
+<ul id="blog_statistics">
+    <li>原创：<span>21篇</span></li>
+    <li>转载：<span>720篇</span></li>
+    <li>译文：<span>0篇</span></li>
+    <li>评论：<span>101条</span></li>
+</ul>
+</ul>
+</div>
+
+
+<div class="panel" id="panel_Search">
+    <ul class="panel_head"><span>文章搜索</span></ul>
+    <ul class="panel_body">
+        <form id="frmSearch" action="http://so.csdn.net/search" class="form_search" target="_blank">
+        <span><input id="inputSearch" type="text" class="blogsearch" title="请输入关键字"></span>
+        <input id="btnSubmit" type="button" value="搜索" title="search in blog">
+        <input type="hidden" name="q" id="inputQ">
+        <input type="hidden" name="t" value="blog">
+        <a id="btnSearchBlog" target="_blank"></a>
+        </form>
+    </ul>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#btnSubmit").click(function () {           
+            search();
+        });
+
+        $("#frmSearch").submit(function () {
+            search();
+            return false;
+        });
+
+        function search()
+        {
+            var url = "http://so.csdn.net/so/search/s.do?q=" + encodeURIComponent($("#inputSearch").val()) + "&u=" + username + "&t=blog";
+            window.location.href = url;
+        }   
+    });
+</script><div id="panel_Category" class="panel">
+<ul class="panel_head"><span>文章分类</span></ul>
+<ul class="panel_body">
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/690867" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Android/OMS</a><span>(254)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/800366" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">iOS / OC</a><span>(147)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/690868" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">J2ME</a><span>(5)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/702143" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">PC知识</a><span>(12)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/690866" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Windows Mobile (C#)</a><span>(9)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1260029" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">MySQL</a><span>(3)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1279804" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">JAVA</a><span>(19)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1279805" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">J2EE</a><span>(8)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1350533" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">HTML5</a><span>(25)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1411966" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">C++</a><span>(22)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1411976" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">cocos2d-x</a><span>(89)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1426652" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">AndEngine</a><span>(11)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1426654" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">libgdx</a><span>(50)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1426655" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">cocos2d</a><span>(54)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1753941" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">微信开发</a><span>(19)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/1908169" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Python</a><span>(1)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/2141707" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">JavaScript</a><span>(3)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/2184215" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Windows Phone</a><span>(20)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/2220903" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">C#</a><span>(4)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/gf771115/article/category/2399145" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">iOS/swift</a><span>(2)</span>
+            </li>
+</ul>
+</div><div id="panel_Archive" class="panel">
+<ul class="panel_head"><span>文章存档</span></ul>
+<ul class="panel_body">
+<div id="archive_list"><li><a href="http://blog.csdn.net/gf771115/article/month/2014/09">2014年09月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/08">2014年08月</a><span>(13)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/07">2014年07月</a><span>(47)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/06">2014年06月</a><span>(22)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/05">2014年05月</a><span>(31)</span></li><span class="hidelist" style="display:none;"><li><a href="http://blog.csdn.net/gf771115/article/month/2014/04">2014年04月</a><span>(29)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/03">2014年03月</a><span>(18)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/02">2014年02月</a><span>(26)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2014/01">2014年01月</a><span>(12)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/12">2013年12月</a><span>(6)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/11">2013年11月</a><span>(23)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/10">2013年10月</a><span>(5)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/09">2013年09月</a><span>(12)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/08">2013年08月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/07">2013年07月</a><span>(10)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/06">2013年06月</a><span>(12)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/05">2013年05月</a><span>(79)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/04">2013年04月</a><span>(44)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/03">2013年03月</a><span>(86)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/02">2013年02月</a><span>(12)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2013/01">2013年01月</a><span>(9)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/12">2012年12月</a><span>(7)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/11">2012年11月</a><span>(21)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/10">2012年10月</a><span>(6)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/09">2012年09月</a><span>(10)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/08">2012年08月</a><span>(14)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/07">2012年07月</a><span>(23)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/06">2012年06月</a><span>(30)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/05">2012年05月</a><span>(4)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2012/03">2012年03月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/11">2011年11月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/09">2011年09月</a><span>(5)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/08">2011年08月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/07">2011年07月</a><span>(9)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/06">2011年06月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/05">2011年05月</a><span>(16)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/04">2011年04月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/03">2011年03月</a><span>(17)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/02">2011年02月</a><span>(5)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2011/01">2011年01月</a><span>(5)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/12">2010年12月</a><span>(8)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/11">2010年11月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/10">2010年10月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/09">2010年09月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/08">2010年08月</a><span>(20)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/07">2010年07月</a><span>(10)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/06">2010年06月</a><span>(14)</span></li><li><a href="http://blog.csdn.net/gf771115/article/month/2010/05">2010年05月</a><span>(3)</span></li></span><div id="archive_list_button" class="list_closed">展开</div></div>
+</ul>
+</div>
+<div id="hotarticls" class="panel">
+<ul class="panel_head">
+    <span>       
+阅读排行    </span>
+</ul>
+
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/7902461" title="iOS开发者帐号申请指南">iOS开发者帐号申请指南</a><span>(62440)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6082356" title="Android获取图片资源的4种方式">Android获取图片资源的4种方式</a><span>(16214)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/5694354" title="Android 图片缩放">Android 图片缩放</a><span>(15073)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/8208841" title="Android百度定位API使用方法">Android百度定位API使用方法</a><span>(13613)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/5842190" title=" android中的后退键——onBackPressed()的使用"> android中的后退键——onBackPressed()的使用</a><span>(11649)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6795918" title="eclipse修改默认工作空间">eclipse修改默认工作空间</a><span>(9536)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/7729864" title="iOS Socket第三方开源类库 AsyncSocket">iOS Socket第三方开源类库 AsyncSocket</a><span>(9195)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/8077117" title="iiOS 6 新特性">iiOS 6 新特性</a><span>(7761)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6996577" title="Android 开启移动网络（GPRS 3G）">Android 开启移动网络（GPRS 3G）</a><span>(5853)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6283866" title="设置中的Preferencescreen用法介绍与分析">设置中的Preferencescreen用法介绍与分析</a><span>(5579)</span>
+</li>
+</ul>
+</div>
+<div id="hotarticls2" class="panel">
+<ul class="panel_head"><span>评论排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/7902461" title="iOS开发者帐号申请指南">iOS开发者帐号申请指南</a><span>(7)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/8208841" title="Android百度定位API使用方法">Android百度定位API使用方法</a><span>(5)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6996577" title="Android 开启移动网络（GPRS 3G）">Android 开启移动网络（GPRS 3G）</a><span>(5)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/21001569" title="Unable to execute dex: java.nio.BufferOverflowException.解决办法">Unable to execute dex: java.nio.BufferOverflowException.解决办法</a><span>(5)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/8228532" title="Android 自定义类库打包jar！ 谁说不可以打包res 文件？">Android 自定义类库打包jar！ 谁说不可以打包res 文件？</a><span>(4)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/6382381" title="iPhone开发 引用图片资源的三种方式">iPhone开发 引用图片资源的三种方式</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/8659109" title="libgdx游戏引擎教程(三)libgdx粒子系统的使用">libgdx游戏引擎教程(三)libgdx粒子系统的使用</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/5694354" title="Android 图片缩放">Android 图片缩放</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/21981171" title="Android 通过WebService调用天气预报接口">Android 通过WebService调用天气预报接口</a><span>(3)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/gf771115/article/details/7986832" title="android应用程序安装后自动打开">android应用程序安装后自动打开</a><span>(3)</span>
+</li>
+</ul>
+</div>
+<div id="homepageArticles" class="panel tracking-ad" data-mod="popu_4">
+<ul class="panel_head"><span>推荐文章</span></ul>
+<ul class="panel_body" id="ad_commend"><iframe id="ad_frm_2" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 183px; height: 200px; " src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad.htm"></iframe></ul>
+</div>
+<script type="text/javascript">
+ new Ad(12, 'ad_commend');
+</script><div id="newcomments" class="panel">
+<ul class="panel_head"><span>最新评论</span></ul>
+<ul class="panel_body itemlist">
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/19438409#comments">Android自定义照相机 预览拍照 切换前后置摄像头</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/geshicuowu" class="user_name">暗影幽灵</a>:
+我模拟的时候一直有问题，无法正常启动。可以给我demo参考下吗？谢谢，邮箱981652081@qq....
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/21001569#comments">Unable to execute dex: java.nio.BufferOverflowException.解决办法</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/pudong123456789" class="user_name">pudong123456789</a>:
+解释不错，谢了！
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/19438873#comments">使用ANT打包Android应用</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/gdutzyz" class="user_name">mery落叶</a>:
+这个是旧版本的sdk打包方式，最新的sdk没有apkbuilder这个了，路径也全不对了，求楼主更新...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/19070429#comments">PhotoSwipe简介</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/qq_17552849" class="user_name">qq_17552849</a>:
+针对android 手机一次点按，会引起一层关闭后,底上的层依然会触发点击事件的问题，这个问题怎么搞...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/26604067#comments">Android Sensor感应器介绍，获取用户移动方向，指南针原理</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/nifengfeixiang123" class="user_name">nifengfeixiang123</a>:
+我觉得你也是大神了，膜拜一下~~~
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/26604067#comments">Unable to execute dex: java.nio.BufferOverflowException.解决办法</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/qcjabc" class="user_name">冰镇奶茶</a>:
+的确是可以这样做，但为什么这样做就可以排除错误，为什么？
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/21981171#comments">Android 通过WebService调用天气预报接口</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/Bcai2" class="user_name">Bcai2</a>:
+@u010544067:我浏览了数据源网站，发现关于这个服务，在7月分份有了规定：想获取数据，需要注...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/8659109#comments">libgdx游戏引擎教程(三)libgdx粒子系统的使用</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/lianghongge" class="user_name">lianghongge</a>:
+谢谢分享，很有用。
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/19478383#comments">Android项目使用Ant打包，自动生成build.xml</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/u012633624" class="user_name">Darlinezhu88</a>:
+亲，我也按照你打包的流程打了，可以在简单的项目中运行，但是我公司项目较为复杂，里有混淆，也有.so文...
+    </p>
+    </li>
+    <li>
+   
+         <a href="http://blog.csdn.net/gf771115/article/details/8208841#comments">Android百度定位API使用方法</a>
+    <p style="margin:0px;"><a href="http://blog.csdn.net/quxingyuan" class="user_name">quxingyuan</a>:
+为什么这个函数onReceivePoi总是没有回调呢？
+    </p>
+    </li>
+</ul>
+</div>
+    </div>
+    <div class="clear">
+    </div>
+</div>
+
+            <div class="clear">
+            </div>
+        </div>
+        
+
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/cnick.js"></script>
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/newblog.min.js"></script>
+
+
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+<script type="text/javascript">
+    document.write('<script type="text/javascript" src="http://csdnimg.cn/pubfooter/js/publib_footer.js?' + Math.floor(new Date() / 120000).toString(36) + '="></' + 'script>');
+</script><script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/publib_footer.js"></script><link rel="stylesheet" type="text/css" href="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/pub_footer_2012.css"><div id="pub_footerall" class="pub_footerall"><dl><dt></dt> <dd><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a>|<a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a>|<a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a>|<a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a>|<a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a>|<a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a>|<a href="mailto:webmaster@csdn.net">问题报告</a>|<a target="_blank" href="http://www.csdn.net/friendlink.html">合作伙伴</a>|<a href="http://bbs.csdn.net/forums/Service" target="_blank">论坛反馈</a></dd><dd><a href="http://wpa.qq.com/msgrd?v=3&uin=2355263776&site=qq&menu=yes" target="_blank" class="qq">网站客服</a> <a href="http://wpa.qq.com/msgrd?v=3&uin=2251809102&site=qq&menu=yes" target="_blank" class="qq">杂志客服</a> <a href="http://e.weibo.com/csdnsupport/profile" target="_blank" class="weibo">微博客服</a> <a href="mailto:webmaster@csdn.net" class="email" title="联系邮箱">webmaster@csdn.net</a> <span class="phone" title="服务热线">400-600-2320</span></dd><dd>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd><dd>北京创新乐知信息技术有限公司 版权所有</dd><dd>江苏乐知网络技术有限公司 提供商务支持</dd><dd>Copyright © 1999-2014, CSDN.NET, All Rights Reserved&nbsp;<a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div><div id="note1" class="csdn_note" style="display:none; position:absolute; z-index:9999; width:440px">  <span class="notice_top_arrow"><span class="inner"></span></span>  <div class="box"></div></div><div class="csdn_notice_tip" style="display: none; position: absolute; z-index: 9990; width: 170px; ">  <iframe src="about:blank" frameborder="0" scrolling="no" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe>  <div class="tip_text">您有<strong>0</strong>条新通知</div>  <a href="javascript:void 0" class="close2"></a></div><script id="noticeScript" type="text/javascript" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/notify.js"></script>
+    <script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/login.js"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/pv.aspx" border="0" width="0" height="0">
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad-blog.js"></script><script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/ad-ms974_2.js"></script>
+
+<script type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/count.js"></script><iframe src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/logs.htm" frameborder="0" width="0" height="0"></iframe>
+<script type="text/javascript">
+    $(function () {
+        function __get_code_toolbar(snippet_id) {
+            return $("<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "' target='_blank' title='在CODE上查看代码片' style='text-indent:0;'><img src='https://code.csdn.net/assets/CODE_ico.png' width=12 height=12 alt='在CODE上查看代码片' style='position:relative;top:1px;left:2px;'/></a>"
+                    + "<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "/fork' target='_blank' title='派生到我的代码片'  style='text-indent:0;'><img src='https://code.csdn.net/assets/ico_fork.svg' width=12 height=12 alt='派生到我的代码片' style='position:relative;top:2px;left:2px;'/></a>");
+        }
+        
+        $("[code_snippet_id]").each(function () {
+            __s_id = $(this).attr("code_snippet_id");
+            if (__s_id != null && __s_id != "" && __s_id != 0 && parseInt(__s_id) > 70020) {
+                __code_tool = __get_code_toolbar(__s_id);
+                $(this).prev().find(".tools").append(__code_tool);
+            }
+        });
+    });
+</script>
+
+    </div>
+      <!--new top-->
+    
+    <script id="csdn-toolbar-id" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" type="text/javascript" src="./Android 图片缓存之内存缓存技术LruCache,软引用 - Gabriel的专栏 - 博客频道 - CSDN.NET_files/toolbar.js"></script>
+     <!--new top-->
+
+
+<div id="tag-suggest-pop" style="display: none; ">
+  <div class="relative">
+    <div class="close"></div>
+    <div class="content"><div><span>更多相关资源：</span><a href="http://www.csdn.net/tag/android" title="关于 android 的主题" target="_blank">android</a><a href="http://www.csdn.net/tag/%E7%BC%93%E5%AD%98" title="关于 缓存 的主题" target="_blank">缓存</a><a href="http://www.csdn.net/tag/%E5%9B%BE%E7%89%87" title="关于 图片 的主题" target="_blank">图片</a></div></div>
+  </div>
+</div></body></html>

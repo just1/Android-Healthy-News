@@ -1,0 +1,1075 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0054)http://blog.csdn.net/lnb333666/article/details/8460159 -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <script type="text/javascript" async="" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ga.js"></script><script id="allmobilize" charset="utf-8" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/allmobilize.min.js"></script><style type="text/css"></style>
+ <meta http-equiv="Cache-Control" content="no-siteapp"><link rel="alternate" media="handheld" href="http://blog.csdn.net/lnb333666/article/details/8460159#">
+
+    <title>产品设计：Android应用-开发技术【数据缓存】 - 老牛比
+        - 博客频道 - CSDN.NET</title>
+    
+    <meta name="description" content="最近真够忙的，瞎忙！好久没写博客。不知道写什么，就写些最近对用户体验这块的一个小的见解吧。无论大型或小型应用，灵活的缓存可以说不仅大大减轻了服务器的压力，而且因为更快速的用户体验而方便了用户。从事Android开发工作以来，个人认为Android应用可以说是作为小型应用，只是其中很多的开发时间花费在细节之上(UI交互方式、响应速度、效果、字体、颜色等等)，其中90%乃至99的应用并不是需要实时">
+    <script src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/jquery.js" type="text/javascript"></script>
+    <script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ad.js"></script>
+        <!--new top-->
+       
+        <link rel="stylesheet" href="http://static.csdn.net/public/common/toolbar/css/index.css">
+        <!--new top-->
+
+    <link rel="Stylesheet" type="text/css" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/style.css">
+    <link id="RSSLink" title="RSS" type="application/rss+xml" rel="alternate" href="http://blog.csdn.net/lnb333666/rss/list">
+    <link rel="shortcut icon" href="http://csdnimg.cn/public/favicon.ico">
+    <link type="text/css" rel="stylesheet" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/blue_green.css">
+ 
+
+
+<script src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/share.js"></script><script type="text/javascript" charset="utf-8" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/tracking.js"></script><script type="text/javascript" charset="utf-8" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/main.js"></script><link href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/bdsstyle.css" rel="stylesheet" type="text/css"><link rel="stylesheet" type="text/css" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/style(1).css"><link type="text/css" rel="stylesheet" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/style(2).css"><script src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/logger.js"></script><link rel="stylesheet" href="http://bdimg.share.baidu.com/static/api/css/share_style0_16.css?v=f4b44e79.css"></head>
+<body><iframe style="display: none; " frameborder="0"></iframe>
+    
+   
+      <!--new top-->
+    <script id="toolbar-tpl-scriptId" fixed="true" prod="blog" skin="black" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/html.js" type="text/javascript"></script><div class="csdn-toolbar csdn-toolbar-skin-black ">        <div class="container row center-block ">          <div class="col-md-3 pull-left logo clearfix"><a href="http://www.csdn.net/?ref=toolbar" title="CSDN首页" target="_blank" class="icon"></a><a title="频道首页" href="http://blog.csdn.net/?ref=toolbar_logo" target="_blank" class="img blog-icon"></a></div>          <div class="pull-right login-wrap unlogin">            <ul class="btns">              <li class="loginlink"><a href="https://passport.csdn.net/account/login?ref=toolbar" target="_top">登录&nbsp;</a>|<a target="_top" href="https://passport.csdn.net/account/register?ref=toolbar">&nbsp;注册</a></li>              <li class="search">                <div class="icon on-search-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <form action="http://so.csdn.net/search" method="get" target="_blank">                      <input type="hidden" value="toolbar" name="ref" accesskey="2">                      <div class="border">                        <input placeholder="搜索" type="text" value="" name="q" accesskey="2"><span class="icon-enter-sm"></span>                      </div>                    </form>                  </div>                </div>              </li>              <li class="favor">                <div class="icon on-favor-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div style="display:none;" class="favor-success"><span class="msg">收藏成功</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <div style="display:none;" class="favor-failed"><span class="icon-danger-lg"></span><span class="msg">收藏失败，请重新收藏</span>                      <div class="btns"><span class="btn btn-primary ok">确定</span></div>                    </div>                    <form role="form" class="form-horizontal favor-form">                      <div class="form-group">                        <div class="clearfix">                          <label for="input-title" class="col-sm-2 control-label">标题</label>                          <div class="col-sm-10">                            <input id="inputTitle" type="text" placeholder="" class="title form-control">                          </div>                        </div>                        <div class="alert alert-danger"><strong></strong>标题不能为空</div>                      </div>                      <div class="form-group">                        <label for="input-url" class="col-sm-2 control-label">网址</label>                        <div class="col-sm-10">                          <input id="input-url" type="text" placeholder="" class="url form-control">                        </div>                      </div>                      <div class="form-group">                        <label for="input-tag" class="col-sm-2 tag control-label">标签</label>                        <div class="col-sm-10">                          <input id="input-tag" type="text" class="form-control tag">                        </div>                      </div>                      <div class="form-group">                        <label for="input-description" class="description col-sm-2 control-label">摘要</label>                        <div class="col-sm-10">                          <textarea id="input-description" class="form-control description"></textarea>                        </div>                      </div>                      <div class="form-group">                        <div class="col-sm-offset-2 col-sm-10 ft">                          <div class="col-sm-4 pull-left">                            <div class="checkbox">                              <label>                                <input type="checkbox" name="share" checked="checked" class="share">公开                              </label>                            </div>                          </div>                          <div class="col-sm-8 pull-right favor-btns">                            <button type="button" class="cancel btn btn-default">取消</button>                            <button type="submit" class="submit btn btn-primary">收藏</button>                          </div>                        </div>                      </div>                    </form>                  </div>                </div>              </li>              <li class="notify">                <div style="display:none" class="number"></div>                <div style="display:none" class="icon-hasnotes-sm"></div>                <div id="header_notice_num"></div>                <div class="icon on-notify-icon">                  <div class="wrap">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div id="note1" class="csdn_note">                      <div class="box"></div>                    <iframe src="about:block" frameborder="0" allowtransparency="true" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe></div>                  </div>                </div>              </li>              <li class="ugc">                <div class="icon on-ugc-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <dl>                      <dt><a href="http://geek.csdn.net/news/expert?ref=toolbar" target="_blank" class="p-news clearfix"><em class="icon"></em><span>分享资讯</span></a></dt>                      <dt><a href="http://share.csdn.net/slides/new?ref=toolbar" target="_blank" class="p-doc clearfix"><em class="icon"></em><span>传PPT/文档</span></a></dt>                      <dt><a href="http://bbs.csdn.net/topics/new?ref=toolbar" target="_blank" class="p-ask clearfix"><em class="icon"></em><span>提问题</span></a></dt>                      <dt><a href="http://write.blog.csdn.net/postedit?ref=toolbar" target="_blank" class="p-blog clearfix"><em class="icon"></em><span>写博客</span></a></dt>                      <dt><a href="http://u.download.csdn.net/upload?ref=toolbar" target="_blank" class="p-src clearfix"><em class="icon"></em><span>传资源</span></a></dt>                      <dt><a href="https://code.csdn.net/projects/new?ref=toolbar" target="_blank" class="c-obj clearfix"><em class="icon"></em><span>创建项目</span></a></dt>                      <dt><a href="https://code.csdn.net/snippets/new?ref=toolbar" target="_blank" class="c-code clearfix"><em class="icon"></em><span>创建代码片</span></a></dt>                    </dl>                  </div>                </div>              </li>              <li class="profile">                <div class="icon on-profile-icon"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/100x100.jpg" class="curr-icon-img">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                    <div class="bd">                      <dl class="clearfix">                        <dt class="pull-left img"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="avatar"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/100x100.jpg"></a></dt>                        <dd class="info"><a target="_blank" href="http://my.csdn.net/?ref=toolbar" class="nickname"></a><a class="set-nick" href="https://passport.csdn.net/account/profile">设置昵称<span class="write-icon"></span></a><span class="dec"><a class="fill-dec" href="http://my.csdn.net/" target="_blank">编辑自我介绍，让更多人了解你<span class="write-icon"></span></a></span></dd>                      </dl>                    </div>                    <div class="ft clearfix"><a target="_blank" href="http://my.csdn.net/my/account/changepwd?ref=toolbar" class="pull-left"><span class="icon-cog"></span>帐号设置</a><a href="https://passport.csdn.net/account/logout?ref=toolbar" target="_top" class="pull-right "><span class="icon-signout"></span><span class="out">退出</span></a></div>                  </div>                </div>              </li>              <li class="apps">                <div class="icon on-apps-icon">                  <div class="wrap clearfix">                    <div class="curr-icon-wrap">                      <div class="curr-icon"></div>                    </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>社区</h5>                      </dt>                      <dd> <a href="http://blog.csdn.net/?ref=toolbar" target="_blank">博客</a></dd>                      <dd> <a href="http://bbs.csdn.net/?ref=toolbar" target="_blank">论坛</a></dd>                      <dd> <a href="http://download.csdn.net/?ref=toolbar" target="_blank">下载</a></dd>                      <dd><a href="http://share.csdn.net/?ref=toolbar" target="_blank">Share</a></dd>                      <dd><a href="http://geek.csdn.net/?ref=toolbar" target="_blank">极客头条</a></dd>                    </dl>                  </div>                  <div class="detail">                    <dl>                      <dt>                        <h5>服务</h5>                      </dt>                      <dd> <a href="https://code.csdn.net/?ref=toolbar" target="_blank">CODE</a></dd>                      <dd> <a href="http://hero.csdn.net/?ref=toolbar" target="_blank">英雄会</a></dd>                      <dd> <a href="http://huiyi.csdn.net/?ref=toolbar" target="_blank">活动</a></dd>                      <dd> <a href="http://www.csto.com/?ref=toolbar" target="_blank">CSTO</a></dd>                    </dl>                  </div>                  <div class="detail last">                    <dl>                      <dt>                        <h5>俱乐部</h5>                      </dt>                      <dd> <a href="http://cto.csdn.net/?ref=toolbar" target="_blank">CTO俱乐部</a></dd>                      <dd> <a href="http://student.csdn.net/?ref=toolbar" target="_blank">高校俱乐部</a></dd>                    </dl>                  </div>                </div>              </div>            </li>            </ul>          </div>        </div>    </div>
+     <!--new top-->
+    <div id="container">
+        <div id="header">
+    <div class="header">
+        <div id="blog_title">
+            <h2>
+                <a href="http://blog.csdn.net/lnb333666">老牛比</a></h2>
+            <h3>记录进步的每一瞬间</h3>
+            <div class="clear">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+<div id="navigator">
+    <div class="navigator_bg">
+    </div>
+    <div class="navigator">
+        <ul>
+                <li id="btnContents"><a href="http://blog.csdn.net/lnb333666?viewmode=contents"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_mulu&#39;])">
+                    <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ico_list.gif">目录视图</span></a></li>
+                <li id="btnView"><a href="http://blog.csdn.net/lnb333666?viewmode=list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_zhaiyao&#39;])">
+                    <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ico_summary.gif">摘要视图</span></a></li>
+                <li id="btnRss"><a href="http://blog.csdn.net/lnb333666/rss/list"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_RSS&#39;])">
+                    <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ico_rss.gif">订阅</span></a></li>                
+
+            </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    var username = "lnb333666";
+    var _blogger = username;
+    var blog_address = "http://blog.csdn.net/lnb333666";
+    var static_host = "http://static.blog.csdn.net";
+    var currentUserName = "";  
+</script>
+
+        <div id="body">
+            <div id="main">
+                <div class="main">
+                        <div class="ad_class">
+<div class="notice tracking-ad" data-mod="popu_3"> 
+
+<a href="http://bbs.csdn.net/topics/390812950?page=2#post-398116601" target="_blank">
+<font color="blue">博客专家福利
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://bbs.csdn.net/topics/390863850" target="_blank">
+<font color="red">【限时活动】建专辑得大奖</font></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://www.csdn.net/article/2014-09-10/2821606" target="_blank">
+<font color="blue">专访荣浩：流程的永恒之道
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="http://blog.csdn.net/blogdevteam/article/details/38657235" target="_blank"><font color="red">当青春遇上互联网，能否点燃你的创业梦
+</font></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a href="http://blog.csdn.net/blogdevteam/article/details/38418263" target="_blank">
+<font color="blue">推荐有礼--找出您心中的技术大牛
+</font></a>
+
+
+</div>                        </div>
+                        
+
+  
+<link href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/comment1.css" type="text/css" rel="stylesheet">
+<link href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/style1.css" type="text/css" rel="stylesheet">
+<script language="JavaScript" type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/jquery.cookie.js"></script>
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/main(1).js"></script>
+<div id="article_details" class="details">
+    <div class="article_title">   
+         <span class="ico ico_type_Original"></span>
+
+
+    <h1>
+        <span class="link_title"><a href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm">
+        产品设计：Android应用-开发技术【数据缓存】
+        </a></span>
+    </h1>
+</div>
+
+    <div class="article_manage">
+        <span class="link_categories">
+        分类：
+            <a href="http://blog.csdn.net/lnb333666/article/category/1333697" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_fenlei&#39;]);">产品随唠</a> 
+        </span>
+    <span class="link_postdate">2013-01-02 23:40</span>
+    <span class="link_view" title="阅读次数">6101人阅读</span>
+    <span class="link_comments" title="评论次数"><a href="http://blog.csdn.net/lnb333666/article/details/8460159#comments" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_pinglun&#39;])">评论</a>(39)</span>
+    <span class="link_collect"><a href="javascript:void(0);" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shoucang&#39;]);collectArticle(&#39;产品设计：Android应用-开发技术【数据缓存】&#39;,&#39;8460159&#39;);return false;" title="收藏">收藏</a></span>
+    <span class="link_report"><a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" onclick="javascript:_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_jubao&#39;]);report(8460159,2);return false;" title="举报">举报</a></span>
+    
+</div>
+<div class="tag2box"><a href="http://www.csdn.net/tag/Android" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">Android</a><a href="http://www.csdn.net/tag/%e6%95%b0%e6%8d%ae%e7%bc%93%e5%ad%98" target="_blank" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_tag&#39;]);">数据缓存</a></div>
+
+  
+    
+<div id="article_content" class="article_content">
+
+<p>最近真够忙的，瞎忙！好久没写博客。不知道写什么，就写些最近对用户体验这块的一个小的见解吧。</p>
+<p>无论大型或小型应用，<a target="_blank" href="http://blog.csdn.net/lnb333666">灵活的缓存</a>可以说不仅大大减轻了服务器的压力，而且因为更快速的用户体验而方便了用户。从事Android开发工作以来，个人认为Android应用可以说是作为小型应用，只是其中很多的开发时间花费在细节之上(UI交互方式、响应速度、效果、字体、颜色等等)，其中90%乃至99的应用并不是需要实时更新的(即时通讯类的除外：QQ)，而且诟病于蜗牛般的移动网速，3G也是(至少中国目前是这样的)，与服务器的数据交互是能少则少，这样用户体验才更好。</p>
+<p align="center"></p>
+<p align="center"><a target="_blank" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm"><img alt="" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/1357140875_6776.png"></a>&nbsp;</p>
+<p align="center" style="text-align:left">这是我公司产品(感兴趣的朋友可以到这里下载,提有用建议有回报的哦http://www.hulutan.net/ 目前仍在不断完善，后边还有惊喜)的截图，其实这个列表基本上可以全部用缓存数据来处理，即便你有新游戏发布，我不信你一个上百个应用出世。&nbsp;<br>
+</p>
+<p>采用缓存，可以进一步大大缓解数据交互的压力，又能提供一定的离线浏览。下边我简略列举一下缓存管理的适用环境：</p>
+<p>1. 提供网络服务的应用</p>
+<p>2. 数据更新不需要实时更新，哪怕是3-5分钟的延迟也是可以采用缓存机制。 </p>
+<p>3. 缓存的过期时间是可以接受的(类似网易的新闻阅读,支持离线离线阅读)</p>
+<p>这样所带来的好处：</p>
+<p>1. 减小服务器的压力</p>
+<p>2. 提高客户端的响应速度(本地数据提取嘛)</p>
+<p>3. 一定程度上支持离线浏览(可以参考网易的那个新闻应用,个人感觉离线阅读做得非常棒。)</p>
+<p>&nbsp;</p>
+<p><strong>一、<a target="_blank" href="http://blog.csdn.net/lnb333666">缓存管理的方法</a></strong></p>
+<p>缓存管理的原理很简：通过时间的设置来判断是否读取缓存还是重新下载；断网下就没什么好说的，直接去缓存即可。如图：</p>
+<p align="center"></p>
+<p style="text-align:center"><a target="_blank" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm"><img alt="" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/1357179303_1645.jpg"></a></p>
+<p>里面会有一些细节的处理，后面会详细阐述。基于这个原理，目前个人用过的两种比较常见的缓存管理方法是:数据库和文件(txt)。</p>
+<p>&nbsp;</p>
+<p><strong>二、<a target="_blank" href="http://blog.csdn.net/lnb333666">数据库(SQLite)缓存方式</a></strong></p>
+<p>这种方法是在下载完数据文件后，把文件的相关信息如url，路经，下载时间，过期时间等存放到数据库，当然我个人建议把url作为唯一的标识。下次下载的时候根据url先从数据库中查询，如果查询到当前时间并未过期，就根据路径读取本地文件，从而实现缓存的效果。</p>
+<p>从实现上我们可以看到这种方法可以灵活存放文件的属性，进而提供了很大的扩展性，可以为其它的功能提供一定的支持。</p>
+<p>从操作上需要创建数据库，每次查询数据库，如果过期还需要更新数据库，清理缓存的时候还需要删除数据库数据，稍显麻烦，而数据库操作不当又容易出现一系列的性能，ANR问题，指针错误问题，实现的时候要谨慎，具体作的话，但也只是增加一个工具类或方法的事情。</p>
+<p>还有一个问题，缓存的数据库是存放在/data/data/&lt;package&gt;/databases/目录下，是占用内存空间的，如果缓存累计，容易浪费内存，需要及时清理缓存。</p>
+<p>当然这种方法从目前一些应用的实用上看，我没有发现什么问题,估计使用的量还比较少吧。</p>
+<p>本文本人不太喜欢数据库，原因操作麻烦，尤其是要自己写建表那些语句，你懂的。我侧重文件缓存方式。 </p>
+<p>&nbsp;</p>
+<p><strong>三、文件缓存方式</strong></p>
+<p>这种方法，使用File.lastModified()方法得到文件的最后修改时间，与当前时间判断是否过期，从而实现缓存效果。</p>
+<p>实现上只能使用这一个属性，没有为其它的功能提供技术支持的可能。操作上倒是简单，比较时间即可，而且取的数据也就是文件里的JSON数据而已。本身处理也不容易带来其它问题，代价低廉。</p>
+<p>&nbsp;</p>
+<p><strong>四、文件法缓存方式的两点说明</strong></p>
+<p>1. 不同类型的文件的缓存时间不一样。</p>
+<p>笼统的说，不变文件的缓存时间是永久，变化文件的缓存时间是最大忍受不变时间。说白点，图片文件内容是不变的，一般存在SD卡上直到被清理，我们是可以永远读取缓存的。配置文件内容是可能更新的，需要设置一个可接受的缓存时间。</p>
+<p>2. 不同环境下的缓存时间标准不一样。</p>
+<p>无网络环境下，我们只能读取缓存文件，为了应用有东西显示，没有什么过期之说了。</p>
+<p>WiFi网络环境下，缓存时间可以设置短一点，一是网速较快，而是流量不要钱。</p>
+<p>3G流量环境下，缓存时间可以设置长一点，节省流量，就是节省金钱，而且用户体验也更好。</p>
+<p>GPS就别说更新什么的，已经够慢的了。缓存时间能多长就多长把。</p>
+<p>当然，作为一款好的应用，不会死定一种情况，针对于不同网络变换不同形式的缓存功能是必须有的。而且这个时间根据自己的实际情况来设置：数据的更新频率，数据的重要性等。</p>
+<p>&nbsp;</p>
+<p><strong>五、何时刷新</strong></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 开发者一方面希望尽量读取缓存，用户一方面希望实时刷新，但是响应速度越快越好，流量消耗越少越好(关于这块，的确开发中我没怎么想到，毕竟接口就是这么多，现在公司的产品几乎点一下就访问一下，而且还有些鸡肋多余的功能。慢慢修改哈哈)，是一个矛盾。</p>
+<p>其实何时刷新我也不知道，这里我提供两点建议：</p>
+<p>1. 数据的最长多长时间不变，对应用无大的影响。</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 比如，你的数据更新时间为4小时，则缓存时间设置为1~2小时比较合适。也就是更新时间/缓存时间=2,但用户个人修改、网站编辑人员等一些人为的更新就另说。一天用户总会看到更新，即便有延迟也好，视你产品的用途了；如果你觉得你是资讯类应用，再减少，2~4小时，如果你觉得数据比较重要或者比较受欢迎，用户会经常把玩，再减少，1~2小时，依次类推。</p>
+<p style="text-align:center"><a target="_blank" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm"><img alt="" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/1357141359_8854.png"></a><br>
+</p>
+<p align="center"></p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 当然类似这个界面的数据我认为更新时间能多长就多长了，尽可能长。如果你拿后边那个有多少数据会变动来搪塞。我会告诉你：这个只是一个引导性的界面，你有多少款游戏跟用户半毛钱关系都没有，10亿也跟他没关，他只要确定这里能找到他要找的 汤姆猫 就行。否则你又失去了一个用户。</p>
+<p>2. 提供刷新按钮。</p>
+<p>&nbsp; &nbsp; &nbsp; &nbsp; 必要时候或最保险的方法使在相关界面提供一个刷新按钮，或者当下流行的下拉列表刷新方式。为缓存，为加载失败提供一次重新来过的机会。毕竟喝骨头汤的时候，我也不介意碗旁多双筷子。</p>
+<p>总而言之，一切用户至上，为了更好的用户体验，方法也会层出不穷。<a target="_blank" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm">期待更好的办法</a></p>
+<p>&nbsp;</p>
+<p>关键代码：</p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a><div style="position: absolute; left: 413px; top: 4295px; width: 22px; height: 12px; z-index: 99; "><embed id="ZeroClipboardMovie_1" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="22" height="12" name="ZeroClipboardMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=22&amp;height=12" wmode="transparent"></div></div></div><ol start="1" class="dp-j"><li class="alt"><span><span class="keyword">package</span><span>&nbsp;com.hulutan.gamestore.cache;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;java.io.File;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;java.io.IOException;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;android.os.Environment;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;android.util.Log;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.Constants;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.GameStoreApplication;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.util.EncryptUtils;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.util.FileUtils;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.util.NetworkUtils;&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.util.NetworkUtils.NetworkState;&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">import</span><span>&nbsp;com.hulutan.gamestore.util.StringUtils;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span><span class="comment">/**</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;*&nbsp;缓存工具类</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;*&nbsp;@author&nbsp;naibo-liao</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;*&nbsp;@时间：&nbsp;2013-1-4下午02:30:52</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;ConfigCacheUtil&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;String&nbsp;TAG=ConfigCacheUtil.</span><span class="keyword">class</span><span>.getName();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**&nbsp;1秒超时时间&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">int</span><span>&nbsp;CONFIG_CACHE_SHORT_TIMEOUT=</span><span class="number">1000</span><span>&nbsp;*&nbsp;</span><span class="number">60</span><span>&nbsp;*&nbsp;</span><span class="number">5</span><span>;&nbsp;</span><span class="comment">//&nbsp;5&nbsp;分钟</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**&nbsp;5分钟超时时间&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">int</span><span>&nbsp;CONFIG_CACHE_MEDIUM_TIMEOUT=</span><span class="number">1000</span><span>&nbsp;*&nbsp;</span><span class="number">3600</span><span>&nbsp;*&nbsp;</span><span class="number">2</span><span>;&nbsp;</span><span class="comment">//&nbsp;2小时</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**&nbsp;中长缓存时间&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">int</span><span>&nbsp;CONFIG_CACHE_ML_TIMEOUT=</span><span class="number">1000</span><span>&nbsp;*&nbsp;</span><span class="number">60</span><span>&nbsp;*&nbsp;</span><span class="number">60</span><span>&nbsp;*&nbsp;</span><span class="number">24</span><span>&nbsp;*&nbsp;</span><span class="number">1</span><span>;&nbsp;</span><span class="comment">//&nbsp;1天</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**&nbsp;最大缓存时间&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">int</span><span>&nbsp;CONFIG_CACHE_MAX_TIMEOUT=</span><span class="number">1000</span><span>&nbsp;*&nbsp;</span><span class="number">60</span><span>&nbsp;*&nbsp;</span><span class="number">60</span><span>&nbsp;*&nbsp;</span><span class="number">24</span><span>&nbsp;*&nbsp;</span><span class="number">7</span><span>;&nbsp;</span><span class="comment">//&nbsp;7天</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;CONFIG_CACHE_MODEL_LONG&nbsp;:&nbsp;长时间(7天)缓存模式&nbsp;&lt;br&gt;</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;CONFIG_CACHE_MODEL_ML&nbsp;:&nbsp;中长时间(12小时)缓存模式&lt;br&gt;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;CONFIG_CACHE_MODEL_MEDIUM:&nbsp;中等时间(2小时)缓存模式&nbsp;&lt;br&gt;</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;CONFIG_CACHE_MODEL_SHORT&nbsp;:&nbsp;短时间(5分钟)缓存模式</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">enum</span><span>&nbsp;ConfigCacheModel&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONFIG_CACHE_MODEL_SHORT,&nbsp;CONFIG_CACHE_MODEL_MEDIUM,&nbsp;CONFIG_CACHE_MODEL_ML,&nbsp;CONFIG_CACHE_MODEL_LONG;&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;获取缓存</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;url&nbsp;访问网络的URL</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;缓存数据</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;getUrlCache(String&nbsp;url,&nbsp;ConfigCacheModel&nbsp;model)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(url&nbsp;==&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;result=<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;path=Constants.ENVIROMENT_DIR_CACHE&nbsp;+&nbsp;StringUtils.replaceUrlWithPlus(EncryptUtils.encryptToMD5(url));&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;file=<span class="keyword">new</span><span>&nbsp;File(path);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(file.exists()&nbsp;&amp;&amp;&nbsp;file.isFile())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">long</span><span>&nbsp;expiredTime=System.currentTimeMillis()&nbsp;-&nbsp;file.lastModified();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log.d(TAG,&nbsp;file.getAbsolutePath()&nbsp;+&nbsp;<span class="string">"&nbsp;expiredTime:"</span><span>&nbsp;+&nbsp;expiredTime&nbsp;/&nbsp;</span><span class="number">60000</span><span>&nbsp;+&nbsp;</span><span class="string">"min"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;1。如果系统时间是不正确的</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;2。当网络是无效的,你只能读缓存</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(NetworkUtils.getNetworkState(GameStoreApplication.getInstance().getContext())&nbsp;!=&nbsp;NetworkState.NETWORN_NONE)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&lt;&nbsp;</span><span class="number">0</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(model&nbsp;==&nbsp;ConfigCacheModel.CONFIG_CACHE_MODEL_SHORT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&gt;&nbsp;CONFIG_CACHE_SHORT_TIMEOUT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>(model&nbsp;==&nbsp;ConfigCacheModel.CONFIG_CACHE_MODEL_MEDIUM)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&gt;&nbsp;CONFIG_CACHE_MEDIUM_TIMEOUT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>(model&nbsp;==&nbsp;ConfigCacheModel.CONFIG_CACHE_MODEL_ML)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&gt;&nbsp;CONFIG_CACHE_ML_TIMEOUT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>(model&nbsp;==&nbsp;ConfigCacheModel.CONFIG_CACHE_MODEL_LONG)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&gt;&nbsp;CONFIG_CACHE_MEDIUM_TIMEOUT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(expiredTime&nbsp;&gt;&nbsp;CONFIG_CACHE_MAX_TIMEOUT)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result=FileUtils.readTextFile(file);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>(IOException&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;result;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;设置缓存</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;data</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;url</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;setUrlCache(String&nbsp;data,&nbsp;String&nbsp;url)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(Constants.ENVIROMENT_DIR_CACHE&nbsp;==&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;dir=<span class="keyword">new</span><span>&nbsp;File(Constants.ENVIROMENT_DIR_CACHE);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(!dir.exists()&nbsp;&amp;&amp;&nbsp;Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dir.mkdirs();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;file=<span class="keyword">new</span><span>&nbsp;File(Constants.ENVIROMENT_DIR_CACHE&nbsp;+&nbsp;StringUtils.replaceUrlWithPlus(EncryptUtils.encryptToMD5(url)));&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//&nbsp;创建缓存数据到磁盘，就是创建文件</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FileUtils.writeTextFile(file,&nbsp;data);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>(IOException&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log.d(TAG,&nbsp;<span class="string">"write&nbsp;"</span><span>&nbsp;+&nbsp;file.getAbsolutePath()&nbsp;+&nbsp;</span><span class="string">"&nbsp;data&nbsp;failed!"</span><span>);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>(Exception&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;删除历史缓存文件</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;cacheFile</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;clearCache(File&nbsp;cacheFile)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(cacheFile&nbsp;==&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED))&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;cacheDir=<span class="keyword">new</span><span>&nbsp;File(Environment.getExternalStorageDirectory().getPath()&nbsp;+&nbsp;</span><span class="string">"/hulutan/cache/"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(cacheDir.exists())&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearCache(cacheDir);&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>(Exception&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>(cacheFile.isFile())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cacheFile.delete();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>(cacheFile.isDirectory())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File[]&nbsp;childFiles=cacheFile.listFiles();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span><span>(</span><span class="keyword">int</span><span>&nbsp;i=</span><span class="number">0</span><span>;&nbsp;i&nbsp;&lt;&nbsp;childFiles.length;&nbsp;i++)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clearCache(childFiles[i]);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>}&nbsp;&nbsp;</span></li></ol></div><pre class="java" name="code" style="display: none; ">package com.hulutan.gamestore.cache;
+
+import java.io.File;
+import java.io.IOException;
+
+import android.os.Environment;
+import android.util.Log;
+
+import com.hulutan.gamestore.Constants;
+import com.hulutan.gamestore.GameStoreApplication;
+import com.hulutan.gamestore.util.EncryptUtils;
+import com.hulutan.gamestore.util.FileUtils;
+import com.hulutan.gamestore.util.NetworkUtils;
+import com.hulutan.gamestore.util.NetworkUtils.NetworkState;
+import com.hulutan.gamestore.util.StringUtils;
+
+/**
+ * 缓存工具类
+ * @author naibo-liao
+ * @时间： 2013-1-4下午02:30:52
+ */
+public class ConfigCacheUtil {
+
+    private static final String TAG=ConfigCacheUtil.class.getName();
+
+    /** 1秒超时时间 */
+    public static final int CONFIG_CACHE_SHORT_TIMEOUT=1000 * 60 * 5; // 5 分钟
+
+    /** 5分钟超时时间 */
+    public static final int CONFIG_CACHE_MEDIUM_TIMEOUT=1000 * 3600 * 2; // 2小时
+
+    /** 中长缓存时间 */
+    public static final int CONFIG_CACHE_ML_TIMEOUT=1000 * 60 * 60 * 24 * 1; // 1天
+
+    /** 最大缓存时间 */
+    public static final int CONFIG_CACHE_MAX_TIMEOUT=1000 * 60 * 60 * 24 * 7; // 7天
+
+    /**
+     * CONFIG_CACHE_MODEL_LONG : 长时间(7天)缓存模式 &lt;br&gt;
+     * CONFIG_CACHE_MODEL_ML : 中长时间(12小时)缓存模式&lt;br&gt;
+     * CONFIG_CACHE_MODEL_MEDIUM: 中等时间(2小时)缓存模式 &lt;br&gt;
+     * CONFIG_CACHE_MODEL_SHORT : 短时间(5分钟)缓存模式
+     */
+    public enum ConfigCacheModel {
+        CONFIG_CACHE_MODEL_SHORT, CONFIG_CACHE_MODEL_MEDIUM, CONFIG_CACHE_MODEL_ML, CONFIG_CACHE_MODEL_LONG;
+    }
+
+    /**
+     * 获取缓存
+     * @param url 访问网络的URL
+     * @return 缓存数据
+     */
+    public static String getUrlCache(String url, ConfigCacheModel model) {
+        if(url == null) {
+            return null;
+        }
+
+        String result=null;
+        String path=Constants.ENVIROMENT_DIR_CACHE + StringUtils.replaceUrlWithPlus(EncryptUtils.encryptToMD5(url));
+        File file=new File(path);
+        if(file.exists() &amp;&amp; file.isFile()) {
+            long expiredTime=System.currentTimeMillis() - file.lastModified();
+            Log.d(TAG, file.getAbsolutePath() + " expiredTime:" + expiredTime / 60000 + "min");
+            // 1。如果系统时间是不正确的
+            // 2。当网络是无效的,你只能读缓存
+            if(NetworkUtils.getNetworkState(GameStoreApplication.getInstance().getContext()) != NetworkState.NETWORN_NONE) {
+                if(expiredTime &lt; 0) {
+                    return null;
+                }
+                if(model == ConfigCacheModel.CONFIG_CACHE_MODEL_SHORT) {
+                    if(expiredTime &gt; CONFIG_CACHE_SHORT_TIMEOUT) {
+                        return null;
+                    }
+                } else if(model == ConfigCacheModel.CONFIG_CACHE_MODEL_MEDIUM) {
+                    if(expiredTime &gt; CONFIG_CACHE_MEDIUM_TIMEOUT) {
+                        return null;
+                    }
+                } else if(model == ConfigCacheModel.CONFIG_CACHE_MODEL_ML) {
+                    if(expiredTime &gt; CONFIG_CACHE_ML_TIMEOUT) {
+                        return null;
+                    }
+                } else if(model == ConfigCacheModel.CONFIG_CACHE_MODEL_LONG) {
+                    if(expiredTime &gt; CONFIG_CACHE_MEDIUM_TIMEOUT) {
+                        return null;
+                    }
+                } else {
+                    if(expiredTime &gt; CONFIG_CACHE_MAX_TIMEOUT) {
+                        return null;
+                    }
+                }
+            }
+
+            try {
+                result=FileUtils.readTextFile(file);
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 设置缓存
+     * @param data
+     * @param url
+     */
+    public static void setUrlCache(String data, String url) {
+        if(Constants.ENVIROMENT_DIR_CACHE == null) {
+            return;
+        }
+        File dir=new File(Constants.ENVIROMENT_DIR_CACHE);
+        if(!dir.exists() &amp;&amp; Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+            dir.mkdirs();
+        }
+        File file=new File(Constants.ENVIROMENT_DIR_CACHE + StringUtils.replaceUrlWithPlus(EncryptUtils.encryptToMD5(url)));
+        try {
+            // 创建缓存数据到磁盘，就是创建文件
+            FileUtils.writeTextFile(file, data);
+        } catch(IOException e) {
+            Log.d(TAG, "write " + file.getAbsolutePath() + " data failed!");
+            e.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 删除历史缓存文件
+     * @param cacheFile
+     */
+    public static void clearCache(File cacheFile) {
+        if(cacheFile == null) {
+            if(Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
+                try {
+                    File cacheDir=new File(Environment.getExternalStorageDirectory().getPath() + "/hulutan/cache/");
+                    if(cacheDir.exists()) {
+                        clearCache(cacheDir);
+                    }
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if(cacheFile.isFile()) {
+            cacheFile.delete();
+        } else if(cacheFile.isDirectory()) {
+            File[] childFiles=cacheFile.listFiles();
+            for(int i=0; i &lt; childFiles.length; i++) {
+                clearCache(childFiles[i]);
+            }
+        }
+    }
+}
+</pre>
+<p><br>
+获取缓存：</p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a><div style="position: absolute; left: 413px; top: 7146px; width: 22px; height: 12px; z-index: 99; "><embed id="ZeroClipboardMovie_2" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="22" height="12" name="ZeroClipboardMovie_2" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=2&amp;width=22&amp;height=12" wmode="transparent"></div></div></div><ol start="1" class="dp-j"><li class="alt"><span><span>String&nbsp;cacheConfigString=ConfigCacheUtil.getUrlCache(Net.API_HELP,&nbsp;ConfigCacheModel.CONFIG_CACHE_MODEL_LONG);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>(cacheConfigString&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">//do&nbsp;something</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li></ol></div><pre class="java" name="code" style="display: none; ">String cacheConfigString=ConfigCacheUtil.getUrlCache(Net.API_HELP, ConfigCacheModel.CONFIG_CACHE_MODEL_LONG);
+        if(cacheConfigString != null) {
+               //do something
+        }</pre>
+<p><br>
+设置缓存：</p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a><div style="position: absolute; left: 413px; top: 7332px; width: 22px; height: 12px; z-index: 99; "><embed id="ZeroClipboardMovie_3" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="22" height="12" name="ZeroClipboardMovie_3" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=3&amp;width=22&amp;height=12" wmode="transparent"></div></div></div><ol start="1" class="dp-j"><li class="alt"><span><span>ConfigCacheUtil.setUrlCache(data,&nbsp;Net.API_HELP);&nbsp;&nbsp;</span></span></li></ol></div><pre class="java" name="code" style="display: none; ">ConfigCacheUtil.setUrlCache(data, Net.API_HELP);</pre>
+<p><br>
+补充 &nbsp;FileUtils 文件</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_java"><div class="bar"><div class="tools"><b>[java]</b> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="ViewSource" title="view plain" onclick="dp.sh.Toolbar.Command(&#39;ViewSource&#39;,this);return false;">view plain</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="CopyToClipboard" title="copy" onclick="dp.sh.Toolbar.Command(&#39;CopyToClipboard&#39;,this);return false;">copy</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="PrintSource" title="print" onclick="dp.sh.Toolbar.Command(&#39;PrintSource&#39;,this);return false;">print</a><a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="About" title="?" onclick="dp.sh.Toolbar.Command(&#39;About&#39;,this);return false;">?</a><div style="position: absolute; left: 413px; top: 7491px; width: 22px; height: 12px; z-index: 99; "><embed id="ZeroClipboardMovie_4" src="http://static.blog.csdn.net/scripts/ZeroClipboard/ZeroClipboard.swf" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="22" height="12" name="ZeroClipboardMovie_4" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=4&amp;width=22&amp;height=12" wmode="transparent"></div></div></div><ol start="1" class="dp-j"><li class="alt"><span><span class="comment">/**</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;*&nbsp;文件处理工具类</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;*&nbsp;</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;*&nbsp;@author&nbsp;naibo-liao</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;*&nbsp;@时间：&nbsp;2013-1-4下午03:13:08</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span><span class="keyword">public</span><span>&nbsp;</span><span class="keyword">class</span><span>&nbsp;FileUtils&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">long</span><span>&nbsp;B&nbsp;=&nbsp;</span><span class="number">1</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">long</span><span>&nbsp;KB&nbsp;=&nbsp;B&nbsp;*&nbsp;</span><span class="number">1024</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">long</span><span>&nbsp;MB&nbsp;=&nbsp;KB&nbsp;*&nbsp;</span><span class="number">1024</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">long</span><span>&nbsp;GB&nbsp;=&nbsp;MB&nbsp;*&nbsp;</span><span class="number">1024</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">private</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">final</span><span>&nbsp;</span><span class="keyword">int</span><span>&nbsp;BUFFER&nbsp;=&nbsp;</span><span class="number">8192</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;格式化文件大小&lt;b&gt;&nbsp;带有单位</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;size</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;formatFileSize(</span><span class="keyword">long</span><span>&nbsp;size)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StringBuilder&nbsp;sb&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;StringBuilder();&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;u&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">double</span><span>&nbsp;tmpSize&nbsp;=&nbsp;</span><span class="number">0</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(size&nbsp;&lt;&nbsp;KB)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sb.append(size).append(<span class="string">"B"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;sb.toString();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>&nbsp;(size&nbsp;&lt;&nbsp;MB)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpSize&nbsp;=&nbsp;getSize(size,&nbsp;KB);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;=&nbsp;<span class="string">"KB"</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>&nbsp;(size&nbsp;&lt;&nbsp;GB)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpSize&nbsp;=&nbsp;getSize(size,&nbsp;MB);&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;=&nbsp;<span class="string">"MB"</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tmpSize&nbsp;=&nbsp;getSize(size,&nbsp;GB);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;u&nbsp;=&nbsp;<span class="string">"GB"</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;sb.append(twodot(tmpSize)).append(u).toString();&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;保留两位小数</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;d</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;twodot(</span><span class="keyword">double</span><span>&nbsp;d)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;String.format(</span><span class="string">"%.2f"</span><span>,&nbsp;d);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">double</span><span>&nbsp;getSize(</span><span class="keyword">long</span><span>&nbsp;size,&nbsp;</span><span class="keyword">long</span><span>&nbsp;u)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;(</span><span class="keyword">double</span><span>)&nbsp;size&nbsp;/&nbsp;(</span><span class="keyword">double</span><span>)&nbsp;u;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;sd卡挂载且可用</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">boolean</span><span>&nbsp;isSdCardMounted()&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;android.os.Environment.getExternalStorageState().equals(&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;android.os.Environment.MEDIA_MOUNTED);&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;递归创建文件目录</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;path</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;CreateDir(String&nbsp;path)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(!isSdCardMounted())&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;file&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;File(path);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(!file.exists())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file.mkdirs();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>&nbsp;(Exception&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Log.e(<span class="string">"hulutan"</span><span>,&nbsp;</span><span class="string">"error&nbsp;on&nbsp;creat&nbsp;dirs:"</span><span>&nbsp;+&nbsp;e.getStackTrace());&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;读取文件</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;file</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;IOException</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;readTextFile(File&nbsp;file)&nbsp;</span><span class="keyword">throws</span><span>&nbsp;IOException&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;text&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;InputStream&nbsp;is&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;FileInputStream(file);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;text&nbsp;=&nbsp;readTextInputStream(is);;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">finally</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(is&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;is.close();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;text;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;从流中读取文件</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;is</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;IOException</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;readTextInputStream(InputStream&nbsp;is)&nbsp;</span><span class="keyword">throws</span><span>&nbsp;IOException&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;StringBuffer&nbsp;strbuffer&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;StringBuffer();&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;line;&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedReader&nbsp;reader&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reader&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;BufferedReader(</span><span class="keyword">new</span><span>&nbsp;InputStreamReader(is));&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;((line&nbsp;=&nbsp;reader.readLine())&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;strbuffer.append(line).append(<span class="string">"\r\n"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">finally</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(reader&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reader.close();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;strbuffer.toString();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;将文本内容写入文件</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;file</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;str</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;IOException</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;writeTextFile(File&nbsp;file,&nbsp;String&nbsp;str)&nbsp;</span><span class="keyword">throws</span><span>&nbsp;IOException&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataOutputStream&nbsp;out&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;DataOutputStream(</span><span class="keyword">new</span><span>&nbsp;FileOutputStream(file));&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.write(str.getBytes());&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">finally</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(out&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;out.close();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;将Bitmap保存本地JPG图片</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;url</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;IOException</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;String&nbsp;saveBitmap2File(String&nbsp;url)&nbsp;</span><span class="keyword">throws</span><span>&nbsp;IOException&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedInputStream&nbsp;inBuff&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedOutputStream&nbsp;outBuff&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SimpleDateFormat&nbsp;sf&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;SimpleDateFormat(</span><span class="string">"yyyy_MM_dd_HH_mm_ss"</span><span>);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;timeStamp&nbsp;=&nbsp;sf.format(<span class="keyword">new</span><span>&nbsp;Date());&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;targetFile&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;File(Constants.ENVIROMENT_DIR_SAVE,&nbsp;timeStamp&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+&nbsp;<span class="string">".jpg"</span><span>);&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;oldfile&nbsp;=&nbsp;ImageLoader.getInstance().getDiscCache().get(url);&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inBuff&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;BufferedInputStream(</span><span class="keyword">new</span><span>&nbsp;FileInputStream(oldfile));&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outBuff&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;BufferedOutputStream(</span><span class="keyword">new</span><span>&nbsp;FileOutputStream(targetFile));&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">byte</span><span>[]&nbsp;buffer&nbsp;=&nbsp;</span><span class="keyword">new</span><span>&nbsp;</span><span class="keyword">byte</span><span>[BUFFER];&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span><span>&nbsp;length;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;((length&nbsp;=&nbsp;inBuff.read(buffer))&nbsp;!=&nbsp;-</span><span class="number">1</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outBuff.write(buffer,&nbsp;<span class="number">0</span><span>,&nbsp;length);&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outBuff.flush();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;targetFile.getPath();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>&nbsp;(Exception&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">finally</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(inBuff&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inBuff.close();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(outBuff&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outBuff.close();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;targetFile.getPath();&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;读取表情配置文件</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;context</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;List&lt;String&gt;&nbsp;getEmojiFile(Context&nbsp;context)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">try</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;List&lt;String&gt;&nbsp;list&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;ArrayList&lt;String&gt;();&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;InputStream&nbsp;in&nbsp;=&nbsp;context.getResources().getAssets().open(<span class="string">"emoji"</span><span>);</span><span class="comment">//&nbsp;文件名字为rose.txt</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BufferedReader&nbsp;br&nbsp;=&nbsp;<span class="keyword">new</span><span>&nbsp;BufferedReader(</span><span class="keyword">new</span><span>&nbsp;InputStreamReader(in,&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="string">"UTF-8"</span><span>));&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;str&nbsp;=&nbsp;<span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span><span>&nbsp;((str&nbsp;=&nbsp;br.readLine())&nbsp;!=&nbsp;</span><span class="keyword">null</span><span>)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list.add(str);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;list;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">catch</span><span>&nbsp;(IOException&nbsp;e)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;e.printStackTrace();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;</span><span class="keyword">null</span><span>;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;获取一个文件夹大小</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;f</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@throws&nbsp;Exception</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">long</span><span>&nbsp;getFileSize(File&nbsp;f)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">long</span><span>&nbsp;size&nbsp;=&nbsp;</span><span class="number">0</span><span>;&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;flist[]&nbsp;=&nbsp;f.listFiles();&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span><span>&nbsp;(</span><span class="keyword">int</span><span>&nbsp;i&nbsp;=&nbsp;</span><span class="number">0</span><span>;&nbsp;i&nbsp;&lt;&nbsp;flist.length;&nbsp;i++)&nbsp;{&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(flist[i].isDirectory())&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size&nbsp;=&nbsp;size&nbsp;+&nbsp;getFileSize(flist[i]);&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;size&nbsp;=&nbsp;size&nbsp;+&nbsp;flist[i].length();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span><span>&nbsp;size;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">/**</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;删除文件</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;</span>&nbsp;</span></li><li class="alt"><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;file</span>&nbsp;</span></li><li class=""><span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">public</span><span>&nbsp;</span><span class="keyword">static</span><span>&nbsp;</span><span class="keyword">void</span><span>&nbsp;deleteFile(File&nbsp;file)&nbsp;{&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(file.exists())&nbsp;{&nbsp;</span><span class="comment">//&nbsp;判断文件是否存在</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;(file.isFile())&nbsp;{&nbsp;</span><span class="comment">//&nbsp;判断是否是文件</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file.delete();&nbsp;<span class="comment">//&nbsp;delete()方法&nbsp;你应该知道&nbsp;是删除的意思;</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;<span class="keyword">else</span><span>&nbsp;</span><span class="keyword">if</span><span>&nbsp;(file.isDirectory())&nbsp;{&nbsp;</span><span class="comment">//&nbsp;否则如果它是一个目录</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File&nbsp;files[]&nbsp;=&nbsp;file.listFiles();&nbsp;<span class="comment">//&nbsp;声明目录下所有的文件&nbsp;files[];</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span><span>&nbsp;(</span><span class="keyword">int</span><span>&nbsp;i&nbsp;=&nbsp;</span><span class="number">0</span><span>;&nbsp;i&nbsp;&lt;&nbsp;files.length;&nbsp;i++)&nbsp;{&nbsp;</span><span class="comment">//&nbsp;遍历目录下所有的文件</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deleteFile(files[i]);&nbsp;<span class="comment">//&nbsp;把每个文件&nbsp;用这个方法进行迭代</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file.delete();&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;}&nbsp;&nbsp;</span></li><li class="alt"><span>}&nbsp;&nbsp;</span></li></ol></div><pre class="java" name="code" style="display: none; ">/**
+ * 文件处理工具类
+ * 
+ * @author naibo-liao
+ * @时间： 2013-1-4下午03:13:08
+ */
+public class FileUtils {
+
+	public static final long B = 1;
+	public static final long KB = B * 1024;
+	public static final long MB = KB * 1024;
+	public static final long GB = MB * 1024;
+	private static final int BUFFER = 8192;
+	/**
+	 * 格式化文件大小&lt;b&gt; 带有单位
+	 * 
+	 * @param size
+	 * @return
+	 */
+	public static String formatFileSize(long size) {
+		StringBuilder sb = new StringBuilder();
+		String u = null;
+		double tmpSize = 0;
+		if (size &lt; KB) {
+			sb.append(size).append("B");
+			return sb.toString();
+		} else if (size &lt; MB) {
+			tmpSize = getSize(size, KB);
+			u = "KB";
+		} else if (size &lt; GB) {
+			tmpSize = getSize(size, MB);
+			u = "MB";
+		} else {
+			tmpSize = getSize(size, GB);
+			u = "GB";
+		}
+		return sb.append(twodot(tmpSize)).append(u).toString();
+	}
+
+	/**
+	 * 保留两位小数
+	 * 
+	 * @param d
+	 * @return
+	 */
+	public static String twodot(double d) {
+		return String.format("%.2f", d);
+	}
+
+	public static double getSize(long size, long u) {
+		return (double) size / (double) u;
+	}
+
+	/**
+	 * sd卡挂载且可用
+	 * 
+	 * @return
+	 */
+	public static boolean isSdCardMounted() {
+		return android.os.Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED);
+	}
+
+	/**
+	 * 递归创建文件目录
+	 * 
+	 * @param path
+	 * */
+	public static void CreateDir(String path) {
+		if (!isSdCardMounted())
+			return;
+		File file = new File(path);
+		if (!file.exists()) {
+			try {
+				file.mkdirs();
+			} catch (Exception e) {
+				Log.e("hulutan", "error on creat dirs:" + e.getStackTrace());
+			}
+		}
+	}
+
+	/**
+	 * 读取文件
+	 * 
+	 * @param file
+	 * @return
+	 * @throws IOException
+	 */
+	public static String readTextFile(File file) throws IOException {
+		String text = null;
+		InputStream is = null;
+		try {
+			is = new FileInputStream(file);
+			text = readTextInputStream(is);;
+		} finally {
+			if (is != null) {
+				is.close();
+			}
+		}
+		return text;
+	}
+
+	/**
+	 * 从流中读取文件
+	 * 
+	 * @param is
+	 * @return
+	 * @throws IOException
+	 */
+	public static String readTextInputStream(InputStream is) throws IOException {
+		StringBuffer strbuffer = new StringBuffer();
+		String line;
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(is));
+			while ((line = reader.readLine()) != null) {
+				strbuffer.append(line).append("\r\n");
+			}
+		} finally {
+			if (reader != null) {
+				reader.close();
+			}
+		}
+		return strbuffer.toString();
+	}
+
+	/**
+	 * 将文本内容写入文件
+	 * 
+	 * @param file
+	 * @param str
+	 * @throws IOException
+	 */
+	public static void writeTextFile(File file, String str) throws IOException {
+		DataOutputStream out = null;
+		try {
+			out = new DataOutputStream(new FileOutputStream(file));
+			out.write(str.getBytes());
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+		}
+	}
+
+	/**
+	 * 将Bitmap保存本地JPG图片
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
+	public static String saveBitmap2File(String url) throws IOException {
+
+		BufferedInputStream inBuff = null;
+		BufferedOutputStream outBuff = null;
+
+		SimpleDateFormat sf = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		String timeStamp = sf.format(new Date());
+		File targetFile = new File(Constants.ENVIROMENT_DIR_SAVE, timeStamp
+				+ ".jpg");
+		File oldfile = ImageLoader.getInstance().getDiscCache().get(url);
+		try {
+
+			inBuff = new BufferedInputStream(new FileInputStream(oldfile));
+			outBuff = new BufferedOutputStream(new FileOutputStream(targetFile));
+			byte[] buffer = new byte[BUFFER];
+			int length;
+			while ((length = inBuff.read(buffer)) != -1) {
+				outBuff.write(buffer, 0, length);
+			}
+			outBuff.flush();
+			return targetFile.getPath();
+		} catch (Exception e) {
+
+		} finally {
+			if (inBuff != null) {
+				inBuff.close();
+			}
+			if (outBuff != null) {
+				outBuff.close();
+			}
+		}
+		return targetFile.getPath();
+	}
+
+	/**
+	 * 读取表情配置文件
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static List&lt;String&gt; getEmojiFile(Context context) {
+		try {
+			List&lt;String&gt; list = new ArrayList&lt;String&gt;();
+			InputStream in = context.getResources().getAssets().open("emoji");// 文件名字为rose.txt
+			BufferedReader br = new BufferedReader(new InputStreamReader(in,
+					"UTF-8"));
+			String str = null;
+			while ((str = br.readLine()) != null) {
+				list.add(str);
+			}
+
+			return list;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * 获取一个文件夹大小
+	 * 
+	 * @param f
+	 * @return
+	 * @throws Exception
+	 */
+	public static long getFileSize(File f) {
+		long size = 0;
+		File flist[] = f.listFiles();
+		for (int i = 0; i &lt; flist.length; i++) {
+			if (flist[i].isDirectory()) {
+				size = size + getFileSize(flist[i]);
+			} else {
+				size = size + flist[i].length();
+			}
+		}
+		return size;
+	}
+
+	/**
+	 * 删除文件
+	 * 
+	 * @param file
+	 */
+	public static void deleteFile(File file) {
+
+		if (file.exists()) { // 判断文件是否存在
+			if (file.isFile()) { // 判断是否是文件
+				file.delete(); // delete()方法 你应该知道 是删除的意思;
+			} else if (file.isDirectory()) { // 否则如果它是一个目录
+				File files[] = file.listFiles(); // 声明目录下所有的文件 files[];
+				for (int i = 0; i &lt; files.length; i++) { // 遍历目录下所有的文件
+					deleteFile(files[i]); // 把每个文件 用这个方法进行迭代
+				}
+			}
+			file.delete();
+		}
+	}
+}
+</pre>
+<p><br>
+&nbsp;</p>
+
+</div>
+
+
+
+
+<!-- Baidu Button BEGIN -->
+
+<div class="bdsharebuttonbox bdshare-button-style0-16" style="float: right;" data-bd-bind="1410403803066">
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_more" data-cmd="more" style="background-position:0 0 !important; background-image: url(http://bdimg.share.baidu.com/static/api/img/share/icons_0_16.png?v=d754dcc0.png) !important"></a>
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间" style="background-position:0 -52px !important"></a>
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博" style="background-position:0 -104px !important"></a>
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博" style="background-position:0 -260px !important"></a>
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_renren" data-cmd="renren" title="分享到人人网" style="background-position:0 -208px !important"></a>
+<a href="http://blog.csdn.net/lnb333666/article/details/8460159#" class="bds_weixin" data-cmd="weixin" title="分享到微信" style="background-position:0 -1612px !important"></a>
+</div>
+<script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "1", "bdMiniList": false, "bdPic": "", "bdStyle": "0", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];</script>
+<!-- Baidu Button END -->
+
+<!--192.168.100.35-->
+<ul class="article_next_prev">
+            <li class="prev_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;]);location.href=&#39;/lnb333666/article/details/8035947&#39;;">上一篇</span><a href="http://blog.csdn.net/lnb333666/article/details/8035947" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_shangyipian&#39;])">Android 内存浅析【泄漏、溢出】【二】</a></li>
+            <li class="next_article"><span onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;]);location.href=&#39;/lnb333666/article/details/8546497&#39;;">下一篇</span><a href="http://blog.csdn.net/lnb333666/article/details/8546497" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_xiayipian&#39;])">Android UI【android 仿微信、QQ聊天，带表情，可翻页，带翻页拖动缓冲】</a></li>
+</ul>
+
+<!-- Baidu Button BEGIN -->
+<script type="text/javascript" id="bdshare_js" data="type=tools&amp;uid=1536434" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/bds_s_v2.js"></script>
+
+<script type="text/javascript">
+    document.getElementById("bdshell_js").src = "http://bdimg.share.baidu.com/static/js/shell_v2.js?cdnversion=" + Math.ceil(new Date()/3600000)
+</script>
+<!-- Baidu Button END -->
+
+
+</div>
+      <dl class="blog-associat-tag">
+        <dt>主题推荐</dt>
+        <dd>
+                <a href="http://www.csdn.net/tag/android%E5%BA%94%E7%94%A8" target="_blank" class="blog-tage-red">android应用</a> 
+                <a href="http://www.csdn.net/tag/%E4%BA%A7%E5%93%81%E8%AE%BE%E8%AE%A1" target="_blank" class="blog-tage-red">产品设计</a> 
+                <a href="http://www.csdn.net/tag/%E6%8A%80%E6%9C%AF" target="_blank" class="blog-tage-red">技术</a> 
+                <a href="http://www.csdn.net/tag/%E6%95%B0%E6%8D%AE" target="_blank" class="blog-tage-red">数据</a> 
+                <a href="http://www.csdn.net/tag/%E7%BC%93%E5%AD%98" target="_blank" class="blog-tage-red">缓存</a> 
+        </dd>
+    </dl> 
+
+
+<dl class="blog-ass-articl tracking-ad" data-mod="popu_36" id="res-relatived"> 
+     <dt><span>猜你在找</span></dt>    
+<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/jdsjlzx/article/details/7553987" title="Android提高篇之自定义dialog实现processDialog“正在加载”效果、使用Animation实现图片旋转" strategy="CFRecommendAlgorithm" target="_blank">Android提高篇之自定义dialog实现processDialog“正在加载”效果、使用Animation实现图片旋转</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/nkmnkm/article/details/7331297" title="Android Service 详解四：开始停止service" strategy="CFRecommendAlgorithm" target="_blank">Android Service 详解四：开始停止service</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/jaycee110905/article/details/8581810" title="Android获取HTML数据" strategy="CFRecommendAlgorithm" target="_blank">Android获取HTML数据</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/mldxs/article/details/9179515" title="android制作圆角图片和图片倒影" strategy="CFRecommendAlgorithm" target="_blank">android制作圆角图片和图片倒影</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/nie312122330/article/details/17993403" title="android仿win8 metro磁贴布局" strategy="CFRecommendAlgorithm" target="_blank">android仿win8 metro磁贴布局</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/yangyu20121224/article/details/9122517" title="【Android UI设计与开发】第15期：顶部标题栏（六）实现悬浮式顶部和底部标题栏效果" strategy="CFRecommendAlgorithm" target="_blank">【Android UI设计与开发】第15期：顶部标题栏（六）实现悬浮式顶部和底部标题栏效果</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/Simdanfeg/article/details/9011603" title="Android支付接入（一）：支付宝" strategy="CFRecommendAlgorithm" target="_blank">Android支付接入（一）：支付宝</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/sunalongl/article/details/22864869" title="AsyncTask时异常： Cannot execute task: the task has already been executed (a task can be executed only o" strategy="CFRecommendAlgorithm" target="_blank">AsyncTask时异常： Cannot execute task: the task has already been executed (a task can be executed only o</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/li_wen_qi_/article/details/8606840" title="页面上现有ProgressBar控件progressBar，请用书写线程以10秒的的时间完成其进度显示工作" strategy="CFRecommendAlgorithm" target="_blank">页面上现有ProgressBar控件progressBar，请用书写线程以10秒的的时间完成其进度显示工作</a></dd><dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="http://blog.csdn.net/stpeace/article/details/24926343" title="android手机安装软件后/data/app目录的变化" strategy="CFRecommendAlgorithm" target="_blank">android手机安装软件后/data/app目录的变化</a></dd></dl>
+
+<script type="text/javascript">
+    var searchtitletags = '产品设计：Android应用-开发技术【数据缓存】' + ',' + 'android应用,产品设计,技术,数据,缓存';
+    searchService({
+        index: 'blog',
+        query: searchtitletags,
+        from: 10,
+        size: 10,
+        appendTo: '#res-relatived',
+        url: 'recommend',
+        his: 2,
+        client: "blog_cf_enhance",
+        tmpl: '<dd style="background:url(http://static.blog.csdn.net/skin/default/images/blog-dot-red3.gif) no-repeat 0 10px;"><a href="#{ url }" title="#{ title }" strategy="#{ strategy }">#{ title }</a></dd>'
+    });
+
+ </script>   
+
+
+    <div id="ad_cen">
+   
+          <script type="text/javascript">
+              new Ad(4, 'ad_cen');
+          </script>
+    <iframe id="ad_frm_0" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 985px; height: 90px; " src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ad.htm"></iframe></div>
+<div class="comment_class">
+    <div id="comment_title" class="panel_head">
+        <span class="see_comment">查看评论</span><a name="comments"></a></div>
+    <div id="comment_list"><dl class="comment_item comment_topic" id="comment_item_4260705"><dt class="comment_head" floor="34">34楼 <span class="user"><a class="username" href="http://blog.csdn.net/harder321" target="_blank">harder321</a> <span class="ptime">前天 10:35发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="4260705" username="harder321"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/harder321" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_harder321.jpg" width="40" height="40"></a></dd><dd class="comment_body">harde1@163.com,楼主求代码啊</dd></dl><dl class="comment_item comment_topic" id="comment_item_4176781"><dt class="comment_head" floor="33">33楼 <span class="user"><a class="username" href="http://blog.csdn.net/u014514478" target="_blank">u014514478</a> <span class="ptime">2014-08-15 14:46发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="4176781" username="u014514478"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u014514478" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u014514478.jpg" width="40" height="40"></a></dd><dd class="comment_body">求楼主发我一份完整的例子18046587732@163.com，万分感谢</dd></dl><dl class="comment_item comment_topic" id="comment_item_4168649"><dt class="comment_head" floor="32">32楼 <span class="user"><a class="username" href="http://blog.csdn.net/mingxuan0115" target="_blank">mingxuan0115</a> <span class="ptime">2014-08-13 14:22发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="4168649" username="mingxuan0115"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/mingxuan0115" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_mingxuan0115.jpg" width="40" height="40"></a></dd><dd class="comment_body">发我一份吧，楼主。感谢，mingxuan0115@163.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_4155707"><dt class="comment_head" floor="31">31楼 <span class="user"><a class="username" href="http://blog.csdn.net/u014216541" target="_blank">u014216541</a> <span class="ptime">2014-08-09 14:54发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="4155707" username="u014216541"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u014216541" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u014216541.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，求发送一份完整的代码。1710611646@qq.com，万分感谢！</dd></dl><dl class="comment_item comment_topic" id="comment_item_4085097"><dt class="comment_head" floor="30">30楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010916810" target="_blank">u010916810</a> <span class="ptime">2014-07-26 10:25发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="4085097" username="u010916810"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010916810" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010916810.jpg" width="40" height="40"></a></dd><dd class="comment_body">461501417@qq.com，谢谢楼主，好人一生平安~</dd></dl><dl class="comment_item comment_topic" id="comment_item_4068227"><dt class="comment_head" floor="29">29楼 <span class="user"><a class="username" href="http://blog.csdn.net/u013404283" target="_blank">supekylin</a> <span class="ptime">2014-07-21 09:16发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="4068227" username="u013404283"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u013404283" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u013404283.jpg" width="40" height="40"></a></dd><dd class="comment_body">842831059@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_4068223"><dt class="comment_head" floor="28">28楼 <span class="user"><a class="username" href="http://blog.csdn.net/u013404283" target="_blank">supekylin</a> <span class="ptime">2014-07-21 09:15发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="4068223" username="u013404283"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u013404283" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u013404283.jpg" width="40" height="40"></a></dd><dd class="comment_body">求相关的完整代码，急用</dd></dl><dl class="comment_item comment_topic" id="comment_item_4062081"><dt class="comment_head" floor="27">27楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010376274" target="_blank">爱臭美的程序猿</a> <span class="ptime">2014-07-18 10:19发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="4062081" username="u010376274"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010376274" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010376274.jpg" width="40" height="40"></a></dd><dd class="comment_body">求楼主完整代码呀~~344511427@qq.com，我是大学学生，课堂大作业里想增加缓存功能，没有商业用途，楼主不用担心啦~~</dd></dl><dl class="comment_item comment_topic" id="comment_item_4048017"><dt class="comment_head" floor="26">26楼 <span class="user"><a class="username" href="http://blog.csdn.net/u012602019" target="_blank">深度灵魂</a> <span class="ptime">2014-07-14 16:45发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="4048017" username="u012602019"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u012602019" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u012602019.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主。完整的代码求发一份。谢谢<br>501769146@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3967975"><dt class="comment_head" floor="25">25楼 <span class="user"><a class="username" href="http://blog.csdn.net/u014509161" target="_blank">随缘海豚音</a> <span class="ptime">2014-06-19 16:30发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3967975" username="u014509161"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u014509161" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u014509161.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主你好，能不能发一份较为完整的代码给我学习。小弟先感谢了。1931416786@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3962831"><dt class="comment_head" floor="24">24楼 <span class="user"><a class="username" href="http://blog.csdn.net/ljl716997043" target="_blank">ljl716997043</a> <span class="ptime">2014-06-18 08:51发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3962831" username="ljl716997043"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/ljl716997043" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_ljl716997043.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主：这个File oldfile = ImageLoader.getInstance().getDiscCache().get(url);？<br> ImageLoader这个类可以发给我看看吗？716997043</dd></dl><dl class="comment_item comment_topic" id="comment_item_3934921"><dt class="comment_head" floor="23">23楼 <span class="user"><a class="username" href="http://blog.csdn.net/hwy584624785" target="_blank">我去饿饿饿饿饿饿</a> <span class="ptime">2014-06-07 13:03发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3934921" username="hwy584624785"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/hwy584624785" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_hwy584624785.jpg" width="40" height="40"></a></dd><dd class="comment_body">你好，可以给我发一份完整的project吗？     584624785@qq.com<br>谢谢了</dd></dl><dl class="comment_item comment_topic" id="comment_item_3899925"><dt class="comment_head" floor="22">22楼 <span class="user"><a class="username" href="http://blog.csdn.net/software_develop_zsh" target="_blank">software_develop_zsh</a> <span class="ptime">2014-05-30 18:04发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3899925" username="software_develop_zsh"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/software_develop_zsh" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_software_develop_zsh.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，看了你的写的东西，感触颇深，我们现在的这个电商项目，缓存是用sqlite数据库做的，就是把本地数据库做成一个关系型数据库，太复杂了，好多张表............ 你这种文件存储的方式我有个疑问：例如现在一个请求A1，返回的json结果里有15个商品信息，我用文件缓存一下，第二次请求，返回的结果是1个商品，我这时候如果更新缓存文件，也就是讲15个商品信息删掉，再添加上这次的1个商品信息，如果现在断网了，我这从缓存中取的商品信息只有一个呀，不合适吧。</dd><dl class="comment_item comment_reply" id="comment_item_3937629"><dt class="comment_head" floor="22">Re: <span class="user"><a class="username" href="http://blog.csdn.net/lnb333666" target="_blank">厂圩菠萝菠萝蜜</a> <span class="ptime">2014-06-08 14:12发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3937629" username="lnb333666"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/lnb333666" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_lnb333666.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复software_develop_zsh：其实你的想法开始我也想到过，不过如果改成单条缓存的形式，这样工作量可能会很大，而且还有可能产生一些额外的问题。所以我仅仅列出这种最简单的方法。或者你有更好的方法请告诉我</dd></dl></dl><dl class="comment_item comment_topic" id="comment_item_3897029"><dt class="comment_head" floor="21">21楼 <span class="user"><a class="username" href="http://blog.csdn.net/zhanghao9444" target="_blank">夏洛克Shylock</a> <span class="ptime">2014-05-30 10:44发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3897029" username="zhanghao9444"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/zhanghao9444" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_zhanghao9444.jpg" width="40" height="40"></a></dd><dd class="comment_body">您好，楼主，能不能发一份数据缓存完整的代码例子给我，先谢谢了！<br>我的邮箱409159907@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3897011"><dt class="comment_head" floor="20">20楼 <span class="user"><a class="username" href="http://blog.csdn.net/zhanghao9444" target="_blank">夏洛克Shylock</a> <span class="ptime">2014-05-30 10:42发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3897011" username="zhanghao9444"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/zhanghao9444" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_zhanghao9444.jpg" width="40" height="40"></a></dd><dd class="comment_body">您好，楼主，能不能发一份数据缓存完整的代码例子给我，先谢谢了！<br>我的邮箱409159907@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3891885"><dt class="comment_head" floor="19">19楼 <span class="user"><a class="username" href="http://blog.csdn.net/ljl716997043" target="_blank">ljl716997043</a> <span class="ptime">2014-05-29 09:21发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3891885" username="ljl716997043"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/ljl716997043" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_ljl716997043.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主：发给我一份。先谢谢了。你的写的特好特好！<br>邮箱是716997043@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3835379"><dt class="comment_head" floor="18">18楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010608030" target="_blank">大头菇凉</a> <span class="ptime">2014-05-13 11:40发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3835379" username="u010608030"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010608030" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010608030.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，，EncryptUtils这个类也没有啊，可否贴一下代码呢？</dd></dl><dl class="comment_item comment_topic" id="comment_item_3835315"><dt class="comment_head" floor="17">17楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010608030" target="_blank">大头菇凉</a> <span class="ptime">2014-05-13 11:29发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3835315" username="u010608030"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010608030" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010608030.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，，，Constants和ImageLoader的代码能否发给我一份呢？1016787958@qq.com。谢谢。</dd></dl><dl class="comment_item comment_topic" id="comment_item_3749141"><dt class="comment_head" floor="16">16楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010606321" target="_blank">u010606321</a> <span class="ptime">2014-04-17 13:35发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3749141" username="u010606321"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010606321" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010606321.jpg" width="40" height="40"></a></dd><dd class="comment_body">你好，可以给我发一份完整的project吗？705380609@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3719423"><dt class="comment_head" floor="15">15楼 <span class="user"><a class="username" href="http://blog.csdn.net/tom540066931" target="_blank">tom540066931</a> <span class="ptime">2014-04-09 11:36发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3719423" username="tom540066931"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/tom540066931" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_tom540066931.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主！看了你的代码有些不了解，你写的是存储在file文件里了。如果分页离线加载数据，是不是就……？为什么不能缓存到数据库呢？</dd></dl><dl class="comment_item comment_topic" id="comment_item_3714015"><dt class="comment_head" floor="14">14楼 <span class="user"><a class="username" href="http://blog.csdn.net/zhxpsd_" target="_blank">zhxpsd_</a> <span class="ptime">2014-04-07 15:16发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3714015" username="zhxpsd_"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/zhxpsd_" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_zhxpsd_.jpg" width="40" height="40"></a></dd><dd class="comment_body">您好！最近一直在学安卓的开发，对缓存不是很懂，能否把完整的例子发给我一份啊？1553815502@qq.com，万分感谢！</dd></dl><dl class="comment_item comment_topic" id="comment_item_3698181"><dt class="comment_head" floor="13">13楼 <span class="user"><a class="username" href="http://blog.csdn.net/u013977070" target="_blank">avans16</a> <span class="ptime">2014-04-02 10:40发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3698181" username="u013977070"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u013977070" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u013977070.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，您好，能发一份完整的例子参考学习吗？644471096@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3664951"><dt class="comment_head" floor="12">12楼 <span class="user"><a class="username" href="http://blog.csdn.net/yingyoulan" target="_blank">yingyoulan</a> <span class="ptime">2014-03-28 15:10发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="3664951" username="yingyoulan"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/yingyoulan" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_yingyoulan.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主，您好，最近刚好在学习android数据缓存，能不能发一份完整的例子参考学习一下呢？862790676@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3561773"><dt class="comment_head" floor="11">11楼 <span class="user"><a class="username" href="http://blog.csdn.net/u010845909" target="_blank">心愿sss</a> <span class="ptime">2014-03-08 13:23发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3561773" username="u010845909"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/u010845909" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_u010845909.jpg" width="40" height="40"></a></dd><dd class="comment_body">顶！！！！！楼主能发一份完整代码给小弟，十分感激 348735514@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_3331793"><dt class="comment_head" floor="10">10楼 <span class="user"><a class="username" href="http://blog.csdn.net/zxl10059" target="_blank">精神病281号</a> <span class="ptime">2013-12-27 08:57发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="3331793" username="zxl10059"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/zxl10059" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_zxl10059.jpg" width="40" height="40"></a></dd><dd class="comment_body">何时刷新可参考新浪微博，让用户决定是否刷新。主体页面还是每次都去load为好，一个用户一天可能就打开几次而已。</dd></dl><dl class="comment_item comment_topic" id="comment_item_2939691"><dt class="comment_head" floor="9">9楼 <span class="user"><a class="username" href="http://blog.csdn.net/Don_Leah" target="_blank">Love-leah</a> <span class="ptime">2013-09-25 09:54发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="2939691" username="Don_Leah"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/Don_Leah" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_don_leah.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主能发个完整代码供学习参考吗？243153901@qq.com，先谢谢啦</dd></dl><dl class="comment_item comment_topic" id="comment_item_2932805"><dt class="comment_head" floor="8">8楼 <span class="user"><a class="username" href="http://blog.csdn.net/xiaozj886" target="_blank">KitTak</a> <span class="ptime">2013-09-22 17:11发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display:none;" commentid="2932805" username="xiaozj886"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/xiaozj886" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_xiaozj886.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主您好！能发一份完整的例子嘛，3Q！ 546851596@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_2923449"><dt class="comment_head" floor="7">7楼 <span class="user"><a class="username" href="http://blog.csdn.net/mangrove0723" target="_blank">mangrove0723</a> <span class="ptime">2013-09-17 13:32发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2923449" username="mangrove0723"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/mangrove0723" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_mangrove0723.jpg" width="40" height="40"></a></dd><dd class="comment_body">FileUtils , 能发一份吗？多谢 473959311@qq.com</dd><dl class="comment_item comment_reply" id="comment_item_2931317"><dt class="comment_head" floor="7">Re: <span class="user"><a class="username" href="http://blog.csdn.net/lnb333666" target="_blank">厂圩菠萝菠萝蜜</a> <span class="ptime">2013-09-22 09:28发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2931317" username="lnb333666"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/lnb333666" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_lnb333666.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复mangrove0723：补充了FileUtils文件</dd></dl></dl><dl class="comment_item comment_topic" id="comment_item_2891789"><dt class="comment_head" floor="6">6楼 <span class="user"><a class="username" href="http://blog.csdn.net/chequer_lkp" target="_blank">KrocLin</a> <span class="ptime">2013-09-04 17:32发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2891789" username="chequer_lkp"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/chequer_lkp" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_chequer_lkp.jpg" width="40" height="40"></a></dd><dd class="comment_body">再顶，写得真的很好。</dd><dl class="comment_item comment_reply" id="comment_item_2893759"><dt class="comment_head" floor="6">Re: <span class="user"><a class="username" href="http://blog.csdn.net/lnb333666" target="_blank">厂圩菠萝菠萝蜜</a> <span class="ptime">2013-09-05 13:43发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2893759" username="lnb333666"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/lnb333666" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_lnb333666.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复chequer_lkp：这个没有完整demo，呵呵</dd></dl></dl><dl class="comment_item comment_topic" id="comment_item_2891787"><dt class="comment_head" floor="5">5楼 <span class="user"><a class="username" href="http://blog.csdn.net/chequer_lkp" target="_blank">KrocLin</a> <span class="ptime">2013-09-04 17:32发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2891787" username="chequer_lkp"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/chequer_lkp" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_chequer_lkp.jpg" width="40" height="40"></a></dd><dd class="comment_body">楼主你好，能不能发一份较为完整的代码给我学习。小弟先感谢了。1191984850@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_2884273"><dt class="comment_head" floor="4">4楼 <span class="user"><a class="username" href="http://blog.csdn.net/fenghao12321" target="_blank">fenghao12321</a> <span class="ptime">2013-09-02 11:22发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2884273" username="fenghao12321"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/fenghao12321" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_fenghao12321.jpg" width="40" height="40"></a></dd><dd class="comment_body">你好！！能把FileUtils发我一份吗？<br>458699031@qq.com</dd><dl class="comment_item comment_reply" id="comment_item_2885121"><dt class="comment_head" floor="4">Re: <span class="user"><a class="username" href="http://blog.csdn.net/lnb333666" target="_blank">厂圩菠萝菠萝蜜</a> <span class="ptime">2013-09-02 15:57发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2885121" username="lnb333666"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/lnb333666" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_lnb333666.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复fenghao12321：已发送</dd></dl></dl><dl class="comment_item comment_topic" id="comment_item_2884269"><dt class="comment_head" floor="3">3楼 <span class="user"><a class="username" href="http://blog.csdn.net/fenghao12321" target="_blank">fenghao12321</a> <span class="ptime">2013-09-02 11:23发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2884269" username="fenghao12321"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/fenghao12321" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_fenghao12321.jpg" width="40" height="40"></a></dd><dd class="comment_body">您好！！能把FileUtils发我一份吗？非常感谢了！！！<br>458699031@qq.com</dd></dl><dl class="comment_item comment_topic" id="comment_item_2693829"><dt class="comment_head" floor="2">2楼 <span class="user"><a class="username" href="http://blog.csdn.net/xiaozj886" target="_blank">KitTak</a> <span class="ptime">2013-06-26 22:22发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2693829" username="xiaozj886"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/xiaozj886" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_xiaozj886.jpg" width="40" height="40"></a></dd><dd class="comment_body">能把代码发全嘛，楼主！</dd></dl><dl class="comment_item comment_topic" id="comment_item_2496188"><dt class="comment_head" floor="1">1楼 <span class="user"><a class="username" href="http://blog.csdn.net/eoesoft" target="_blank">冰封de四季</a> <span class="ptime">2013-01-08 15:47发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2496188" username="eoesoft"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/eoesoft" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_eoesoft.jpg" width="40" height="40"></a></dd><dd class="comment_body">"毕竟接口就是这么多，现在公司的产品几乎点一下就访问一下"，这一点我深有体会！<br>文件缓存方式的txt文件是存在手机本身好，还是存在sd卡好？</dd><dl class="comment_item comment_reply" id="comment_item_2496712"><dt class="comment_head" floor="1">Re: <span class="user"><a class="username" href="http://blog.csdn.net/lnb333666" target="_blank">厂圩菠萝菠萝蜜</a> <span class="ptime">2013-01-08 20:18发表</span>  <a href="http://blog.csdn.net/lnb333666/article/details/8460159#reply" class="cmt_btn reply" title="回复">[回复]</a> <span class="comment_manage" style="display: none; " commentid="2496712" username="lnb333666"> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#quote" class="cmt_btn quote" title="引用">[引用]</a> <a href="http://blog.csdn.net/lnb333666/article/details/8460159#report" class="cmt_btn report" title="举报">[举报]</a></span></span></dt><dd class="comment_userface"><a href="http://blog.csdn.net/lnb333666" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/3_lnb333666.jpg" width="40" height="40"></a></dd><dd class="comment_body">回复eoesoft：SD卡，这个没什么好说的，呵呵</dd></dl></dl><div class="clear"></div></div>
+    <div id="comment_bar" style="display: none; ">
+    </div>
+    <div id="comment_form"><div class="guest_link">您还没有登录,请<a href="javascript:void(0);" onclick="javascript:csdn.showLogin(function (dat) {js_logined(dat.data.userName);});">[登录]</a>或<a href="http://passport.csdn.net/account/register?from=http%3A%2F%2Fblog.csdn.net%2Flnb333666%2Farticle%2Fdetails%2F8460159">[注册]</a></div></div>
+
+    <div class="announce">
+        * 以上用户言论只代表其个人观点，不代表CSDN网站的观点或立场<a name="reply"></a><a name="quote"></a></div>
+</div>
+
+<script type="text/javascript">
+    var fileName = '8460159';
+    var commentscount = 39;
+    var islock = false
+</script>
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/comment.js"></script>
+    <div id="ad_bot">
+    <iframe id="ad_frm_1" frameborder="0" scrolling="no" style="border-width: 0px; overflow: hidden; width: 985px; height: 0px; " src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ad(1).htm"></iframe></div>
+    <script type="text/javascript">
+    new Ad(5, 'ad_bot');
+    </script>
+<div id="report_dialog">
+</div>
+
+<div id="d-top" style="bottom:60px;">
+      
+
+       <a id="quick-reply" class="btn btn-top q-reply" title="快速回复" style="display:none;">
+            <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/blog-icon-reply.png" alt="快速回复">
+        </a>    
+
+    <a id="d-top-a" class="btn btn-top backtop" style="" title="返回顶部" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_huidaodingbu&#39;])">         
+         <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/top.png" alt="TOP">
+    </a>
+</div>
+<script type="text/javascript">
+    $(function ()
+    {
+        $("#ad_frm_0").height("90px");
+        
+        setTimeout(function(){
+            $("#ad_frm_2").height("200px");
+        },1000);
+        
+
+        if($("#comment_content").length>0)
+        {
+            $("#quick-reply").show();
+
+            $("#quick-reply").click(function(){
+                setEditorFocus();
+            });
+        }       
+     
+        var d_top = $('#d-top-a');
+        document.onscroll = function ()
+        {
+            var scrTop = (document.body.scrollTop || document.documentElement.scrollTop);
+            if (scrTop > 500)
+            {
+                d_top.show();
+            } else
+            {
+                d_top.hide();
+            }
+        }
+        $('#d-top-a').click(function ()
+        {
+            scrollTo(0, 0);
+            this.blur();
+            return false;
+        });
+    });
+  
+</script>
+<style type="text/css">
+    .tag_list
+    {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #D7CBC1;
+        color: #000000;
+        font-size: 12px;
+        line-height: 20px;
+        list-style: none outside none;
+        margin: 10px 2% 0 1%;
+        padding: 1px;
+    }
+    .tag_list h5
+    {
+        background: none repeat scroll 0 0 #E0DBD3;
+        color: #47381C;
+        font-size: 12px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 5px;
+        margin: 0;
+    }
+    .tag_list h5 a
+    {
+        color: #47381C;
+    }
+    .classify
+    {
+        margin: 10px 0;
+        padding: 4px 12px 8px;
+    }
+    .classify a
+    {
+        margin-right: 20px;
+        white-space: nowrap;
+    }
+</style>
+<div class="tag_list">
+    <h5>
+        <a href="http://www.csdn.net/tag/" target="_blank">核心技术类目</a></h5>
+    <div class="classify">
+<a title="全部主题" href="http://www.csdn.net/tag" target="_blank" onclick="LogClickCount(this,336);">全部主题</a>
+<a title="Hadoop" href="http://g.csdn.net/5272865" target="_blank" onclick="LogClickCount(this,336);">Hadoop</a>
+<a title="AWS" href="http://g.csdn.net/5272866" target="_blank" onclick="LogClickCount(this,336);">AWS</a>
+<a title="移动游戏" href="http://g.csdn.net/5272870" target="_blank" onclick="LogClickCount(this,336);">移动游戏</a>
+<a title="Java" href="http://g.csdn.net/5272871" target="_blank" onclick="LogClickCount(this,336);">Java</a>
+<a title="Android" href="http://g.csdn.net/5272872" target="_blank" onclick="LogClickCount(this,336);">Android</a>
+<a title="iOS" href="http://g.csdn.net/5272873" target="_blank" onclick="LogClickCount(this,336);">iOS</a>
+<a title="Swift" href="http://g.csdn.net/5272868" target="_blank" onclick="LogClickCount(this,336);">Swift</a>
+<a title="智能硬件" href="http://g.csdn.net/5272869" target="_blank" onclick="LogClickCount(this,336);">智能硬件</a>
+<a title="Docker" href="http://g.csdn.net/5272867" target="_blank" onclick="LogClickCount(this,336);">Docker</a>
+<a title="OpenStack" href="http://g.csdn.net/5272925" target="_blank" onclick="LogClickCount(this,336);">OpenStack</a>
+<a title="VPN" href="http://www.csdn.net/tag/vpn" target="_blank" onclick="LogClickCount(this,336);">VPN</a>
+<a title="Spark" href="http://g.csdn.net/5272924" target="_blank" onclick="LogClickCount(this,336);">Spark</a>
+<a title="ERP" href="http://www.csdn.net/tag/erp" target="_blank" onclick="LogClickCount(this,336);">ERP</a>
+<a title="IE10" href="http://www.csdn.net/tag/ie10" target="_blank" onclick="LogClickCount(this,336);">IE10</a>
+<a title="Eclipse" href="http://www.csdn.net/tag/eclipse" target="_blank" onclick="LogClickCount(this,336);">Eclipse</a>
+<a title="CRM" href="http://www.csdn.net/tag/crm" target="_blank" onclick="LogClickCount(this,336);">CRM</a>
+<a title="JavaScript" href="http://www.csdn.net/tag/javascript" target="_blank" onclick="LogClickCount(this,336);">JavaScript</a>
+<a title="数据库" href="http://www.csdn.net/tag/%E6%95%B0%E6%8D%AE%E5%BA%93" target="_blank" onclick="LogClickCount(this,336);">数据库</a>
+<a title="Ubuntu" href="http://www.csdn.net/tag/ubuntu" target="_blank" onclick="LogClickCount(this,336);">Ubuntu</a>
+<a title="NFC" href="http://www.csdn.net/tag/nfc" target="_blank" onclick="LogClickCount(this,336);">NFC</a>
+<a title="WAP" href="http://www.csdn.net/tag/wap" target="_blank" onclick="LogClickCount(this,336);">WAP</a>
+<a title="jQuery" href="http://www.csdn.net/tag/jquery" target="_blank" onclick="LogClickCount(this,336);">jQuery</a>
+<a title="BI" href="http://www.csdn.net/tag/bi" target="_blank" onclick="LogClickCount(this,336);">BI</a>
+<a title="HTML5" href="http://www.csdn.net/tag/html5" target="_blank" onclick="LogClickCount(this,336);">HTML5</a>
+<a title="Spring" href="http://www.csdn.net/tag/spring" target="_blank" onclick="LogClickCount(this,336);">Spring</a>
+<a title="Apache" href="http://www.csdn.net/tag/apache" target="_blank" onclick="LogClickCount(this,336);">Apache</a>
+<a title=".NET" href="http://www.csdn.net/tag/.net" target="_blank" onclick="LogClickCount(this,336);">.NET</a>
+<a title="API" href="http://www.csdn.net/tag/api" target="_blank" onclick="LogClickCount(this,336);">API</a>
+<a title="HTML" href="http://www.csdn.net/tag/html" target="_blank" onclick="LogClickCount(this,336);">HTML</a>
+<a title="SDK" href="http://www.csdn.net/tag/sdk" target="_blank" onclick="LogClickCount(this,336);">SDK</a>
+<a title="IIS" href="http://www.csdn.net/tag/iis" target="_blank" onclick="LogClickCount(this,336);">IIS</a>
+<a title="Fedora" href="http://www.csdn.net/tag/fedora" target="_blank" onclick="LogClickCount(this,336);">Fedora</a>
+<a title="XML" href="http://www.csdn.net/tag/xml" target="_blank" onclick="LogClickCount(this,336);">XML</a>
+<a title="LBS" href="http://www.csdn.net/tag/lbs" target="_blank" onclick="LogClickCount(this,336);">LBS</a>
+<a title="Unity" href="http://www.csdn.net/tag/unity" target="_blank" onclick="LogClickCount(this,336);">Unity</a>
+<a title="Splashtop" href="http://www.csdn.net/tag/splashtop" target="_blank" onclick="LogClickCount(this,336);">Splashtop</a>
+<a title="UML" href="http://www.csdn.net/tag/uml" target="_blank" onclick="LogClickCount(this,336);">UML</a>
+<a title="components" href="http://www.csdn.net/tag/components" target="_blank" onclick="LogClickCount(this,336);">components</a>
+<a title="Windows Mobile" href="http://www.csdn.net/tag/windowsmobile" target="_blank" onclick="LogClickCount(this,336);">Windows Mobile</a>
+<a title="Rails" href="http://www.csdn.net/tag/rails" target="_blank" onclick="LogClickCount(this,336);">Rails</a>
+<a title="QEMU" href="http://www.csdn.net/tag/qemu" target="_blank" onclick="LogClickCount(this,336);">QEMU</a>
+<a title="KDE" href="http://www.csdn.net/tag/kde" target="_blank" onclick="LogClickCount(this,336);">KDE</a>
+<a title="Cassandra" href="http://www.csdn.net/tag/cassandra" target="_blank" onclick="LogClickCount(this,336);">Cassandra</a>
+<a title="CloudStack" href="http://www.csdn.net/tag/cloudstack" target="_blank" onclick="LogClickCount(this,336);">CloudStack</a>
+<a title="FTC" href="http://www.csdn.net/tag/ftc" target="_blank" onclick="LogClickCount(this,336);">FTC</a>
+<a title="coremail" href="http://www.csdn.net/tag/coremail" target="_blank" onclick="LogClickCount(this,336);">coremail</a>
+<a title="OPhone " href="http://www.csdn.net/tag/ophone" target="_blank" onclick="LogClickCount(this,336);">OPhone </a>
+<a title="CouchBase" href="http://www.csdn.net/tag/couchbase" target="_blank" onclick="LogClickCount(this,336);">CouchBase</a>
+<a title="云计算" href="http://www.csdn.net/tag/%E4%BA%91%E8%AE%A1%E7%AE%97" target="_blank" onclick="LogClickCount(this,336);">云计算</a>
+<a title="iOS6" href="http://www.csdn.net/tag/iOS6" target="_blank" onclick="LogClickCount(this,336);">iOS6</a>
+<a title="Rackspace " href="http://www.csdn.net/tag/rackspace" target="_blank" onclick="LogClickCount(this,336);">Rackspace </a>
+<a title="Web App" href="http://www.csdn.net/tag/webapp" target="_blank" onclick="LogClickCount(this,336);">Web App</a>
+<a title="SpringSide" href="http://www.csdn.net/tag/springside" target="_blank" onclick="LogClickCount(this,336);">SpringSide</a>
+<a title="Maemo" href="http://www.csdn.net/tag/maemo" target="_blank" onclick="LogClickCount(this,336);">Maemo</a>
+<a title="Compuware" href="http://www.csdn.net/tag/compuware" target="_blank" onclick="LogClickCount(this,336);">Compuware</a>
+<a title="大数据" href="http://www.csdn.net/tag/%E5%A4%A7%E6%95%B0%E6%8D%AE" target="_blank" onclick="LogClickCount(this,336);">大数据</a>
+<a title="aptech" href="http://www.csdn.net/tag/aptech" target="_blank" onclick="LogClickCount(this,336);">aptech</a>
+<a title="Perl" href="http://www.csdn.net/tag/perl" target="_blank" onclick="LogClickCount(this,336);">Perl</a>
+<a title="Tornado" href="http://www.csdn.net/tag/tornado" target="_blank" onclick="LogClickCount(this,336);">Tornado</a>
+<a title="Ruby" href="http://www.csdn.net/tag/ruby" target="_blank" onclick="LogClickCount(this,336);">Ruby</a>
+<a title="Hibernate" href="http://www.csdn.net/hibernate" target="_blank" onclick="LogClickCount(this,336);">Hibernate</a>
+<a title="ThinkPHP" href="http://www.csdn.net/tag/thinkphp" target="_blank" onclick="LogClickCount(this,336);">ThinkPHP</a>
+<a title="HBase" href="http://www.csdn.net/tag/hbase" target="_blank" onclick="LogClickCount(this,336);">HBase</a>
+<a title="Pure" href="http://www.csdn.net/tag/pure" target="_blank" onclick="LogClickCount(this,336);">Pure</a>
+<a title="Solr" href="http://www.csdn.net/tag/solr" target="_blank" onclick="LogClickCount(this,336);">Solr</a>
+<a title="Angular" href="http://www.csdn.net/tag/angular" target="_blank" onclick="LogClickCount(this,336);">Angular</a>
+<a title="Cloud Foundry" href="http://www.csdn.net/tag/cloudfoundry" target="_blank" onclick="LogClickCount(this,336);">Cloud Foundry</a>
+<a title="Redis" href="http://www.csdn.net/tag/redis" target="_blank" onclick="LogClickCount(this,336);">Redis</a>
+<a title="Scala" href="http://www.csdn.net/tag/scala" target="_blank" onclick="LogClickCount(this,336);">Scala</a>
+<a title="Django" href="http://www.csdn.net/tag/django" target="_blank" onclick="LogClickCount(this,336);">Django</a>
+<a title="Bootstrap" href="http://www.csdn.net/tag/bootstrap" target="_blank" onclick="LogClickCount(this,336);">Bootstrap</a>
+    </div>
+</div>
+
+
+                        <div class="clear">
+                        </div>
+                    </div>                   
+                
+            </div>
+            <div id="side">
+    <div class="side">
+<div id="panel_Profile" class="panel">
+<ul class="panel_head"><span>个人资料</span></ul>
+<ul class="panel_body profile">
+<div id="blog_userface">
+    <a href="http://my.csdn.net/lnb333666" target="_blank">
+    <img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/1_lnb333666.jpg" title="访问我的空间" style="max-width:90%">
+    </a>
+    <br>
+    <span><a href="http://my.csdn.net/lnb333666" class="user_name" target="_blank">厂圩菠萝菠萝蜜</a></span>
+</div>
+<div class="interact">
+<a href="javascript:void(0);" class="attent" id="span_add_follow" title="[加关注]" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_guanzhu&#39;])"></a>
+<a href="javascript:void(0);" class="letter" onclick="loginto(1)" title="[发私信]"></a>
+</div>
+<div id="blog_medal">
+<div id="bms_box"><a href="http://medal.blog.csdn.net/allmedal.aspx" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/holdon_s2.gif" onmouseover="m_over_m(this,0)" onmouseout="m_out_m()" alt=""></a></div></div>
+<ul id="blog_rank">
+    <li>访问：<span>243877次</span></li>
+    <li>积分：<span>2287分</span></li>
+    <li>排名：<span>第5500名</span></li>
+</ul>
+<ul id="blog_statistics">
+    <li>原创：<span>39篇</span></li>
+    <li>转载：<span>3篇</span></li>
+    <li>译文：<span>0篇</span></li>
+    <li>评论：<span>548条</span></li>
+</ul>
+</ul>
+</div>
+
+
+<div id="panel_Category" class="panel">
+<ul class="panel_head"><span>文章分类</span></ul>
+<ul class="panel_body">
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1333697" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">产品随唠</a><span>(4)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1354724" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Android UI设计</a><span>(4)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1126716" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Android XMPP</a><span>(8)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1132256" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">工作感悟</a><span>(5)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1398426" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">记录点滴</a><span>(14)</span>
+            </li>
+             <li>
+                <a href="http://blog.csdn.net/lnb333666/article/category/1754621" onclick="_gaq.push([&#39;_trackEvent&#39;,&#39;function&#39;, &#39;onclick&#39;, &#39;blog_articles_wenzhangfenlei&#39;]); ">Cocos2d-x 学习</a><span>(8)</span>
+            </li>
+</ul>
+</div><div id="panel_Archive" class="panel">
+<ul class="panel_head"><span>文章存档</span></ul>
+<ul class="panel_body">
+<div id="archive_list"><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/11">2013年11月</a><span>(9)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/09">2013年09月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/07">2013年07月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/05">2013年05月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/04">2013年04月</a><span>(2)</span></li><span class="hidelist" style="display:none;"><li><a href="http://blog.csdn.net/lnb333666/article/month/2013/01">2013年01月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/10">2012年10月</a><span>(1)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/09">2012年09月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/08">2012年08月</a><span>(3)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/07">2012年07月</a><span>(2)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/05">2012年05月</a><span>(9)</span></li><li><a href="http://blog.csdn.net/lnb333666/article/month/2012/04">2012年04月</a><span>(8)</span></li></span><div id="archive_list_button" class="list_closed">展开</div></div>
+</ul>
+</div>
+<div id="hotarticls" class="panel">
+<ul class="panel_head">
+    <span>       
+阅读排行    </span>
+</ul>
+
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7471292" title="基于XMPP协议的Android即时通信系">基于XMPP协议的Android即时通信系</a><span>(55286)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7476177" title="Android基于XMPP Smack openfire 开发的聊天室（一）【会议服务、聊天室列表、加入】">Android基于XMPP Smack openfire 开发的聊天室（一）【会议服务、聊天室列表、加入】</a><span>(26116)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7772569" title="android 屏幕适配小结">android 屏幕适配小结</a><span>(15017)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7476376" title="Android基于XMPP Smack openfire 开发的聊天室（二） 【聊天信息、成员】">Android基于XMPP Smack openfire 开发的聊天室（二） 【聊天信息、成员】</a><span>(14522)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/8546497" title="Android UI【android 仿微信、QQ聊天，带表情，可翻页，带翻页拖动缓冲】">Android UI【android 仿微信、QQ聊天，带表情，可翻页，带翻页拖动缓冲】</a><span>(13328)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7598683" title="Android基于XMPP Smack openfire 开发的聊天室（四） 【创建房间、表单；报文】">Android基于XMPP Smack openfire 开发的聊天室（四） 【创建房间、表单；报文】</a><span>(11738)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7599017" title="Android基于XMPP Smack openfire 开发的聊天室（六） 【加入房间、权限错误】">Android基于XMPP Smack openfire 开发的聊天室（六） 【加入房间、权限错误】</a><span>(9822)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7599166" title="Android基于XMPP Smack openfire 开发的聊天室（七） 【成员状态、自身状态】">Android基于XMPP Smack openfire 开发的聊天室（七） 【成员状态、自身状态】</a><span>(7585)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7598488" title="Android基于XMPP Smack openfire 开发的聊天室（三） 【新旧记录、踢人】">Android基于XMPP Smack openfire 开发的聊天室（三） 【新旧记录、踢人】</a><span>(7009)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7598869" title="Android基于XMPP Smack openfire 开发的聊天室（五） 【邀请、被邀请】">Android基于XMPP Smack openfire 开发的聊天室（五） 【邀请、被邀请】</a><span>(6487)</span>
+</li>
+</ul>
+</div>
+<div id="hotarticls2" class="panel">
+<ul class="panel_head"><span>评论排行</span></ul>
+<ul class="panel_body itemlist">
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7471292" title="基于XMPP协议的Android即时通信系">基于XMPP协议的Android即时通信系</a><span>(106)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/8546497" title="Android UI【android 仿微信、QQ聊天，带表情，可翻页，带翻页拖动缓冲】">Android UI【android 仿微信、QQ聊天，带表情，可翻页，带翻页拖动缓冲】</a><span>(89)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7599166" title="Android基于XMPP Smack openfire 开发的聊天室（七） 【成员状态、自身状态】">Android基于XMPP Smack openfire 开发的聊天室（七） 【成员状态、自身状态】</a><span>(85)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7476177" title="Android基于XMPP Smack openfire 开发的聊天室（一）【会议服务、聊天室列表、加入】">Android基于XMPP Smack openfire 开发的聊天室（一）【会议服务、聊天室列表、加入】</a><span>(45)</span>
+</li>
+<li>
+<a href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET.htm" title="产品设计：Android应用-开发技术【数据缓存】">产品设计：Android应用-开发技术【数据缓存】</a><span>(39)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7772569" title="android 屏幕适配小结">android 屏幕适配小结</a><span>(27)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7598869" title="Android基于XMPP Smack openfire 开发的聊天室（五） 【邀请、被邀请】">Android基于XMPP Smack openfire 开发的聊天室（五） 【邀请、被邀请】</a><span>(18)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7476376" title="Android基于XMPP Smack openfire 开发的聊天室（二） 【聊天信息、成员】">Android基于XMPP Smack openfire 开发的聊天室（二） 【聊天信息、成员】</a><span>(16)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7598683" title="Android基于XMPP Smack openfire 开发的聊天室（四） 【创建房间、表单；报文】">Android基于XMPP Smack openfire 开发的聊天室（四） 【创建房间、表单；报文】</a><span>(16)</span>
+</li>
+<li>
+<a href="http://blog.csdn.net/lnb333666/article/details/7469786" title="留与后人一段面试的总结">留与后人一段面试的总结</a><span>(13)</span>
+</li>
+</ul>
+</div>
+    </div>
+    <div class="clear">
+    </div>
+</div>
+
+            <div class="clear">
+            </div>
+        </div>
+        
+
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/cnick.js"></script>
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/newblog.min.js"></script>
+
+
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/showblogmedal.ashx"></script>
+<script type="text/javascript">
+    document.write('<script type="text/javascript" src="http://csdnimg.cn/pubfooter/js/publib_footer.js?' + Math.floor(new Date() / 120000).toString(36) + '="></' + 'script>');
+</script><script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/publib_footer.js"></script><link rel="stylesheet" type="text/css" href="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/pub_footer_2012.css"><div id="pub_footerall" class="pub_footerall"><dl><dt></dt> <dd><a href="http://www.csdn.net/company/about.html" target="_blank">公司简介</a>|<a href="http://www.csdn.net/company/recruit.html" target="_blank">招贤纳士</a>|<a href="http://www.csdn.net/company/marketing.html" target="_blank">广告服务</a>|<a href="http://www.csdn.net/company/account.html" target="_blank">银行汇款帐号</a>|<a href="http://www.csdn.net/company/contact.html" target="_blank">联系方式</a>|<a href="http://www.csdn.net/company/statement.html" target="_blank">版权声明</a>|<a href="http://www.csdn.net/company/layer.html" target="_blank">法律顾问</a>|<a href="mailto:webmaster@csdn.net">问题报告</a>|<a target="_blank" href="http://www.csdn.net/friendlink.html">合作伙伴</a>|<a href="http://bbs.csdn.net/forums/Service" target="_blank">论坛反馈</a></dd><dd><a href="http://wpa.qq.com/msgrd?v=3&uin=2355263776&site=qq&menu=yes" target="_blank" class="qq">网站客服</a> <a href="http://wpa.qq.com/msgrd?v=3&uin=2251809102&site=qq&menu=yes" target="_blank" class="qq">杂志客服</a> <a href="http://e.weibo.com/csdnsupport/profile" target="_blank" class="weibo">微博客服</a> <a href="mailto:webmaster@csdn.net" class="email" title="联系邮箱">webmaster@csdn.net</a> <span class="phone" title="服务热线">400-600-2320</span></dd><dd>京&nbsp;ICP&nbsp;证&nbsp;070598&nbsp;号</dd><dd>北京创新乐知信息技术有限公司 版权所有</dd><dd>江苏乐知网络技术有限公司 提供商务支持</dd><dd>Copyright © 1999-2014, CSDN.NET, All Rights Reserved&nbsp;<a href="http://www.hd315.gov.cn/beian/view.asp?bianhao=010202001032100010" target="_blank"><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/gongshang_logos.gif" alt="GongshangLogo" title=""></a></dd></dl></div><div id="note1" class="csdn_note" style="display:none; position:absolute; z-index:9999; width:440px">  <span class="notice_top_arrow"><span class="inner"></span></span>  <div class="box"></div></div><div class="csdn_notice_tip" style="display: none; position: absolute; z-index: 9990; width: 170px; ">  <iframe src="about:blank" frameborder="0" scrolling="no" style="z-index:-1;position:absolute;top:0;left:0;width:100%;height:100%;background:transparent"></iframe>  <div class="tip_text">您有<strong>0</strong>条新通知</div>  <a href="javascript:void 0" class="close2"></a></div><script id="noticeScript" type="text/javascript" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/notify.js"></script>
+    <script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/login.js"></script>
+<script type="text/javascript">document.write("<img src=http://counter.csdn.net/pv.aspx?id=24 border=0 width=0 height=0>");</script><img src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/pv.aspx" border="0" width="0" height="0">
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/counter.js"></script><script type="text/javascript" charset="UTF-8" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/msg.popup.js"></script>
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ad-blog.js"></script><script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/ad-ms974_2.js"></script>
+
+<script type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/count.js"></script><iframe src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/logs.htm" frameborder="0" width="0" height="0"></iframe>
+<script type="text/javascript">
+    $(function () {
+        function __get_code_toolbar(snippet_id) {
+            return $("<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "' target='_blank' title='在CODE上查看代码片' style='text-indent:0;'><img src='https://code.csdn.net/assets/CODE_ico.png' width=12 height=12 alt='在CODE上查看代码片' style='position:relative;top:1px;left:2px;'/></a>"
+                    + "<a href='https://code.csdn.net/snippets/"
+                    + snippet_id
+                    + "/fork' target='_blank' title='派生到我的代码片'  style='text-indent:0;'><img src='https://code.csdn.net/assets/ico_fork.svg' width=12 height=12 alt='派生到我的代码片' style='position:relative;top:2px;left:2px;'/></a>");
+        }
+        
+        $("[code_snippet_id]").each(function () {
+            __s_id = $(this).attr("code_snippet_id");
+            if (__s_id != null && __s_id != "" && __s_id != 0 && parseInt(__s_id) > 70020) {
+                __code_tool = __get_code_toolbar(__s_id);
+                $(this).prev().find(".tools").append(__code_tool);
+            }
+        });
+    });
+</script>
+
+    </div>
+      <!--new top-->
+    
+    <script id="csdn-toolbar-id" btnid="header_notice_num" wrapid="note1" count="5" subcount="5" type="text/javascript" src="./产品设计：Android应用-开发技术【数据缓存】 - 老牛比 - 博客频道 - CSDN.NET_files/toolbar.js"></script>
+     <!--new top-->
+
+
+<div id="tag-suggest-pop">
+  <div class="relative">
+    <div class="close"></div>
+    <div class="content"></div>
+  </div>
+</div></body></html>

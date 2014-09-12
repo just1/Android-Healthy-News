@@ -8,11 +8,11 @@ import android.view.Window;
 import android.widget.TabHost.TabSpec;
 import cn.sharesdk.framework.ShareSDK;
 
-import com.yin.myhealthy.view.DietFragment;
-import com.yin.myhealthy.view.KnowledgeFragment;
-import com.yin.myhealthy.view.MedicineFragment;
-import com.yin.myhealthy.view.NewsFragment;
+import com.yin.myhealthy.view.diet.DietFragment;
+import com.yin.myhealthy.view.knowledge.KnowledgeFragment;
 import com.yin.myhealthy.view.manager.TopBarManager;
+import com.yin.myhealthy.view.medicine.MedicineFragment;
+import com.yin.myhealthy.view.news.NewsFragment;
 
 public class MainActivity extends FragmentActivity {
 	// 定义一个布局

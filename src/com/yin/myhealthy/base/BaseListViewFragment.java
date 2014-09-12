@@ -89,23 +89,8 @@ public abstract class BaseListViewFragment extends Fragment{
 
 	abstract public void setLvItemClickListener();
 
-
 	// 访问网络，请求数据
 	protected  abstract void getListViewDate();
-//	{
-//		// 请求网络，获取健康知识分类列表
-//		List<KeyValuesBean> list = new ArrayList<KeyValuesBean>();
-//
-//		// 需要返回的页号
-//		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
-//
-//		list.add(new KeyValuesBean("limit", "30"));
-//		list.add(new KeyValuesBean("type", "id"));
-//
-//		HealthyKnowEngine hke = new HealthyKnowEngine();
-//		hke.GetHealthyKnowList(list, handler);
-//	}
-
 	
 	// "加载更多"的事件处理
 	protected int clickCount = 1; // 记录按下的次数
@@ -140,32 +125,7 @@ public abstract class BaseListViewFragment extends Fragment{
 
 	//解析Json数据变成列表
 	protected abstract void AnalyJSONToList(String jsonStr);
-//	{
-//		JSONObject obj;
-//		String healthyKnowListStr = null;
-//	    List<HealthyKnowListBean> HKLBeanList = null;
-//		try {
-//
-//			// 用JSONObject获取指定段的JSON内容
-//			obj = new JSONObject(jsonStr);
-//			healthyKnowListStr = (String) obj.getJSONArray("yi18")
-//					.toString();
-//
-//			// 用GSON来反序列化，生成相应的实体类
-//			HKLBeanList = new Gson().fromJson(healthyKnowListStr,
-//					new TypeToken<List<HealthyKnowListBean>>() {
-//					}.getType());
-//
-//		} catch (JSONException e) {
-//			e.printStackTrace();
-//		}
-//
-//		for (int i = 0; i < HKLBeanList.size(); i++) {
-//			titleList.add(HKLBeanList.get(i).getTitle());
-//
-//			imgList.add(apiUrl + HKLBeanList.get(i).getImg());
-//		}
-//	}
+
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

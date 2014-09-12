@@ -46,5 +46,11 @@ public class GlobalDate {
 
 	// 健康知识信息详细
 	public static final String API_KNOWLEDGE_MORE = "http://api.yi18.net/lore/show?id=";
-
+	
+	
+	/*
+	 * 操作标志位
+	 * */
+	public static final int GET_DIETLIST_DATA_SUCCESS = 1;
+	public static final int GET_DIETLIST_DATA_FAIL = -1;
 }

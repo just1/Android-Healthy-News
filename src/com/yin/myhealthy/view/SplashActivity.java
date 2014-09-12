@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.yin.myhealthy.MainActivity;
 import com.yin.myhealthy.R;
+import com.yin.myhealthy.view.news.NewsContextActivity;
 
 public class SplashActivity extends Activity {
 

@@ -35,10 +35,10 @@
             </intent-filter>
         </activity>
         <activity android:name="com.yin.myhealthy.MainActivity" />
-        <activity android:name="com.yin.myhealthy.view.NewsContextActivity" />
-        <activity android:name="com.yin.myhealthy.view.DietContextActivity" />
-        <activity android:name="com.yin.myhealthy.view.MedicineContextActivity" />
-        <activity android:name="com.yin.myhealthy.view.KnowledgeContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.news.NewsContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.diet.DietContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.medicine.MedicineContextActivity" />
+        <activity android:name="com.yin.myhealthy.view.knowledge.KnowledgeContextActivity" />
         <activity
             android:name="cn.sharesdk.framework.ShareSDKUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
