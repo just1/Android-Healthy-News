@@ -1,8 +1,5 @@
 package com.yin.myhealthy.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -16,26 +13,25 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.R;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 import com.yin.myhealthy.view.PullDownListView;
 import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;
 
-
 public abstract class BaseListViewFragment extends Fragment{
 
-	public Context context = null;
-	private LinearLayout ll;
+	protected Context context = null;
+	protected LinearLayout ll;
 	protected PullDownListView lv;
-	private PullDownListViewAdapter adapter;
-	protected List<String> titleList = new ArrayList<String>();
-	protected List<String> imgList = new ArrayList<String>();
-	protected List<String> idList = new ArrayList<String>();
-	
+	protected PullDownListViewAdapter adapter;
 	protected String apiUrl = null;
+	protected BaseListController controller;
+	protected String id;	// 类别的id号
 
 	
-	public BaseListViewFragment(String url) {
+	public BaseListViewFragment(String url, String id) {
+		this.id = id;
 		apiUrl = url;
 	}
 	
@@ -46,12 +42,17 @@ public abstract class BaseListViewFragment extends Fragment{
 	    context = activity;  
 	}
 	
+	public void setController(BaseListController ctrl){
+		controller = ctrl;
+	}
+	
 	// 初始化ListView
 	private void initView() {
 		lv = new PullDownListView(context);
 		ll.addView(lv);
 
-		adapter = new PullDownListViewAdapter(titleList, imgList, context);
+		adapter = new PullDownListViewAdapter(controller.getTitleList(),
+				controller.getImgList(), context);
 		lv.setAdapter(adapter);
 		lv.setMoreViewBtnListener(moreBtnListener);
 
@@ -64,10 +65,12 @@ public abstract class BaseListViewFragment extends Fragment{
 					protected Void doInBackground(Void... params) {
 						try {
 							Thread.sleep(500);
-							titleList.removeAll(null);
-							imgList.removeAll(null);
-							idList.removeAll(null);
-							getListViewDate();
+							controller.getTitleList().removeAll(null);
+							controller.getImgList().removeAll(null);
+							controller.getIdList().removeAll(null);
+							// getListViewDate();
+							controller.getListData(apiUrl, clickCount, id,
+									handler);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -82,15 +85,26 @@ public abstract class BaseListViewFragment extends Fragment{
 				}.execute(null, null, null);
 			}
 		});
-		
-		//设置listview的item监听
+
+		// 设置listview的item监听
 		setLvItemClickListener();
 	}
+	
+	
+	// 当数据返回来时回调
+	Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.what == GlobalDate.GET_DATA_SUCCESS) {
+
+				// 更新ListView数据
+				adapter.notifyDataSetChanged();
+			}
+		}
+	};
+	
 
 	abstract public void setLvItemClickListener();
-
-	// 访问网络，请求数据
-	protected  abstract void getListViewDate();
 	
 	// "加载更多"的事件处理
 	protected int clickCount = 1; // 记录按下的次数
@@ -100,32 +114,10 @@ public abstract class BaseListViewFragment extends Fragment{
 		public void onClick(View v) {
 
 			clickCount++; // 又按下一次
-
-			getListViewDate();
+			controller.getListData(apiUrl, clickCount, id, handler);
 		}
 	};
-
-	// 用来获取健康信息列表的数据，并显示到ListView中
-	protected Handler listDataHandler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			String jsonStr = (String) msg.obj;
-
-			//实际发现这里会报空指针异常
-			if(jsonStr != null){
-				if(!jsonStr.isEmpty()){
-					AnalyJSONToList(jsonStr);
-				}
-			}
-			
-			// 更新ListView数据
-			adapter.notifyDataSetChanged();
-		}
-	};
-
-	//解析Json数据变成列表
-	protected abstract void AnalyJSONToList(String jsonStr);
-
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,7 +130,7 @@ public abstract class BaseListViewFragment extends Fragment{
 		// 初始化ListView
 		initView();
 		// 请求网络，获取健康知识分类列表
-		getListViewDate();
+		controller.getListData(apiUrl, clickCount, id, handler);
 		
 		return view;
 	}

@@ -29,7 +29,7 @@ public class DietController extends BaseListController{
 	public void AnalyListJSONToList(String jsonStr) {
 		JSONObject obj;
 		String someJsonStr = null;
-		List<DietListBean> dietListBeanList = null;
+		List<DietListBean> listBeanList = null;
 		try {
 
 			// 用JSONObject获取指定段的JSON内容
@@ -37,7 +37,7 @@ public class DietController extends BaseListController{
 			someJsonStr = (String) obj.getJSONArray("yi18").toString();
 
 			// 用GSON来反序列化，生成相应的实体类
-			dietListBeanList = new Gson().fromJson(someJsonStr,
+			listBeanList = new Gson().fromJson(someJsonStr,
 					new TypeToken<List<DietListBean>>() {
 					}.getType());
 
@@ -46,23 +46,23 @@ public class DietController extends BaseListController{
 		}
 
 		// 判断是否全部都加载完毕
-		if (dietListBeanList.size() == 0) {
+		if (listBeanList.size() == 0) {
 			System.out.println("数据全部加载完");
 			// Toast.makeText(context, "数据全部加载完", 0).show();
 
 			return;
 		}
 
-		for (int i = 0; i < dietListBeanList.size(); i++) {
+		for (int i = 0; i < listBeanList.size(); i++) {
 
-			titleList.add(dietListBeanList.get(i).getName());
-			idList.add(String.valueOf(dietListBeanList.get(i).getId()));
+			titleList.add(listBeanList.get(i).getName());
+			idList.add(String.valueOf(listBeanList.get(i).getId()));
 
 			/*
 			 * 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
 			 */
 			imgList.add(GlobalDate.WEB_ADDRESS
-					+ dietListBeanList.get(i).getImg());
+					+ listBeanList.get(i).getImg());
 		}
 	}
 

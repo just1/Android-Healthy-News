@@ -16,11 +16,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.base.BaseListViewFragment;
+import com.yin.myhealthy.base.BaseListViewFragment_BAK;
 import com.yin.myhealthy.bean.KeyValuesBean;
 import com.yin.myhealthy.bean.NewsListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
-public class NewsSingleFragment extends BaseListViewFragment {
+public class NewsSingleFragment extends BaseListViewFragment_BAK {
 
 	// 新闻类别的id号
 	private String id;

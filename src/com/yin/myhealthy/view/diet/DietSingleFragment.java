@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.R;
 import com.yin.myhealthy.adapter.PullDownListViewAdapter;
+import com.yin.myhealthy.base.BaseListController;
 import com.yin.myhealthy.controller.DietController;
 import com.yin.myhealthy.view.PullDownListView;
 import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;
@@ -35,11 +36,16 @@ public class DietSingleFragment extends Fragment {
 	// 新闻类别的id号
 	private String id;
 
+	
 	public DietSingleFragment(String url, String id) {
 		this.id = id;
 		apiUrl = url;
 	}
 
+	public void setController(BaseListController ctrl){
+		controller = (DietController) ctrl;
+	}
+	
 	@Override
 	public void onAttach(Activity activity) {
 	    super.onAttach(activity);  
