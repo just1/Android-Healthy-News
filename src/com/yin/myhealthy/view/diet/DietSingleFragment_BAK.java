@@ -23,7 +23,8 @@ import com.yin.myhealthy.controller.DietController;
 import com.yin.myhealthy.view.PullDownListView;
 import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;
 
-public class DietSingleFragment extends Fragment {
+//用来备份，原本那一个就使用继承baseListController的Controller
+public class DietSingleFragment_BAK extends Fragment {
 
 	private Context context = null;
 	private LinearLayout ll;
@@ -35,17 +36,11 @@ public class DietSingleFragment extends Fragment {
 	// 新闻类别的id号
 	private String id;
 
-	public DietSingleFragment(String url, String id) {
+	public DietSingleFragment_BAK(String url, String id) {
 		this.id = id;
 		apiUrl = url;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-	    super.onAttach(activity);  
-	    context = activity;  
-	}
-	
 	// 初始化ListView
 	private void initView() {
 		lv = new PullDownListView(context);

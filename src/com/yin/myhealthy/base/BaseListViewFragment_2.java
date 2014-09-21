@@ -1,4 +1,4 @@
-package com.yin.myhealthy.view.diet;
+package com.yin.myhealthy.base;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,30 +22,37 @@ import com.yin.myhealthy.adapter.PullDownListViewAdapter;
 import com.yin.myhealthy.controller.DietController;
 import com.yin.myhealthy.view.PullDownListView;
 import com.yin.myhealthy.view.PullDownListView.OnRefreshListener;
+import com.yin.myhealthy.view.diet.DietContextActivity;
 
-public class DietSingleFragment extends Fragment {
+public abstract class BaseListViewFragment_2 extends Fragment {
 
-	private Context context = null;
+	public Context context = null;
 	private LinearLayout ll;
 	protected PullDownListView lv;
 	private PullDownListViewAdapter adapter;
-	protected String apiUrl = null;
-	private DietController controller;
 
+	protected String apiUrl = null;
+	protected String apiMoreUrl = null;
+	
+	private BaseListController controller;
 	// 新闻类别的id号
 	private String id;
 
-	public DietSingleFragment(String url, String id) {
+	public BaseListViewFragment_2(String url, String moreUrl,String id,BaseListController controller) {
+		this.apiUrl = url;
+		this.apiMoreUrl = moreUrl;
+		
 		this.id = id;
-		apiUrl = url;
+		
+		this.controller = controller;
 	}
 
 	@Override
 	public void onAttach(Activity activity) {
-	    super.onAttach(activity);  
-	    context = activity;  
+		super.onAttach(activity);
+		context = activity;
 	}
-	
+
 	// 初始化ListView
 	private void initView() {
 		lv = new PullDownListView(context);
@@ -115,7 +122,7 @@ public class DietSingleFragment extends Fragment {
 					int position, long id) {
 
 				String diet_id = controller.getIdList().get(position - 1);
-				String url = GlobalDate.API_DIET_MORE + diet_id;
+				String url = apiMoreUrl + diet_id;
 
 				Intent startIntent = new Intent(getActivity(),
 						DietContextActivity.class);
@@ -125,6 +132,10 @@ public class DietSingleFragment extends Fragment {
 		});
 	}
 
+	public void initData() {
+		controller.getListData(apiUrl, clickCount, id, handler);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -132,12 +143,11 @@ public class DietSingleFragment extends Fragment {
 				false);
 
 		ll = (LinearLayout) view.findViewById(R.id.ll_frag_healthyknow);
-		controller = new DietController();
+		
 
 		// 初始化ListView
 		initView();
-		// 请求网络，获取健康知识分类列表
-		controller.getListData(apiUrl, clickCount, id, handler);
+		initData();
 
 		return view;
 	}
@@ -153,5 +163,4 @@ public class DietSingleFragment extends Fragment {
 			}
 		}
 	};
-
 }

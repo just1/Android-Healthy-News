@@ -93,7 +93,7 @@ public class DietContextActivity extends Activity {
 
 		// ÇëÇóÍøÂç
 		//AsyncHttpClientUtil.RequestAPI(news_url, null, handler);
-		controller.getDietBeanData(news_url,handler);
+		controller.getBeanData(news_url,handler);
 	}
 
 	Handler handler = new Handler(){

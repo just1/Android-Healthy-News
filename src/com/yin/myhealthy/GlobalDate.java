@@ -51,6 +51,6 @@ public class GlobalDate {
 	/*
 	 * 操作标志位
 	 * */
-	public static final int GET_DIETLIST_DATA_SUCCESS = 1;
-	public static final int GET_DIETLIST_DATA_FAIL = -1;
+	public static final int GET_DATA_SUCCESS = 1;
+	public static final int GET_DATA_FAIL = -1;
 }
