@@ -3,21 +3,14 @@ package com.yin.myhealthy.base;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.yin.myhealthy.GlobalDate;
-import com.yin.myhealthy.bean.DietContextBean;
-import com.yin.myhealthy.bean.DietListBean;
-import com.yin.myhealthy.bean.KeyValuesBean;
-import com.yin.myhealthy.utils.AsyncHttpClientUtil;
-
 import android.os.Handler;
 import android.os.Message;
 
-public class BaseListController {
+import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.bean.KeyValuesBean;
+import com.yin.myhealthy.utils.AsyncHttpClientUtil;
+
+public abstract class BaseListController {
 
 	/*
 	 * 以下是对于DataList页的数据处理
@@ -91,62 +84,52 @@ public class BaseListController {
 
 	}
 
-	public void AnalyListJSONToList(String jsonStr) {
-		JSONObject obj;
-		String someJsonStr = null;
-		List<DietListBean> dietListBeanList = null;
-		try {
+	abstract public void AnalyListJSONToList(String jsonStr);
 
-			// 用JSONObject获取指定段的JSON内容
-			obj = new JSONObject(jsonStr);
-			someJsonStr = (String) obj.getJSONArray("yi18").toString();
+	/*
+	 * { JSONObject obj; String someJsonStr = null; List<DietListBean>
+	 * dietListBeanList = null; try {
+	 * 
+	 * // 用JSONObject获取指定段的JSON内容 obj = new JSONObject(jsonStr); someJsonStr =
+	 * (String) obj.getJSONArray("yi18").toString();
+	 * 
+	 * // 用GSON来反序列化，生成相应的实体类 dietListBeanList = new
+	 * Gson().fromJson(someJsonStr, new TypeToken<List<DietListBean>>() {
+	 * }.getType());
+	 * 
+	 * } catch (JSONException e) { e.printStackTrace(); }
+	 * 
+	 * // 判断是否全部都加载完毕 if (dietListBeanList.size() == 0) {
+	 * System.out.println("数据全部加载完"); // Toast.makeText(context, "数据全部加载完",
+	 * 0).show();
+	 * 
+	 * return; }
+	 * 
+	 * for (int i = 0; i < dietListBeanList.size(); i++) {
+	 * 
+	 * titleList.add(dietListBeanList.get(i).getName());
+	 * idList.add(String.valueOf(dietListBeanList.get(i).getId()));
+	 * 
+	 * 
+	 * // 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
+	 * 
+	 * imgList.add(GlobalDate.WEB_ADDRESS + dietListBeanList.get(i).getImg()); }
+	 * }
+	 */
 
-			// 用GSON来反序列化，生成相应的实体类
-			dietListBeanList = new Gson().fromJson(someJsonStr,
-					new TypeToken<List<DietListBean>>() {
-					}.getType());
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		// 判断是否全部都加载完毕
-		if (dietListBeanList.size() == 0) {
-			System.out.println("数据全部加载完");
-			// Toast.makeText(context, "数据全部加载完", 0).show();
-
-			return;
-		}
-
-		for (int i = 0; i < dietListBeanList.size(); i++) {
-
-			titleList.add(dietListBeanList.get(i).getName());
-			idList.add(String.valueOf(dietListBeanList.get(i).getId()));
-
-			/*
-			 * 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
-			 */
-			imgList.add(GlobalDate.WEB_ADDRESS
-					+ dietListBeanList.get(i).getImg());
-		}
-	}
-	
-	
-	
 	/*
 	 * 以下是对于Context页的数据处理
 	 */
 	protected Handler returnBeanHandler;
 	protected Message returnBeanMsg;
-	
-	
-	public void getBeanData(String apiUrl,Handler handler) {
+
+	public void getBeanData(String apiUrl, Handler handler) {
 		returnBeanHandler = handler;
-		
+
 		// 请求网络
 		AsyncHttpClientUtil.RequestAPI(apiUrl, null, beanHandler);
 	}
-	
+
 	Handler beanHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -156,34 +139,42 @@ public class BaseListController {
 			// 实际发现这里会报空指针异常
 			if (jsonStr != null) {
 				if (!jsonStr.isEmpty()) {
-					AnalyDataJSONToBean(jsonStr);
+					Object obj = AnalyDataJSONToBean(jsonStr);
+					if (obj != null) {
+						Message returnBeanMsg = new Message();
+						returnBeanMsg.obj = obj;
+						returnBeanMsg.what = GlobalDate.GET_DATA_SUCCESS;
+						returnBeanHandler.sendMessage(returnBeanMsg);
+					} else {
+						returnBeanHandler
+								.sendEmptyMessage(GlobalDate.GET_DATA_FAIL);
+					}
+
+				} else {
+					returnBeanHandler
+							.sendEmptyMessage(GlobalDate.GET_DATA_FAIL);
 				}
+			} else {
+				returnBeanHandler.sendEmptyMessage(GlobalDate.GET_DATA_FAIL);
 			}
+
 		}
 	};
-	
-	private void AnalyDataJSONToBean(String jsonStr) {
-		JSONObject obj;
-		String someJsonStr = null;
-		try {
-			// 用JSONObject获取指定段的JSON内容
-			obj = new JSONObject(jsonStr);
-			someJsonStr = (String) obj.get("yi18").toString();
 
-			// 用GSON来反序列化，生成相应的实体类
-			Gson gson = new Gson();
-			DietContextBean bean = gson.fromJson(someJsonStr,
-					DietContextBean.class);
-
-			// 根据json的数据更新页面
-			//reflashViewFromNet(bean);
-			returnBeanMsg = new Message();
-			returnBeanMsg.obj = bean;
-			returnBeanHandler.sendMessage(returnBeanMsg);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
+	abstract public Object AnalyDataJSONToBean(String jsonStr);
+	/*
+	 * { JSONObject obj; String someJsonStr = null; try { //
+	 * 用JSONObject获取指定段的JSON内容 obj = new JSONObject(jsonStr); someJsonStr =
+	 * (String) obj.get("yi18").toString();
+	 * 
+	 * // 用GSON来反序列化，生成相应的实体类 Gson gson = new Gson(); DietContextBean bean =
+	 * gson.fromJson(someJsonStr, DietContextBean.class);
+	 * 
+	 * // 根据json的数据更新页面 //reflashViewFromNet(bean); returnBeanMsg = new
+	 * Message(); returnBeanMsg.obj = bean;
+	 * returnBeanHandler.sendMessage(returnBeanMsg);
+	 * 
+	 * } catch (JSONException e) { e.printStackTrace(); } }
+	 */
 
 }

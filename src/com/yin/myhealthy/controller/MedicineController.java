@@ -5,8 +5,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Message;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
@@ -61,7 +59,7 @@ public class MedicineController extends BaseListController {
 	/*
 	 * 单个详情逻辑类
 	 */
-	private void AnalyDataJSONToBean(String jsonStr) {
+	public Object AnalyDataJSONToBean(String jsonStr) {
 		JSONObject obj;
 		String someJsonStr = null;
 		try {
@@ -76,13 +74,16 @@ public class MedicineController extends BaseListController {
 
 			// 根据json的数据更新页面
 			// reflashViewFromNet(bean);
-			returnBeanMsg = new Message();
-			returnBeanMsg.obj = bean;
-			returnBeanHandler.sendMessage(returnBeanMsg);
-
+			//returnBeanMsg = new Message();
+			//returnBeanMsg.obj = bean;
+			//returnBeanHandler.sendMessage(returnBeanMsg);
+			return bean;
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 }

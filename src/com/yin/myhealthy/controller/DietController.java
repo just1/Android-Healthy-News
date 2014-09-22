@@ -5,7 +5,6 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.os.Handler;
 import android.os.Message;
 
 import com.google.gson.Gson;
@@ -14,7 +13,6 @@ import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.base.BaseListController;
 import com.yin.myhealthy.bean.DietContextBean;
 import com.yin.myhealthy.bean.DietListBean;
-import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 
 //饮食相关的逻辑类
 
@@ -71,7 +69,7 @@ public class DietController extends BaseListController{
 	 * 饮食类单个详情逻辑类
 	 */
 	
-	private void AnalyDataJSONToBean(String jsonStr) {
+	public Object AnalyDataJSONToBean(String jsonStr) {
 		JSONObject obj;
 		String someJsonStr = null;
 		try {
@@ -84,15 +82,13 @@ public class DietController extends BaseListController{
 			DietContextBean bean = gson.fromJson(someJsonStr,
 					DietContextBean.class);
 
-			// 根据json的数据更新页面
-			//reflashViewFromNet(bean);
-			returnBeanMsg = new Message();
-			returnBeanMsg.obj = bean;
-			returnBeanHandler.sendMessage(returnBeanMsg);
+			return bean;
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 }

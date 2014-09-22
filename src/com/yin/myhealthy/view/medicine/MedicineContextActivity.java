@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -19,9 +20,11 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
+import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.R;
 import com.yin.myhealthy.bean.MedicineContextBean;
 import com.yin.myhealthy.bean.NewsContextBean;
+import com.yin.myhealthy.controller.MedicineController;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 import com.yin.myhealthy.utils.StringUtil;
 
@@ -38,6 +41,9 @@ public class MedicineContextActivity extends Activity {
 	private TextView tv_context;
 
 	private MedicineContextBean bean;
+	private MedicineController controller;
+	
+	private final String TAG = "MedicineContextActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,47 +98,35 @@ public class MedicineContextActivity extends Activity {
 		Intent intent = getIntent();
 		String news_url = (String) intent.getSerializableExtra("url");
 
+		
 		// 请求网络
-		AsyncHttpClientUtil.RequestAPI(news_url, null, handler);
+		//AsyncHttpClientUtil.RequestAPI(news_url, null, handler);
+		controller = new MedicineController();
+		controller.getBeanData(news_url, handler);
+
 	}
 
 	Handler handler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
+			if (msg.what == GlobalDate.GET_DATA_SUCCESS) {
 
-			String jsonStr = (String) msg.obj;
-
-			// 实际发现这里会报空指针异常
-			if (jsonStr != null) {
-				if (!jsonStr.isEmpty()) {
-					AnalyJSONToList(jsonStr);
+				// 更新数据
+				MedicineContextBean bean = (MedicineContextBean) msg.obj;
+				if(bean == null){
+					Log.d(TAG, "MedicineContextBean is null");
+				}
+				
+				if(bean != null){
+					reflashViewFromNet(bean);
 				}
 			}
+			
 		}
 	};
 
-	private void AnalyJSONToList(String jsonStr) {
-		JSONObject obj;
-		String someJsonStr = null;
-		try {
 
-			// 用JSONObject获取指定段的JSON内容
-			obj = new JSONObject(jsonStr);
-			someJsonStr = (String) obj.get("yi18").toString();
-
-			// 用GSON来反序列化，生成相应的实体类
-			Gson gson = new Gson();
-			MedicineContextBean bean = gson.fromJson(someJsonStr,
-					MedicineContextBean.class);
-
-			// 根据json的数据更新页面
-			reflashViewFromNet(bean);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
 
 	// 根据json的数据更新页面
 	private void reflashViewFromNet(MedicineContextBean bean) {
