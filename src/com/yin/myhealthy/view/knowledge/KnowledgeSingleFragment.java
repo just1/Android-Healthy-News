@@ -15,85 +15,25 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yin.myhealthy.GlobalDate;
+import com.yin.myhealthy.base.BaseListController;
 import com.yin.myhealthy.base.BaseListViewFragment;
 import com.yin.myhealthy.base.BaseListViewFragment_BAK;
 import com.yin.myhealthy.bean.KeyValuesBean;
 import com.yin.myhealthy.bean.KnowledgeListBean;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
+import com.yin.myhealthy.view.medicine.MedicineContextActivity;
 
-public class KnowledgeSingleFragment extends BaseListViewFragment_BAK {
-
-	// 新闻类别的id号
-	private String id;
+public class KnowledgeSingleFragment extends BaseListViewFragment {
 
 	public KnowledgeSingleFragment(String url, String id) {
-		super(url);
-		this.id = id;
+		super(url,id);
+	}
+	
+	public KnowledgeSingleFragment(String url, String id,BaseListController ctrl) {
+		super(url,id);
+		setController(ctrl);
 	}
 
-	@Override
-	protected void AnalyJSONToList(String jsonStr) {
-		JSONObject obj;
-		String someJsonStr = null;
-		List<KnowledgeListBean> knowledgeListBeanList = null;
-		try {
-
-			// 用JSONObject获取指定段的JSON内容
-			obj = new JSONObject(jsonStr);
-			someJsonStr = (String) obj.getJSONArray("yi18").toString();
-
-			// 用GSON来反序列化，生成相应的实体类
-			knowledgeListBeanList = new Gson().fromJson(someJsonStr,
-					new TypeToken<List<KnowledgeListBean>>() {
-					}.getType());
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		// 判断是否全部都加载完毕
-		if (knowledgeListBeanList.size() == 0) {
-			System.out.println("数据全部加载完");
-			Toast.makeText(context, "数据全部加载完", 0).show();
-
-			return;
-		}
-
-		// 判断是否全部都加载完毕
-		if (knowledgeListBeanList.size() == 0) {
-			System.out.println("数据全部加载完");
-			Toast.makeText(context, "数据全部加载完", 0).show();
-
-			return;
-		}
-
-		for (int i = 0; i < knowledgeListBeanList.size(); i++) {
-			titleList.add(knowledgeListBeanList.get(i).getTitle());
-			idList.add(String.valueOf(knowledgeListBeanList.get(i).getId()));
-
-			/*
-			 * 图片地址示例： http://www.yi18.net/img/news/20140905132030_697.jpg
-			 */
-			imgList.add(GlobalDate.WEB_ADDRESS
-					+ knowledgeListBeanList.get(i).getImg());
-		}
-	}
-
-	@Override
-	protected void getListViewDate() {
-		// 请求网络，获取健康知识分类列表
-		List<KeyValuesBean> list = new ArrayList<KeyValuesBean>();
-
-		// 需要返回的页号
-
-		list.add(new KeyValuesBean("page", String.valueOf(clickCount)));
-
-		list.add(new KeyValuesBean("limit", "20"));
-		list.add(new KeyValuesBean("type", "id"));
-		list.add(new KeyValuesBean("id", id));
-
-		AsyncHttpClientUtil.RequestAPI(apiUrl, list, listDataHandler);
-	}
 
 	// 设置listView的item点击处理
 	@Override
@@ -104,10 +44,9 @@ public class KnowledgeSingleFragment extends BaseListViewFragment_BAK {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long itemId) {
-
-				String id = idList.get(position - 1);
-				String url = GlobalDate.API_KNOWLEDGE_MORE + id;
+					int position, long id) {
+				String knowledge_id = controller.getIdList().get(position-1);
+				String url = GlobalDate.API_KNOWLEDGE_MORE + knowledge_id;
 
 				Intent startIntent = new Intent(getActivity(),
 						KnowledgeContextActivity.class);

@@ -98,7 +98,6 @@ public class MedicineContextActivity extends Activity {
 		Intent intent = getIntent();
 		String news_url = (String) intent.getSerializableExtra("url");
 
-		
 		// 请求网络
 		//AsyncHttpClientUtil.RequestAPI(news_url, null, handler);
 		controller = new MedicineController();
@@ -106,6 +105,7 @@ public class MedicineContextActivity extends Activity {
 
 	}
 
+	// 获取网络请求到的数据后回调
 	Handler handler = new Handler() {
 
 		@Override
@@ -114,19 +114,12 @@ public class MedicineContextActivity extends Activity {
 
 				// 更新数据
 				MedicineContextBean bean = (MedicineContextBean) msg.obj;
-				if(bean == null){
-					Log.d(TAG, "MedicineContextBean is null");
-				}
-				
 				if(bean != null){
 					reflashViewFromNet(bean);
 				}
 			}
-			
 		}
 	};
-
-
 
 	// 根据json的数据更新页面
 	private void reflashViewFromNet(MedicineContextBean bean) {

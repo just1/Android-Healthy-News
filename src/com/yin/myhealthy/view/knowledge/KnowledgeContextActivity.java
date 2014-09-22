@@ -19,9 +19,12 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 
 import com.google.gson.Gson;
 import com.loopj.android.image.SmartImageView;
+import com.yin.myhealthy.GlobalDate;
 import com.yin.myhealthy.R;
-import com.yin.myhealthy.bean.DietContextBean;
 import com.yin.myhealthy.bean.KnowledgeContextBean;
+import com.yin.myhealthy.bean.MedicineContextBean;
+import com.yin.myhealthy.controller.DietController;
+import com.yin.myhealthy.controller.KnowledgeController;
 import com.yin.myhealthy.utils.AsyncHttpClientUtil;
 import com.yin.myhealthy.utils.StringUtil;
 
@@ -35,7 +38,9 @@ public class KnowledgeContextActivity extends Activity {
 	private TextView tv_className;
 	private SmartImageView img_context;
 	private TextView tv_context;
+
 	private KnowledgeContextBean bean;
+	private KnowledgeController controller;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,46 +95,26 @@ public class KnowledgeContextActivity extends Activity {
 		String url = (String) intent.getSerializableExtra("url");
 
 		// 请求网络
-		AsyncHttpClientUtil.RequestAPI(url, null, handler);
+		// AsyncHttpClientUtil.RequestAPI(url, null, handler);
+		controller = new KnowledgeController();
+		controller.getBeanData(url, handler);
 	}
 
+	// 获取网络请求到的数据后回调
 	Handler handler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
+			if (msg.what == GlobalDate.GET_DATA_SUCCESS) {
 
-			String jsonStr = (String) msg.obj;
-
-			// 实际发现这里会报空指针异常
-			if (jsonStr != null) {
-				if (!jsonStr.isEmpty()) {
-					AnalyJSONToList(jsonStr);
+				// 更新数据
+				KnowledgeContextBean bean = (KnowledgeContextBean) msg.obj;
+				if (bean != null) {
+					reflashViewFromNet(bean);
 				}
 			}
 		}
 	};
-
-	private void AnalyJSONToList(String jsonStr) {
-		JSONObject obj;
-		String someJsonStr = null;
-		try {
-
-			// 用JSONObject获取指定段的JSON内容
-			obj = new JSONObject(jsonStr);
-			someJsonStr = (String) obj.get("yi18").toString();
-
-			// 用GSON来反序列化，生成相应的实体类
-			Gson gson = new Gson();
-			KnowledgeContextBean bean = gson.fromJson(someJsonStr,
-					KnowledgeContextBean.class);
-
-			// 根据json的数据更新页面
-			reflashViewFromNet(bean);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
 
 	// 根据json的数据更新页面
 	private void reflashViewFromNet(KnowledgeContextBean bean) {

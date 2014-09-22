@@ -31,8 +31,8 @@ public class MedicineSingleFragment extends BaseListViewFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				String news_id = controller.getIdList().get(position-1);
-				String url = GlobalDate.API_MEDICINE_MORE + news_id;
+				String medicine_id = controller.getIdList().get(position-1);
+				String url = GlobalDate.API_MEDICINE_MORE + medicine_id;
 
 				Intent startIntent = new Intent(getActivity(),
 						MedicineContextActivity.class);
