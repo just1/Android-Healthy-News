@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_frag_healthyknow"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ScrollView
+        
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/ll_lv_vp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            
+            <com.yin.myhealthy.view.ChildViewPager
+            android:id="@+id/child_vp"
+            android:layout_width="wrap_content"
+            android:layout_height="240dp" >
+        </com.yin.myhealthy.view.ChildViewPager>
+            
+        </LinearLayout>
+
+        
+    </ScrollView>
+
+</LinearLayout>
